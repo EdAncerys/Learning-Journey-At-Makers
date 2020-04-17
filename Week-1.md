@@ -5,7 +5,6 @@
 - Follow an effective debugging process
 - Describe some basic OO principles like encapsulation, SRP
 
-
 ## Daily Goals 
 ### Wednesday 15 of April 2020
 
@@ -25,7 +24,7 @@
 - **Encapsulation** in OOP is commonly done by *“wrapping”* up objects into classes by changing the scope of these objects (or/and simply hiding the data by preventing "data pollution").
 
 ><p align="center">
-    ![Object Encapsulation](images/encapsulation.png)  
+    ![Object Encapsulation](images/encapsulation.png?)  
     *Object Encapsulation* 
 </p>
 
@@ -33,18 +32,19 @@
 By defining a new instance of the class *"ObjectEncapsulation"* and calling methods defined in the class, as per above, we getting different output every time despite the same variable name.
 
 >```
-p user 
-user = ObjectEncapsulation.new
-p user.name_one
-p user.name_two 
+p user # => "Anna"
+user = ObjectEncapsulation.new 
+p user.name_one # => "Frodo"
+p user.name_two # => "Gandalf"
 
 >```
 
 ## Afternoon Challenges  
+
 Practice pairing and Test-Driven development.
 
 **Plan:** 
-Pair with Jed and start working through the afternoon challenge for the week - "Boris Bikes".
+Pair with Jed and keep working on the afternoon challenge for the week - "Boris Bikes".
 
 **Process:**
 
@@ -71,7 +71,8 @@ Pair with Jed and start working through the afternoon challenge for the week - "
 
 > **Stack Trace:** all the lines that get printed when an error is thrown. Gives information about the type of error and all the paths to the different places of the code where it has happened.
 
-## Daily Goals 
+***
+
 ### Thursday 16 of April 2020
 
 ## Morning Goals 
@@ -97,40 +98,113 @@ Learn Debugging Techniques
 *(Hint: Follow the path of the error as it wont always be directly caused/thrown in the main file or line mentioned by the RSpec...)*
 
 ## Afternoon Challenges  
+
 Practice pairing and Test-Driven development.
 
 **Plan:** 
-Pair with Ellis and start carried on through the afternoon challenge for the week - "Boris Bikes".
+Pair with Ellis and keep working on the afternoon challenge for the week - "Boris Bikes".
 
 **Process:**
 
-- Add ability to *dock bikes* at the station by adding *dock* method to *DockingStation* class. Pass **Unit Test**.
+- Implement our code with user story "I want to dock my bike at the docking station" and add ability to *dock bikes* at the station by adding *dock* method to *DockingStation* class. Pass **Unit Test**.
 - Raise an error if docking station is empty in **Unit Test**. Write **Unit Test based on Feature Test**. 
+```
+  describe '#release_bike' do
+    it 'raises an error when there are no bikes available' do
+      expect { subject.release_bike }.to raise_error 'No bikes available'
+    end
+  end
+```
 - Raise an exception when docking station is full. Write **RSpec** test that expects to throw an errors. Using **fail** syntax to raise an error if @bikes stores more then 20 bikes.
-- Add ability to dock 20 bikes at the station. Writing **Feature Test** for *DockingStation* class *dock* method to test it. Use array to store more than one bike at the docking station. Utilize initialize method. Update release_bike and dock methods as well as **Unit Test** to account for new capacity of 20 bikes.
+```
+  describe '#dock' do
+    it 'raises an error when full' do
+      subject.dock(Bike.new)
+      expect { subject.dock Bike.new }.to raise_error 'Docking station full'
+    end
+  end
+```
 
 **What I've Learned:**
 
->-  Learned that methods can return other objects.
-- In **spec.rb** we can have nested `describe` blocks. By nesting it in another `describe` block, we are able to DRY out our description.  
+>Learned that methods can return other objects.
+In **spec.rb** we can have nested `describe` blocks. By nesting it in another `describe` block, we are able to DRY out our description. 
+
+>How to raise an error in ruby **RSpec**
+
+>```
+expect { raise StandardError }.to raise_error
+``` 
+
+>**attr_reader:** returns the value of an instance variable and makes it accessible to others. (_`attr_accesor` gives permission to both write and read an instance variable, `_attr_reader_` is only for reading and `_attr_writer_` only for writing_).
+
+>**Require vs. require_relative:** The general rule is `require` should be used for external files, like gems, while `require_relative` should be used for referring to files within your directory. `Require_relative`'s scope is wider and is aware of the entire directory where the program resides. 
+
+***
+
+### Friday 17 of April 2020
+
+## Morning Goals 
+
+*Be able to explain what is **SRP** in OOP, importance and the usage.*
+
+**Plan:** Perform a research on-line. Collected information condense and present as a summary.
+
+- **SRP** or a **single-responsibility principle** is computer programing principle that states that every *class* or *module* should have responsibility over a single part of the functionality.
+- **What is responsibility?** In the context of the Single Responsibility Principle (SRP) we define a responsibility to be “a reason for change.” If you can think of more than one motive for changing a class, then that class has more than one responsibility.
+- The **SRP** is one of the simplest of the principles, and one of the hardest to get right. Con-joining responsibilities is something that we do naturally. Finding and separating those responsibilities from one another is much of what software design is really about.
+
+><p align="center">
+    ![SRP](images/SRP.png)  
+    *SRP* 
+</p>
+
+**What I've learned:**
+
+> SRP in programing:
+
+> Every class or/and method should have one responsibility only.  
+A class should have one, and only one, reason to change.  
+
+*(Hint: Class should have only one reason to change and should always represent only one responsibility...)*
+
+## Afternoon Challenges  
+
+Practice pairing and Test-Driven development.
+
+**Plan:** 
+Pair with Paula and keep working on the afternoon challenge for the week - "Boris Bikes".
+
+**Process:**
+
+- We compared our previous code and made sure we all tests passes and our code performs as per requirements. Recap on previous steps and discuss the code.
+- We now want to set a limit on the number of Bikes a DockingStation can hold and at this point setting it to one Bike.
+- In IRB running a **Feature Test** which expects an error when trying to dock a Bike in a DockingStation which already contains one.
+- Implementing it to the **Unit Test** as per below:
 
 ```
 require 'docking_station'
 
 describe DockingStation do
-  # other tests omitted for brevity
-
-  describe '#release_bike' do
-    it 'raises an error when there are no bikes available' do
-      # Let's not dock a bike first:
-      # remember subject == DockingStation.new
-      expect { subject.release_bike }.to raise_error 'No bikes available'
+  describe '#dock' do
+    it 'raises an error when full' do
+      subject.dock(Bike.new)
+      expect { subject.dock Bike.new }.to raise_error 'Docking station full'
     end
   end
 end
+```
+- Now we have matching errors at the Feature and Unit levels, implemented solution for **Unit Test** as per below:
 
 ```
->- How to raise an error in ruby **RSpec**
-```
-expect { raise StandardError }.to raise_error
-```
+  def dock(bike)
+    fail 'Docking station full' if @bike
+    @bike = bike
+  end
+  ```
+  
+  
+  
+  
+  
+  
