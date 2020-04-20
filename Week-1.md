@@ -23,28 +23,29 @@
 - To **"encapsulate"** means to enclose variables, functions or methods into a small group or object.  
 - **Encapsulation** in OOP is commonly done by *“wrapping”* up objects into classes by changing the scope of these objects (or/and simply hiding the data by preventing "data pollution").
 
-><p align="center">
-    ![Object Encapsulation](images/encapsulation.png?)  
+<p align="center">
+    <img width="350" src="images/encapsulation_01.png">  
     *Object Encapsulation* 
 </p>
 
 >**Encapsulation** can be illustrated as per the example above, where we have defined class object named *"ObjectEncapsulation"* and a variable defined below it. In all cases, the same variable name has been used (as well as the same variable "user" in class been defined three times).  
 By defining a new instance of the class *"ObjectEncapsulation"* and calling methods defined in the class, as per above, we getting different output every time despite the same variable name.
 
->```
-p user # => "Anna"
-user = ObjectEncapsulation.new 
-p user.name_one # => "Frodo"
-p user.name_two # => "Gandalf"
+```
+    p user # => "Anna"
+    user = ObjectEncapsulation.new 
+    p user.name_one # => "Frodo"
+    p user.name_two # => "Gandalf"
 
->```
+```
 
 ## Afternoon Challenges  
 
-Practice pairing and Test-Driven development.
+*Practice pairing and Test-Driven development.*   
+**"Boris Bikes"**
 
 **Plan:** 
-Pair with Jed and keep working on the afternoon challenge for the week - "Boris Bikes".
+Pair with Jed and keep working on the afternoon challenge for the week - *"Boris Bikes".*
 
 **Process:**
 
@@ -99,30 +100,37 @@ Learn Debugging Techniques
 
 ## Afternoon Challenges  
 
-Practice pairing and Test-Driven development.
+*Practice pairing and Test-Driven development.*   
+**"Boris Bikes"**
 
 **Plan:** 
-Pair with Ellis and keep working on the afternoon challenge for the week - "Boris Bikes".
+Pair with Ellis and keep working on the afternoon challenge for the week - *"Boris Bikes".*
 
 **Process:**
 
 - Implement our code with user story "I want to dock my bike at the docking station" and add ability to *dock bikes* at the station by adding *dock* method to *DockingStation* class. Pass **Unit Test**.
 - Raise an error if docking station is empty in **Unit Test**. Write **Unit Test based on Feature Test**. 
+
 ```
   describe '#release_bike' do
     it 'raises an error when there are no bikes available' do
-      expect { subject.release_bike }.to raise_error 'No bikes available'
+      expect { subject.release_bike }.to raise_error 
+                                    'No bikes available'
     end
   end
+  
 ```
 - Raise an exception when docking station is full. Write **RSpec** test that expects to throw an errors. Using **fail** syntax to raise an error if @bikes stores more then 20 bikes.
+
 ```
   describe '#dock' do
     it 'raises an error when full' do
       subject.dock(Bike.new)
-      expect { subject.dock Bike.new }.to raise_error 'Docking station full'
+      expect { subject.dock Bike.new }.to raise_error 
+                                    'Docking station full'
     end
   end
+  
 ```
 
 **What I've Learned:**
@@ -132,8 +140,8 @@ In **spec.rb** we can have nested `describe` blocks. By nesting it in another `d
 
 >How to raise an error in ruby **RSpec**
 
->```
-expect { raise StandardError }.to raise_error
+```
+    expect { raise StandardError }.to raise_error
 ``` 
 
 >**attr_reader:** returns the value of an instance variable and makes it accessible to others. (_`attr_accesor` gives permission to both write and read an instance variable, `_attr_reader_` is only for reading and `_attr_writer_` only for writing_).
@@ -154,9 +162,9 @@ expect { raise StandardError }.to raise_error
 - **What is responsibility?** In the context of the Single Responsibility Principle (SRP) we define a responsibility to be “a reason for change.” If you can think of more than one motive for changing a class, then that class has more than one responsibility.
 - The **SRP** is one of the simplest of the principles, and one of the hardest to get right. Con-joining responsibilities is something that we do naturally. Finding and separating those responsibilities from one another is much of what software design is really about.
 
-><p align="center">
-    ![SRP](images/SRP.png)  
-    *SRP* 
+<p align="center">
+    <img width="500" src="images/SRP_01.png">  
+    *Object Encapsulation* 
 </p>
 
 **What I've learned:**
@@ -170,10 +178,11 @@ A class should have one, and only one, reason to change.
 
 ## Afternoon Challenges  
 
-Practice pairing and Test-Driven development.
+*Practice pairing and Test-Driven development.*   
+**"Boris Bikes"**
 
 **Plan:** 
-Pair with Paula and keep working on the afternoon challenge for the week - "Boris Bikes".
+Pair with Paula and keep working on the afternoon challenge for the week - *"Boris Bikes".*
 
 **Process:**
 
@@ -183,26 +192,80 @@ Pair with Paula and keep working on the afternoon challenge for the week - "Bori
 - Implementing it to the **Unit Test** as per below:
 
 ```
-require 'docking_station'
+    require 'docking_station'
 
-describe DockingStation do
-  describe '#dock' do
-    it 'raises an error when full' do
-      subject.dock(Bike.new)
-      expect { subject.dock Bike.new }.to raise_error 'Docking station full'
+    describe DockingStation do
+      describe '#dock' do
+        it 'raises an error when full' do
+          subject.dock(Bike.new)
+          expect { subject.dock Bike.new }.to raise_error 
+                                        'Docking station full'
+        end
+      end
     end
-  end
-end
 ```
 - Now we have matching errors at the Feature and Unit levels, implemented solution for **Unit Test** as per below:
 
 ```
-  def dock(bike)
-    fail 'Docking station full' if @bike
-    @bike = bike
-  end
-  ```
+    def dock(bike)
+      fail 'Docking station full' if @bike
+      @bike = bike
+    end
   
+```
+  
+## Weekend Challenge
+**Airport Challenge:** Full path to the project on [GitHub](https://github.com/EdAncerys/airport_challenge)
+
+We have a request from a client to write the software to control the flow of planes at an airport. The planes can land and take off provided that the weather is sunny. Occasionally it may be stormy, in which case no planes can land or take off. Here are the user stories that we worked out in collaboration with the client:
+- I want to instruct a plane to land at an airport
+- I want to instruct a plane to take off from an airport and confirm that it is no longer in the airport
+- I want to prevent landing when the airport is full
+- I would like a default airport capacity that can be overridden as appropriate
+- I want to prevent takeoff and landing when weather is stormy
+
+**What I've Learnt:**
+>**RSpec:** can expect/test a method to trow an error message if certain condition is met. Expectations ships with a number of built-in matchers. Each matcher can be used with expect(..).to or expect(..).not_to to define positive and negative expectations.
+```
+expect { subject.land(plane) }.to raise_error "message to pass in"
+```
+
+>**Method #stubs:** takes in return value of the method (real or test double) and return set value:
+```
+subject.stub(:stormy?) { true }
+```
+
+<br>
+
+***
+
+<br>
+
+
+# Weekend Reflections
+
+### Did you meet all of your goals you set at the start of the week?
+- I have improved my TDD skills and widen understanding.
+- Improve on pair-up and be more explicit in setting the goals before the session.
+
+### What things do you still need to work through?
+- RSpec Mocking
+- TDD and Feature Tests
+
+### What would you change/improve to keep moving forward?
+##### Technical: 
+- Understand how to use Unit and Feature Tests effectively.
+- Plan time more efficiently to drive and help meet my goals
+- Break down the problems in to small manageable chunks and focus solving them first and not focusing on a bigger picture.
+
+##### Personal:
+- PLAN, PLAN, PLAN...
+
+### A pat on the back
+- Sticking most of the days to set routine.
+- Get decent grip and understanding on set week goals!
+
+<br>
   
   
   
