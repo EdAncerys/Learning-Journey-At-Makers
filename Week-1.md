@@ -13,6 +13,7 @@
 *Be able to explain what is **encapsulation**, why and where it is used.*
 
 **Plan:**
+
 - Perform research on-line individually. 
 - Discuss research findings in group.  
 - Describe what is **encapsulation** and its usage. 
@@ -156,15 +157,27 @@ In **spec.rb** we can have nested `describe` blocks. By nesting it in another `d
 
 *Be able to explain what is **SRP** in OOP, importance and the usage.*
 
-**Plan:** Perform a research on-line. Collected information condense and present as a summary.
+**Plan:**
+
+- Perform research on-line individually.  
+- Describe what is **SRP** and its usage. 
+- Summarize and give some practical example for **SRP**.  
+
+
+<p align="center">
+    <img width="400" src="images/SRP_01.png">  
+    *SRP* 
+</p>
+
+**Single-Responsibility Principle**
 
 - **SRP** or a **single-responsibility principle** is computer programing principle that states that every *class* or *module* should have responsibility over a single part of the functionality.
 - **What is responsibility?** In the context of the Single Responsibility Principle (SRP) we define a responsibility to be “a reason for change.” If you can think of more than one motive for changing a class, then that class has more than one responsibility.
 - The **SRP** is one of the simplest of the principles, and one of the hardest to get right. Con-joining responsibilities is something that we do naturally. Finding and separating those responsibilities from one another is much of what software design is really about.
 
 <p align="center">
-    <img width="500" src="images/SRP_01.png">  
-    *Object Encapsulation* 
+    <img width="500" src="images/SRP_02.png">  
+    *SRP: classes designed to represent single responsibility in whole context.* 
 </p>
 
 **What I've learned:**
@@ -215,6 +228,7 @@ Pair with Paula and keep working on the afternoon challenge for the week - *"Bor
 ```
   
 ## Weekend Challenge
+
 **Airport Challenge:** Full path to the project on [GitHub](https://github.com/EdAncerys/airport_challenge)
 
 We have a request from a client to write the software to control the flow of planes at an airport. The planes can land and take off provided that the weather is sunny. Occasionally it may be stormy, in which case no planes can land or take off. Here are the user stories that we worked out in collaboration with the client:
@@ -233,6 +247,11 @@ expect { subject.land(plane) }.to raise_error "message to pass in"
 >**Method #stubs:** takes in return value of the method (real or test double) and return set value:
 ```
 subject.stub(:stormy?) { true }
+```
+
+>We can use a dummy object, a double, Unit Tests that interact with other classes. We can define them to act predictably. They will not be affected by bugs that might arise in the classes they're 'standing in' for. You could think of them as 'stunt doubles' for the actual classes they represent.
+```
+subject.dock double(:bike)
 ```
 
 <br>
