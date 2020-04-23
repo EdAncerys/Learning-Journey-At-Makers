@@ -137,7 +137,7 @@ expect(subject).to receive(:stormy?).with("stormy")
 
 >Mocking gives you the ability to focus in on what you are testing while removing dependencies in your test on how collaborator objects are implemented. However, the dangers of ‘faking it’ means you need to mock responsibly.
 
->**Test** doubles allow you to define object’s that “stand in” for a real object in your system and will give and receive data in a predefined patterns as if they were an actual object.
+>**Test doubles** allow you to define object’s that “stand in” for a real object in your system and will give and receive data in a predefined patterns as if they were an actual object.
 
 ## Afternoon Challenges  
 
@@ -216,5 +216,255 @@ The best practice is that you should start writing your tests when you start wri
 
 **What I've learned:** 
 
-> The ultimate goal of software testing is to build a quality product. In testing, **Unit testing and Feature testing** considered as a foundation of the testing process. However, *unit testing* is performed by Developers whereas *feature testing* is performed by Testers.  
+> The ultimate goal of software testing is to build a quality product. In testing, **Unit testing and Feature testing** considered as a foundation of the testing process. However, *unit testing* is performed by Developers whereas *feature testing* is performed by Testers (similar to UI).  
 *According to Ward Cunningham, “Functional test and Unit test serve different purposes. One gives the developer confidence when refactoring, the other gives the customer confidence when planning.”*
+
+## Afternoon Challenges  
+
+*Practice pairing and Test-Driven development.*  
+**"Oystercard Challenge"**
+
+**Plan:** Pair with Lizzie and keep working on the afternoon challenge for the week - *"Oystercard Challenge".*
+
+**Process:**
+
+- Spent some time to re-factor code in Lizzie's project to bring it up in better shape. 
+- Reviewed and compared code and discussed similarities and differences.
+- Extracted method #deduct as a private method.
+```rb
+  private 
+  def deduct(value)
+    @balance -= value
+  end
+```
+- Added ability to have @journey_history empty upon start of the journey.
+- Tested to have ability to have @journey_history after #touch_out.
+```rb
+  it 'shout have journey_history after a travel' do
+    subject.touch_in station
+    subject.touch_out station
+    expect(subject.journey_history.empty?).to eq false
+  end
+```
+
+**What I've Learned:**
+
+> Privates methods can't be tested with **RSpec** directly. Walk around to test private method is by testing method that is dependent on private method and writing a test for it. It also can be done by mocking it:
+```rb
+expect { subject.touch_out(:deduct, Oystercard::MINIMUM_VALUE) }.to change{ subject.balance }.by -Oystercard::MINIMUM_VALUE
+```
+
+## Skills workshop
+
+**Plan:** *Attend Skill workshop and practice TDD skills in pairs.*
+
+*Been paired up with Dec to work on skills workshop challenges*
+
+**Process:**
+
+- Watch our pair partner test drive "kata" challenge and provide constructive feedback. 
+- Kata that I test drive been *"Get the Middle Letter(s)"* challenge.
+- My main goal was to take *step by step approach* to solve this challenge by braking it down in to smaller pieces.
+- Even I did have a plan but took completely different approach to it as jumped straight in to thinking about the outcome and the result without taking methodical and thought-full approach to the challenge.
+- In fact spent nearly all the time jumping from one solution to the other and waist most of the time not even taking right approach.
+- Close to preset challenge time I started to make a progress as get a grip of what's needed to be done and what approach I should take.
+
+**What I've learned:** 
+
+> Take methodical approach to the problem. **NEVER** start solving the problem without having a plan and/or good understanding of what approach/way I should take and what requirements are in the first place! 
+
+> Did have first practical example where I needed to expect/get different outputs in **RSpec** test. Learned that matchers can be chained to expect multiple outcomes:
+
+```rb
+it "fails when the second matcher fails" do
+    expect(string).to start_with("foo").and end_with("bar")
+  end
+```
+
+## Daily Goals 
+### Thursday 23 of April 2020
+
+## Morning Goals 
+
+*Object-orientated principles (OOP)* - **Abstraction**. 
+
+**Plan:**
+
+- Perform research on-line individually.  
+- Describe what **Abstraction in OO is** and it's usages. 
+- Summarize and give some practical example. 
+  
+**Process:** 
+
+**Abstraction** is on of the four key concepts concepts of **OOP** (Object Oriented Programming). They are *Inheritance, Abstraction, Polymorphism and Encapsulation*.
+
+What is Abstraction in OOP? **Abstraction** is selecting data from a larger pool to show only the relevant details of the object to the user. Abstraction “shows” only the essential attributes and “hides” unnecessary information. It helps to reduce programming complexity and effort.
+
+Let’s illustrate **Abstraction** concept with an Example. Suppose you want to create a banking application and you are asked to collect all the information about your customer. There are chances that you will come up with following information about the customer:
+
+<p align="center">
+    <img width="200" src="images/Abstraction_01.png">  
+    *Abstraction in OOP* 
+</p>
+
+But, not all of the above information is required to create a banking application. So, you need to select only the useful information for your banking application from that pool. Data like name, address, tax information, etc. make sense for a banking application.
+
+Since we have fetched/removed/selected the customer information from a larger pool, the process is referred as Abstraction.
+
+There are also the different levels of Abstraction and it's good practice that classes/methods should interact with other classes/methods with the same level of abstraction or higher level of abstraction. As you increase the level of Abstraction, things start getting simpler and simpler because you leave out details.
+
+When the object data is not visible to the outer world, it creates data abstraction.
+
+<p align="center">
+    <img width="400" src="images/Abstraction_02.png">  
+    *Data Abstraction in OOP* 
+</p>
+
+We don’t need to provide details about all the methods of an object. When we hide the internal implementation of the different functions involved in a user operation, it creates process abstraction.
+
+Abstraction hides complexity by giving you a more abstract picture, a sort of 10,000 feet view, while Encapsulation hides internal working so that you can change it later. In other words, Abstraction hides details at the design level, while Encapsulation hides details at the implementation level.
+
+For example, when you first describe an object, you talk in more abstract term e.g. a Vehicle which can move, you don't tell how Vehicle will move, whether it will move by using tires or it will fly or it will sell. It just moves. This is called Abstraction. We are talking about a most essential thing, which is moving, rather than focusing on details like moving in plane, sky, or water.
+
+<p align="center">
+    <img width="400" src="images/Abstraction_03.png">  
+    *Proses Abstraction in OOP* 
+</p>
+
+**What I've learned:** 
+
+> **Abstraction** is about hiding unwanted details while giving out most essential details.
+
+> **Abstraction** lets you focus on what the object does instead of how it does.
+
+> **Abstraction** is displaying only essential information and hiding the details. Data abstraction refers to providing only essential information about the data to the outside world, hiding the background details or implementation.
+
+## Daily Goals 
+### Friday 24 of April 2020
+
+## Morning Goals 
+
+*Object-orientated principles (OOP)* - **Polymorphism**. 
+
+**Plan:**
+
+- Perform research on-line individually.  
+- Describe what **Polymorphism in OO is** and it's usages. 
+- Summarize and give some practical example. 
+  
+**Process:** 
+
+Polymorphism is a made up of two words Poly which means Many and Morph which means Forms. So Polymorphism is a method where one is able to execute the same method using different objects. In polymorphism, we can obtain different results using the same method by passing different input objects. 
+
+Generally, **Polymorphism** is the ability to appear in many forms. In object-oriented programming, polymorphism refers to a programming language's ability to process objects differently depending on their data type or class. More specifically, it is the ability to redefine methods for derived classes. For example, given a base class shape, polymorphism enables the programmer to define different area methods for any number of derived classes, such as circles, rectangles and triangles. No matter what shape an object is, applying the area method to it will return the correct results. Polymorphism is considered to be a requirement of any true object-oriented programming language (OOPL).
+
+In Polymorphism, classes have different functionality but they share common interference. The concept of polymorphism can be studied under few sub categories.
+
+- Polymorphism using Inheritance
+- Polymorphism using Duck-Typing
+
+**Polymorphism using inheritance** Inheritance is a property where a child class inherits the properties and methods of a parent class. One can easily implement polymorphism using inheritance. It can be explained using the following *example:*
+
+```rb
+    # Ruby program of Polymorphism using inheritance 
+    class Vehicle 
+      def tyreType 
+        puts "Heavy Car"
+      end
+    end
+   
+    # Using inheritance  
+    class Car < Vehicle 
+      def tyreType 
+        puts "Small Car"
+      end
+    end
+   
+    # Using inheritance  
+    class Truck < Vehicle 
+      def tyreType 
+        puts "Big Car"
+      end
+    end
+
+# Creating object  
+vehicle = Vehicle.new
+vehicle.tyreType() # Outputs "Heavy car"
+   
+# Creating different object calling same function  
+vehicle = Car.new
+vehicle.tyreType() # Outputs "Small car" 
+   
+# Creating different object calling same function  
+vehicle = Truck.new
+vehicle.tyreType() # Outputs "Big car" 
+```
+
+**Polymorphism using Duck-Typing** In Ruby, we focus on the object’s capabilities and features rather than its class. So, Duck Typing is nothing but working on the idea of what an object can do rather than what it actually is. Or, what operations could be performed on the object rather than the class of the object.
+Here is a small program to represent the before mentioned process.
+*Example:*
+
+```rb
+# Ruby program of polymorphism using Duck typing 
+# Creating three different classes 
+class Hotel 
+   
+  def enters 
+    puts "A customer enters"
+  end
+   
+  def type(customer) 
+    customer.type 
+  end
+   
+  def room(customer) 
+    customer.room 
+  end
+   
+end
+   
+# Creating class with two methods  
+class Single 
+   
+  def type 
+    puts "Room is on the fourth floor."
+  end
+   
+  def room 
+    puts "Per night stay is 50£"
+  end
+   
+end
+   
+   
+class Couple 
+   
+ # Same methods as in class single 
+  def type 
+    puts "Room is on the second floor"
+  end
+   
+  def room 
+    puts "Per night stay is 80£"
+  end
+   
+end
+   
+# Creating Object 
+# Performing polymorphism  
+hotel= Hotel.new
+puts "This visitor is Single."
+customer = Single.new
+hotel.type(customer) # Outputs "Room is on the fourth floor"
+hotel.room(customer) # Outputs "Per night stay is 50£"
+   
+   
+puts "The visitors are a couple."
+customer = Couple.new
+hotel.type(customer) # Outputs "Room is on the second floor"
+hotel.room(customer) # Outputs "Per night stay is 80£"
+```
+
+**What I've learned:** 
+
+> In OOP **Polymorphism** is an ability to created a variable, method or an object that have more than one form.
