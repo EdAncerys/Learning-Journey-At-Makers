@@ -19,11 +19,6 @@
 - Describe what is **encapsulation** and its usage. 
 - Give some practical example for encapsulation.
 
-**What we learned:**   
-> - Encapsulation process is an important part of programming and it can be defined as wrapping up data under a single unit.   
-- To **"encapsulate"** means to enclose variables, functions or methods into a small group or object.  
-- **Encapsulation** in OOP is commonly done by *“wrapping”* up objects into classes by changing the scope of these objects (or/and simply hiding the data by preventing "data pollution").
-
 <p align="center">
     <img width="350" src="images/encapsulation_01.png">  
     *Object Encapsulation* 
@@ -39,6 +34,13 @@ By defining a new instance of the class *"ObjectEncapsulation"* and calling meth
     p user.name_two # => "Gandalf"
 
 ```
+
+**What we learned:**   
+> - Encapsulation process is an important part of programming and it can be defined as wrapping up data under a single unit.   
+
+>- To **"encapsulate"** means to enclose variables, functions or methods into a small group or object.  
+
+>- **Encapsulation** in OOP is commonly done by *“wrapping”* up objects into classes by changing the scope of these objects (or/and simply hiding the data by preventing "data pollution").
 
 ## Afternoon Challenges  
 

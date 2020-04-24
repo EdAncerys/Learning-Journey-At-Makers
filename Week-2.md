@@ -339,132 +339,113 @@ For example, when you first describe an object, you talk in more abstract term e
 
 > **Abstraction** is displaying only essential information and hiding the details. Data abstraction refers to providing only essential information about the data to the outside world, hiding the background details or implementation.
 
+## Afternoon Challenges  
+
+*Practice pairing and Test-Driven development.*  
+**"Oystercard Challenge"**
+
+**Plan:** Pair with Ellis and keep working on the afternoon challenge for the week - *"Oystercard Challenge".*
+
+**Process:**
+
+- Recap and compare code before start.
+- Write up a plan for how you will interact with your code and manually test in IRB.
+- Test drive the creation of a Station class that exposes a name and a zone variable.
+```rb
+subject { described_class.new(name: "Kings cross", zone: 1)}
+```
+```rb
+  it 'knows its name' do                      
+    expect(subject.name).to eq("Old Street")              
+  end 
+```
+- Use only one expectation per test.
+
+**What I've Learned:**
+
+>  Use multiple describe blocks to group tests. That keeps tests more organized and in order. That as well helps to extraxt some code in to **before** block that keeps tests more readable.
+
+```
+  describe '#touch_out' do
+    before do 
+      subject.touch_in entry_station
+      subject.touch_out exit_station
+    end
+
+    it 'should set entry station to nil' do
+      expect(subject.entry_station).to eq nil
+    end
+  ...//...
+  end
+```
+
 ## Daily Goals 
 ### Friday 24 of April 2020
 
 ## Morning Goals 
 
-*Object-orientated principles (OOP)* - **Polymorphism**. 
+**Dependency injection**. What it is and where it is used.
 
 **Plan:**
 
 - Perform research on-line individually.  
-- Describe what **Polymorphism in OO is** and it's usages. 
+- Describe what **Dependency injection is** and it's usages. 
 - Summarize and give some practical example. 
   
 **Process:** 
 
-Polymorphism is a made up of two words Poly which means Many and Morph which means Forms. So Polymorphism is a method where one is able to execute the same method using different objects. In polymorphism, we can obtain different results using the same method by passing different input objects. 
+**Use dependency injection to test classes in isolation**
 
-Generally, **Polymorphism** is the ability to appear in many forms. In object-oriented programming, polymorphism refers to a programming language's ability to process objects differently depending on their data type or class. More specifically, it is the ability to redefine methods for derived classes. For example, given a base class shape, polymorphism enables the programmer to define different area methods for any number of derived classes, such as circles, rectangles and triangles. No matter what shape an object is, applying the area method to it will return the correct results. Polymorphism is considered to be a requirement of any true object-oriented programming language (OOPL).
+Dependency injection is a technique for helping you test classes in isolation. It allows a class to use either its real dependency, or a double.
 
-In Polymorphism, classes have different functionality but they share common interference. The concept of polymorphism can be studied under few sub categories.
-
-- Polymorphism using Inheritance
-- Polymorphism using Duck-Typing
-
-**Polymorphism using inheritance** Inheritance is a property where a child class inherits the properties and methods of a parent class. One can easily implement polymorphism using inheritance. It can be explained using the following *example:*
+Consider this code:
 
 ```rb
-    # Ruby program of Polymorphism using inheritance 
-    class Vehicle 
-      def tyreType 
-        puts "Heavy Car"
-      end
-    end
-   
-    # Using inheritance  
-    class Car < Vehicle 
-      def tyreType 
-        puts "Small Car"
-      end
-    end
-   
-    # Using inheritance  
-    class Truck < Vehicle 
-      def tyreType 
-        puts "Big Car"
-      end
-    end
+class Greeter
+  def initialize(smiley = Smiley.new)
+    @smiley = smiley
+  end
 
-# Creating object  
-vehicle = Vehicle.new
-vehicle.tyreType() # Outputs "Heavy car"
-   
-# Creating different object calling same function  
-vehicle = Car.new
-vehicle.tyreType() # Outputs "Small car" 
-   
-# Creating different object calling same function  
-vehicle = Truck.new
-vehicle.tyreType() # Outputs "Big car" 
+  def greet
+    "Hello #{@smiley.get}"
+  end
+end
+
+class Smiley
+  def get
+    ":)"
+  end
+end
 ```
-
-**Polymorphism using Duck-Typing** In Ruby, we focus on the object’s capabilities and features rather than its class. So, Duck Typing is nothing but working on the idea of what an object can do rather than what it actually is. Or, what operations could be performed on the object rather than the class of the object.
-Here is a small program to represent the before mentioned process.
-*Example:*
-
+And then test both like this:
 ```rb
-# Ruby program of polymorphism using Duck typing 
-# Creating three different classes 
-class Hotel 
-   
-  def enters 
-    puts "A customer enters"
+# greeter_spec.rb
+
+describe Greeter do
+  describe "#greet" do
+    it "prints a message and a smiley" do
+      smiley_double = double :smiley, get: ":D"
+      greeter = Greeter.new(smiley_double)
+      expect(greeter.greet).to eq "Hello :D"
+    end
   end
-   
-  def type(customer) 
-    customer.type 
-  end
-   
-  def room(customer) 
-    customer.room 
-  end
-   
 end
-   
-# Creating class with two methods  
-class Single 
-   
-  def type 
-    puts "Room is on the fourth floor."
+
+# smiley_spec.rb
+describe Smiley do
+  describe "#get" do
+    it "returns a smiley" do
+      smiley = Smiley.new
+      expect(smiley.get).to eq ":)"
+    end
   end
-   
-  def room 
-    puts "Per night stay is 50£"
-  end
-   
 end
-   
-   
-class Couple 
-   
- # Same methods as in class single 
-  def type 
-    puts "Room is on the second floor"
-  end
-   
-  def room 
-    puts "Per night stay is 80£"
-  end
-   
-end
-   
-# Creating Object 
-# Performing polymorphism  
-hotel= Hotel.new
-puts "This visitor is Single."
-customer = Single.new
-hotel.type(customer) # Outputs "Room is on the fourth floor"
-hotel.room(customer) # Outputs "Per night stay is 50£"
-   
-   
-puts "The visitors are a couple."
-customer = Couple.new
-hotel.type(customer) # Outputs "Room is on the second floor"
-hotel.room(customer) # Outputs "Per night stay is 80£"
 ```
+This is called dependency injection. Instead of hard coding the dependency, we 'inject' it into the class via the initializer.
 
 **What I've learned:** 
 
-> In OOP **Polymorphism** is an ability to created a variable, method or an object that have more than one form.
+> As per example above we now can test class in isolation by injecting other class as a double. That ensures that tests wont fail and wont be dependent on other class having bug. 
+```rb
+smiley_double = double :smiley, get: ":D"
+```
