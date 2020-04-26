@@ -23,7 +23,7 @@ Code Review for the weekend [**Airport Challenge:**](https://github.com/EdAncery
 
 **What I've learned:**  
 
-> **Test doubles** allow you to define object’s that “stand's” for a real object in your system and will give and "received" data in a predefined patterns as if they were an actual object. To **create a double** use:
+> **Test doubles** allow you to define objects that "stands" for a real object in your system and will give and "received" data in a predefined patterns as if they were an actual object. To **create a double** use:
 ```rb
 plane = double() # create a double with an optional name
 plane = double("new plane")
@@ -75,7 +75,7 @@ plane = double("new plane")
 
 **What I've Learned:**
 
-> **Gemfile:** a file we create which is used for describing gem dependencies for Ruby programs. A gem is a collection of Ruby code that we can extract into a “collection” which we can call later. Gemfile should always be in the root of your project directory, this is where Bundler expects it to be.
+> **Gemfile:** a file we create which is used for describing gem dependencies for Ruby programs. A gem is a collection of Ruby code that we can extract into a "collection" which we can call later. Gemfile should always be in the root of your project directory, this is where Bundler expects it to be.
 
 ```rb
 source "https://rubygems.org"
@@ -106,16 +106,26 @@ It will be times where we need to return fixed/expected value, specially if outp
 
 One way is by using **stubs**, that returns fixed value of the method **without testing behavior** of the method:
 ```rb
+subject.stub(:stormy?) { true }
+```
+
+Another way is to perform **mock's**. And why **Mock**? 
+
+- Represent objects that don't exist yet, allowing you to focus on what you are currently implementing instead of stopping and creating that object.
+```rb
 plane = double()
 allow(plane).to receive(:stormy?).and return(true)
 or
 allow(plane).to receive(:stormy?) { true }
 ```
-
-Another way is to perform **mock's**. And why **Mock**? 
-
-- Represent objects that don’t exist yet, allowing you to focus on what you are currently implementing instead of stopping and creating that object.
-- Prevent your test from depending on another object’s implementation and having to set up complex dependencies and data just to write a test. Mocking (*and stubbing*) allow you to truly test in isolation.
+- Prevent your test from depending on another objects implementation and having to set up complex dependencies and data just to write a test. Mocking (*and stubbing*) allow you to truly test in isolation.
+```rb
+it 'able to place once' do
+    allow(subject).to receive(:order).and_return("Tomato Salad")
+    expect(subject).to receive(:order)
+    takeaway.order("Tomato Salad")
+end
+```
 
 **Creating Test double:**
 
@@ -137,7 +147,7 @@ expect(subject).to receive(:stormy?).with("stormy")
 
 >Mocking gives you the ability to focus in on what you are testing while removing dependencies in your test on how collaborator objects are implemented. However, the dangers of ‘faking it’ means you need to mock responsibly.
 
->**Test doubles** allow you to define object’s that “stand in” for a real object in your system and will give and receive data in a predefined patterns as if they were an actual object.
+>**Test doubles** allow you to define objects that "stands" for a real object in your system and will give and receive data in a predefined patterns as if they were an actual object.
 
 ## Afternoon Challenges  
 
@@ -149,7 +159,7 @@ expect(subject).to receive(:stormy?).with("stormy")
 **Process:**
 
 - Save the Entry station (upon #touch_in store station argument to instance variable. Set that variable back to nil upon touch_out)
-- Refactor to remove the in_journey variable. Rewrite the in_journey? method to infer its status based on whether or not there is an entry station
+- Re-factor to remove the in_journey variable. Rewrite the in_journey? method to infer its status based on whether or not there is an entry station
 ```rb
   def in_journey?
     !!@entry_station  # converts @entry_station in a boolean (will return true for any value thats not nil/false)
@@ -164,8 +174,8 @@ expect(subject).to receive(:stormy?).with("stormy")
 
 **What I've Learned:**
 
->**Double Bang:** When using the not-operator(!) we turn the data it’s operating on into a Boolean before negating it. A truthy value would become the Boolean false and a falsey value would become the Boolean true. <br/>
-When we add the second bang (!!) it flips the resultant Boolean back to the appropriate value: it will make a truthy value into the Boolean true and a falsey to false.
+>**Double Bang:** When using the not-operator(!) we turn the data it's operating on into a Boolean before negating it. A truthy value would become the Boolean false and a falsy value would become the Boolean true. <br/>
+When we add the second bang (!!) it flips the resultant Boolean back to the appropriate value: it will make a truthy value into the Boolean true and a falsy to false.
 ```rb
 "hello"   #-> this is a string; it is not in a boolean context
 !"hello"  #-> this is a string that is forced into a boolean 
@@ -197,27 +207,27 @@ Unit test and Feature test usage and deferences.
     *TDD* 
 </p>
 
-**Feature Testing** normally a tester isn’t concerned with the actual code, rather then to verify the output based on given the user requirements with the expected output.   
+**Feature Testing** normally a tester isn't concerned with the actual code, rather then to verify the output based on given the user requirements with the expected output.   
 
 The prime objective of **Feature testing** is to check the functionalities of the system. **Feature tests** check the entire application, its hardware, and networking infrastructure, from the front end UI to the back-end database systems. In that sense, feature tests are also a form of integration testing, ensuring that different components are working together as expected.
 
-Unlike **unit tests**, the **feature tests** don’t tell you what is broken or where to locate the failure in the code base. They just tell you something is broken and not performs/could't be tested as expected. **Feature tests**, by definition, testing end-to-end user functionality that normally end user sees/performs at UI.
+Unlike **unit tests**, the **feature tests** don't tell you what is broken or where to locate the failure in the code base. They just tell you something is broken and not performs/couldn't be tested as expected. **Feature tests**, by definition, testing end-to-end user functionality that normally end user sees/performs at UI.
 
 <p align="center">
     <img width="400" src="images/Feature_test_01.png">  
     *Feature Test illustration* 
 </p>
 
-**When to perform?** Unit tests aren’t a replacement for functional testing. But they are the solid foundation on which the rest of your testing process should be built. 
+**When to perform?** Unit tests aren't a replacement for functional testing. But they are the solid foundation on which the rest of your testing process should be built. 
 
 The best practice is that you should start writing your tests when you start writing your code. Test Driven Development (TDD) is a popular software development practice which advocates writing tests before the code.  
 
-*Unlike unit tests, the functional tests don’t tell you what is broken or where to locate the failure in the code base. They just tell you something is broken.*
+*Unlike unit tests, the functional tests don't tell you what is broken or where to locate the failure in the code base. They just tell you something is broken.*
 
 **What I've learned:** 
 
 > The ultimate goal of software testing is to build a quality product. In testing, **Unit testing and Feature testing** considered as a foundation of the testing process. However, *unit testing* is performed by Developers whereas *feature testing* is performed by Testers (similar to UI).  
-*According to Ward Cunningham, “Functional test and Unit test serve different purposes. One gives the developer confidence when refactoring, the other gives the customer confidence when planning.”*
+*According to Ward Cunningham, "Functional" test and Unit test serve different purposes. One gives the developer confidence when refactoring, the other gives the customer confidence when planning.”*
 
 ## Afternoon Challenges  
 
@@ -298,9 +308,9 @@ it "fails when the second matcher fails" do
 
 **Abstraction** is on of the four key concepts concepts of **OOP** (Object Oriented Programming). They are *Inheritance, Abstraction, Polymorphism and Encapsulation*.
 
-What is Abstraction in OOP? **Abstraction** is selecting data from a larger pool to show only the relevant details of the object to the user. Abstraction “shows” only the essential attributes and “hides” unnecessary information. It helps to reduce programming complexity and effort.
+What is Abstraction in OOP? **Abstraction** is selecting data from a larger pool to show only the relevant details of the object to the user. Abstraction "shows" only the essential attributes and "hides" unnecessary information. It helps to reduce programming complexity and effort.
 
-Let’s illustrate **Abstraction** concept with an Example. Suppose you want to create a banking application and you are asked to collect all the information about your customer. There are chances that you will come up with following information about the customer:
+Let's illustrate **Abstraction** concept with an Example. Suppose you want to create a banking application and you are asked to collect all the information about your customer. There are chances that you will come up with following information about the customer:
 
 <p align="center">
     <img width="200" src="images/Abstraction_01.png">  
@@ -320,7 +330,7 @@ When the object data is not visible to the outer world, it creates data abstract
     *Data Abstraction in OOP* 
 </p>
 
-We don’t need to provide details about all the methods of an object. When we hide the internal implementation of the different functions involved in a user operation, it creates process abstraction.
+We don't need to provide details about all the methods of an object. When we hide the internal implementation of the different functions involved in a user operation, it creates process abstraction.
 
 Abstraction hides complexity by giving you a more abstract picture, a sort of 10,000 feet view, while Encapsulation hides internal working so that you can change it later. In other words, Abstraction hides details at the design level, while Encapsulation hides details at the implementation level.
 
@@ -334,9 +344,7 @@ For example, when you first describe an object, you talk in more abstract term e
 **What I've learned:** 
 
 > **Abstraction** is about hiding unwanted details while giving out most essential details.
-
 > **Abstraction** lets you focus on what the object does instead of how it does.
-
 > **Abstraction** is displaying only essential information and hiding the details. Data abstraction refers to providing only essential information about the data to the outside world, hiding the background details or implementation.
 
 ## Afternoon Challenges  
@@ -363,7 +371,7 @@ subject { described_class.new(name: "Kings cross", zone: 1)}
 
 **What I've Learned:**
 
->  Use multiple describe blocks to group tests. That keeps tests more organized and in order. That as well helps to extraxt some code in to **before** block that keeps tests more readable.
+>  Use multiple describe blocks to group tests. That keeps tests more organized and in order. That as well helps to extract some code in to **before** block that keeps tests more readable.
 
 ```
   describe '#touch_out' do
@@ -389,7 +397,7 @@ subject { described_class.new(name: "Kings cross", zone: 1)}
 **Plan:**
 
 - Perform research on-line individually.  
-- Describe what **Dependency injection is** and it's usages. 
+- Describe what **Dependency injection** is and it's usages. 
 - Summarize and give some practical example. 
   
 **Process:** 
@@ -449,3 +457,130 @@ This is called dependency injection. Instead of hard coding the dependency, we '
 ```rb
 smiley_double = double :smiley, get: ":D"
 ```
+
+## Afternoon Challenges  
+
+**Plan:** Pair with Marija and keep working on the afternoon challenge for the week - *"Oystercard Challenge".*
+
+**Process:**
+
+- Recap previous days progress and compare code.
+- Next steps involved to extract some methods and functionality from *Oystercard* class to *Journey* class. To approach it needed to re draw/came up with **Domain model** that will represent relationship between classes.
+
+Card | Journey | Station
+:---: | :---: | :---: 
+@journey | @journeys | @name
+@fare | | @zones
+@balance | |
+`--------` | `--------` | `--------` 
+#top_up | #completed? |
+#tap_in | #calculate_fare |
+#tap_out | |
+
+- Come up a plan for how you will interact with your code and manually test in IRB.
+- Re factor test suite to reflect a new Journey class.
+- Create a new class Journey and move some the functionality that relates to a journey from **Oystercard to Journey**.
+- Make sure all tests pass, all existing functionality is preserved.
+
+**What I've Learned:**
+
+> **Domain Modeling** is an important aspect of OOP  
+- The Domain Model is your organized and structured knowledge of the problem. The Domain Model should represent the vocabulary and key concepts of the problem domain and it should identify the relationships among all of the entities within the scope of the domain.
+- A domain model is a visual representation of conceptual classes or real-world objects in a domain of interest.
+  
+## Weekend Challenge
+
+**Takeaway Challenge:** Full path to the project on [GitHub](https://github.com/EdAncerys/takeaway-challenge)
+
+Weekend challenge project been a good way of recapping progress that been made over the week. It brought back some confidence and reassurance of what been learned over the week. 
+
+**Takeaway challenge** to start of been approached by coming up with *Domain Model* for it. That gave structure and plan of how app should look like and functionality/data flow. 
+
+**Focus** over doing this project: 
+- Better understanding of relationships between classes and how they interact with each other.   
+- Using **doubles** and mocking class. Testing them in **isolation**.
+- **RSpec** syntax 
+
+#### Domain Model for Takeaway app
+
+TakeAway | Kitchen | Menu | Text 
+:---: | :---: | :---: | :---:
+ | @order  |   | @number
+ | @checkout| | @body
+ `----------` | `----------` | `----------` | `----------` 
+#menu() | #order() | #menu() | #send_text()
+#order() | #order_total() | #print() | 
+#checkout() | #complete?() | |
+
+#### User Stories
+
+```
+As a customer
+So that I can check if I want to order something
+I would like to see a list of dishes with prices
+
+As a customer
+So that I can order the meal I want
+I would like to be able to select some number of several available dishes
+
+As a customer
+So that I can verify that my order is correct
+I would like to check that the total I have been given matches the sum of the various dishes in my order
+
+As a customer
+So that I am reassured that my order will be delivered on time
+I would like to receive a text such as "Thank you! Your order was placed and will be delivered before 18:52" after I have ordered
+```
+
+
+**What I've Learned:**
+> Context blocks in **RSpec** is handy way of keeping your documentation well organized. 
+
+> Contexts are a powerful method to make your tests clear and well organized. In the long term this practice will keep tests easy to read.
+```rb
+context 'order cart' do
+  it 'be empty at start' do
+    expect(kitchen.order_cart.empty?).to be true
+  end
+end
+```
+> Mocking behavior of of the other classes allows us to perform **RSpec** tests in isolation.
+```rb
+context 'instance variables' do
+  it 'responds to Menu_class double' do
+    allow(subject).to receive(:menu) { menu_class }
+    expect(subject.menu).to eq menu_class
+  end
+end
+```
+- Instance variable @menu responds to double of Menu class.
+
+<br>
+
+***
+
+<br>
+
+
+# Weekend Reflections
+
+### Did you meet all of your goals you set at the start of the week?
+- Unit test classes in isolation using mocking is till need some exploring and practicing.
+
+### What things do you still need to work through?
+- RSpec Mocking and doubles
+
+### What would you change/improve to keep moving forward?
+##### Technical: 
+- Domain Modeling and implementation.
+- still need to work on approach to the main problem, making sure I'm breaking them down significantly before approaching with solution.
+
+##### Personal:
+- Set achievable goals and PLAN !
+
+### A pat on the back
+- Made a progress in understanding of **RSpec**
+- Have better day plan routine and strategy.  
+
+<br>
+  

@@ -24,7 +24,7 @@
     *Object Encapsulation* 
 </p>
 
->**Encapsulation** can be illustrated as per the example above, where we have defined class object named *"ObjectEncapsulation"* and a variable defined below it. In all cases, the same variable name has been used (as well as the same variable "user" in class been defined three times).  
+>**Encapsulation** can be illustrated as per the example above, where we have defined class object named *"ObjectEncapsulation"* and a variable defined below it. In all cases, the same variable name has been used - *"user".*  
 By defining a new instance of the class *"ObjectEncapsulation"* and calling methods defined in the class, as per above, we getting different output every time despite the same variable name.
 
 ```
@@ -35,7 +35,7 @@ By defining a new instance of the class *"ObjectEncapsulation"* and calling meth
 
 ```
 
-**What we learned:**   
+**What I've learned:**   
 > - Encapsulation process is an important part of programming and it can be defined as wrapping up data under a single unit.   
 
 >- To **"encapsulate"** means to enclose variables, functions or methods into a small group or object.  
@@ -174,7 +174,7 @@ In **spec.rb** we can have nested `describe` blocks. By nesting it in another `d
 **Single-Responsibility Principle**
 
 - **SRP** or a **single-responsibility principle** is computer programing principle that states that every *class* or *module* should have responsibility over a single part of the functionality.
-- **What is responsibility?** In the context of the Single Responsibility Principle (SRP) we define a responsibility to be “a reason for change.” If you can think of more than one motive for changing a class, then that class has more than one responsibility.
+- **What is responsibility?** In the context of the Single Responsibility Principle (SRP) we define a responsibility to be a "reason for change.” If you can think of more than one motive for changing a class, then that class has more than one responsibility.
 - The **SRP** is one of the simplest of the principles, and one of the hardest to get right. Con-joining responsibilities is something that we do naturally. Finding and separating those responsibilities from one another is much of what software design is really about.
 
 <p align="center">
@@ -240,7 +240,7 @@ We have a request from a client to write the software to control the flow of pla
 - I would like a default airport capacity that can be overridden as appropriate
 - I want to prevent takeoff and landing when weather is stormy
 
-**What I've Learnt:**
+**What I've Learned:**
 >**RSpec:** can expect/test a method to trow an error message if certain condition is met. Expectations ships with a number of built-in matchers. Each matcher can be used with expect(..).to or expect(..).not_to to define positive and negative expectations.
 ```
 expect { subject.land(plane) }.to raise_error "message to pass in"
