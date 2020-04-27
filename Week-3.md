@@ -12,6 +12,128 @@
 
 ## Morning Goals 
 
+Attend *Week 3* kick of class.
+
+**Plan:**
+
+Break down weekly goals to focus on this week.
+
+**Process:** 
+
+Analise and go through the main Web concepts and skills: 
+
+- The relationship between a client and a server.
+- How HTTP is used to send information over the web.
+- RESTful APIs.
+- The request/response cycle.
+- Web templating with HTML/CSS.
+
+## Morning Goals 
+
+The relationship between a client and a server. How HTTP is used to send information over the web.
+
+**Plan:**
+
+- Perform research on-line individually.  
+- Describe what **server-client** relationship is and how **HTTP** is used. 
+- Summarize and give some practical example. 
+  
+**Process:** 
+
+The *World Wide Web* is an information space made up of two chief components: resources (mostly stored on servers), and the entities that request those resources (usually called clients).
+
+The whole **Web** is built on **client-server** relationships. There are different kinds of **clients** and **servers** but the relationship is roughly the same: the client is dependent on the server for providing and managing information. Anything that can request a resource from a server can be called a client.
+
+<p align="center">
+    <img width="250" src="images/Client-Server_01.png">  
+    *Client-Server relationship* 
+</p>
+
+**HTTP** or *Hypertext Transfer Protocol* is a protocol which allows the fetching of resources, such as HTML documents. It is the foundation of any data exchange on the Web and it is a client-server protocol, which means requests are initiated by the recipient, usually the Web browser. A complete document is reconstructed from the different sub-documents fetched, for instance text, layout description, images, videos, scripts, and more.
+
+#### Components of HTTP-based systems
+
+**Client: the user-agent**
+
+The user-agent is any tool that acts on the behalf of the user. This role is primarily performed by the Web browser; other possibilities are programs used by engineers and Web developers to debug their applications.
+
+The browser is **always** the entity initiating the request. It is never the server (though some mechanisms have been added over the years to simulate server-initiated messages).
+
+<p align="center">
+    <img width="400" src="images/HTTP_Request_01.png">  
+    *Client-Server relationship* 
+</p>
+
+**The Web server**
+
+On the opposite side of the communication channel, is the server, which serves the document as requested by the client. A server appears as only a single machine virtually: this is because it may actually be a collection of servers, sharing the load (load balancing) or a complex piece of software interrogating other computers (like cache, a DB server, or e-commerce servers), totally or partially generating the document on demand.
+
+<p align="center">
+    <img width="400" src="images/HTTP_Response_01.png">  
+    *Client-Server relationship* 
+</p>
+
+**Proxies**
+
+Between the Web browser and the server, numerous computers and machines relay the HTTP messages. Due to the layered structure of the Web stack, most of these operate at the transport, network or physical levels, becoming transparent at the HTTP layer and potentially making a significant impact on performance. Those operating at the application layers are generally called proxies. 
+
+**What I've learned:** 
+
+**HTTP** is an extensible protocol that is easy to use. The client-server structure, combined with the ability to simply add headers, allows HTTP to advance along with the extended capabilities of the Web.
+
+## Afternoon Challenges  
+
+*Practice pairing and building Web-app.*  
+**"Battle Challenge"**
+
+**Plan:** Pair with Hibo and keep working on the afternoon challenge for the week - *"Battle".*
+
+**Process:**
+
+- Reflect on documentation and get familiar with following: *The Web, HTTP, HTTP parameters, HTTP verbs.*
+- Sinatra: Getting started. As basic web framework, Sinatra, that can receive and respond to HTTP requests. Set up and run Sinatra from within your own computer.
+- Sinatra: Defining a route
+```rb
+require 'sinatra'
+get '/' do
+  'hello!'
+end
+```
+- Sinatra: Start and restart server to render different information.
+- Sinatra: Returning HTML. Placing a **"string"** in a block to render view.
+```rb
+get '/home' do
+  "<h1>Hello World</h1>"
+end
+```
+- Sinatra: Views. Can render partial by passing to the block `erb(:index)`
+- Sinatra: ERB. Ruby Expression using `<%= %>` ('ERB tags')
+- Sinatra: Keeping views clean. Making sure our file that renders *view* only have elements that related and do not have any logic/functions. **SRP !!!**
+- Sinatra: Introducing `params`. Thats information passed in form of **hash** as **key-value** pair to servers `/home path: ?name=James`
+- Sinatra: Using forms. Instead of letting user to interact  via URL bar we can allow our users to interact with our app via a `<form>` element. 
+```rb
+form.erb # View partial 
+  <form name="input" action=“/form” method=“post”>
+  username: <input type=“text” name=“username”>
+  password: <input type=“password” name=“password”>
+
+  <input type=“submit” value=“Submit”>
+  </form>
+```
+
+**What I've Learned:**
+
+> **Sinatra: Defining a route**. We can handle/define and setup routes by the request path ** /. / **. Browser is making a request using a path for which your server has route setup. When a server receives a request along with a path, it activates a particular route.  
+> **Sinatra** gem basic web framework that can receive and respond to HTTP requests.  
+> **Sinatra: Views**. How to set up view partials that helps to render views for web apps. 
+
+
+
+
+
+
+
+
 
 
 
