@@ -110,6 +110,71 @@ end
 - Sinatra: ERB. Ruby Expression using `<%= %>` ('ERB tags')
 - Sinatra: Keeping views clean. Making sure our file that renders *view* only have elements that related and do not have any logic/functions. **SRP !!!**
 - Sinatra: Introducing `params`. Thats information passed in form of **hash** as **key-value** pair to servers `/home path: ?name=James`
+
+**What I've Learned:**
+
+> **Sinatra: Defining a route**. We can handle/define and setup routes by the request path ** /. / **. Browser is making a request using a path for which your server has route setup. When a server receives a request along with a path, it activates a particular route.  
+> **Sinatra** gem basic web framework that can receive and respond to HTTP requests.  
+> **Sinatra: Views**. How to set up view partials that helps to render views for web apps. 
+
+## Daily Goals 
+### Tuesday 28 of April 2020
+
+## Morning Goals 
+
+Basics, how the web works: **RESTful APIs**
+
+**Plan:**
+
+- Perform research on-line individually.  
+- Describe what **Abstraction in OO is** and it's usages. 
+- Summarize and give some practical example. 
+  
+**Process:** 
+
+A RESTful API is an application program interface (API) that uses HTTP requests to GET, PUT, POST and DELETE data.
+
+An **API** is an application programming interface. It is a set of rules that allow programs to talk to each other. The developer creates the API on the server and allows the client to talk to it.
+
+**REST** determines how the API looks like. It stands for "Representational State Transfer". It is a set of rules that developers follow when they create their API. One of these rules states that you should be able to get a piece of data (called a resource) when you link to a specific URL.
+
+Each **URL** is called a request while the data sent back to you is called a response.
+
+**Resource**
+
+The key abstraction of information in REST is a resource. Any information that can be named can be a resource: a document or image, a temporal service, a collection of other resources, a non-virtual object (e.g. a person), and so on. REST uses a resource identifier to identify the particular resource involved in an interaction between components.
+
+The state of the resource at any particular timestamps is known as resource representation. A representation consists of data, metadata describing the data and hypermedia links which can help the clients in transition to the next desired state.
+
+**REST and HTTP are not same !!**
+
+A lot of people prefer to compare HTTP with REST. REST and HTTP are not same.
+```
+REST != HTTP
+```
+
+**Uses**
+
+Because the calls are stateless, REST is useful in cloud applications. Stateless components can be freely redeployed if something fails, and they can scale to accommodate load changes. This is because any request can be directed to any instance of a component; there can be nothing saved that has to be remembered by the next transaction. That makes REST preferable for web use, but the RESTful model is also helpful in cloud services because binding to a service through an API is a matter of controlling how the URL is decoded.
+
+**What I've Learned:**
+
+> REST is acronym for **REpresentational** State Transfer.  
+
+> Resources are decoupled from their representation so that their content can be accessed in a variety of formats, such as HTML, XML, plain text, PDF, JPEG, JSON, and others. Metadata about the resource is available and used, for example, to control caching, detect transmission errors, negotiate the appropriate representation format, and perform authentication or access control. And most importantly, every interaction with a resource is stateless.  
+
+> All these principles help RESTful applications to be simple, lightweight, and fast.
+
+## Afternoon Challenges  
+
+*Practice pairing and building Web-app.*  
+**"Battle Challenge"**
+
+**Plan:** Pair with Tanil and keep working on the afternoon challenge for the week - *"Battle".*
+
+**Process:**
+
+- Recap on progress and even out any differences.
 - Sinatra: Using forms. Instead of letting user to interact  via URL bar we can allow our users to interact with our app via a `<form>` element. 
 ```rb
 form.erb # View partial 
@@ -120,22 +185,58 @@ form.erb # View partial
   <input type=“submit” value=“Submit”>
   </form>
 ```
+- **Sinatra: POSTed** params we able to hide request parameters by using a **POST** request.
+
+<p align="center">
+    <img width="600" src="images/GET_request_01.png">  
+    *Data Abstraction in OOP* 
+</p>
+
+We able to ask our form to submit its data as a POST request instead:
+```
+<form action="/named-cat" method="post">
+  <input type="text" name="name">
+  <input type="submit" value="Submit">
+</form>
+```
+Now when we submit the form, we get Sinatra's 'undefined route' error. That's because we've only defined a route that can handle the request GET /named-cat. We don't have a route that can handle POST /named-cat.
+
+Let's change our /named-cat route to handle POST requests instead of GET ones:
+
+```
+# in app.rb
+# first, let's write a form-displaying route
+get '/cat-form' do
+  erb :cat_form
+end
+
+post '/named-cat' do
+  p params
+  @name = params[:name]
+  erb :index
+end
+```
 
 **What I've Learned:**
 
-> **Sinatra: Defining a route**. We can handle/define and setup routes by the request path ** /. / **. Browser is making a request using a path for which your server has route setup. When a server receives a request along with a path, it activates a particular route.  
-> **Sinatra** gem basic web framework that can receive and respond to HTTP requests.  
-> **Sinatra: Views**. How to set up view partials that helps to render views for web apps. 
+> **POST** requests do not store their query parameters in the request string. Instead, they store them in the body of the request as 'Form Data'.
+
+> **params** we print to the console have not changed. This is what we expect: although POST sends parameters from clients to servers in a different way to GET, it still sends them, and they are interpreted the same way by Sinatra.
+
+## Daily Goals 
+### Wednesday 29 of April 2020
+
+## Morning Goals 
 
 
 
+**Plan:**
 
-
-
-
-
-
-
+- Perform research on-line individually.  
+- Describe what **Abstraction in OO is** and it's usages. 
+- Summarize and give some practical example. 
+  
+**Process:** 
 
 
 
