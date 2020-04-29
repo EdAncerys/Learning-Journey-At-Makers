@@ -14,7 +14,7 @@
 
 **Plan:**
 
-- Perform research on-line individually. 
+- Perform research online individually. 
 - Discuss research findings in group.  
 - Describe what is **encapsulation** and its usage. 
 - Give some practical example for encapsulation.
@@ -161,7 +161,7 @@ In **spec.rb** we can have nested `describe` blocks. By nesting it in another `d
 
 **Plan:**
 
-- Perform research on-line individually.  
+- Perform research online individually.  
 - Describe what is **SRP** and its usage. 
 - Summarize and give some practical example for **SRP**.  
 

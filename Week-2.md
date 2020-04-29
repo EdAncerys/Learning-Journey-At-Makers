@@ -94,7 +94,7 @@ Unit test classes in isolation using mocking
 
 **Plan:**
 
-- Perform research on-line individually.  
+- Perform research online individually.  
 - Describe what is **Mocking and doubles** and its usage. 
 - Summarize and give some practical example for **doubles**. 
   
@@ -194,7 +194,7 @@ Unit test and Feature test usage and deferences.
 
 **Plan:**
 
-- Perform research on-line individually.  
+- Perform research online individually.  
 - Describe what **Unit and Feature Tests are** and their usages. 
 - Summarize and give some practical example. 
   
@@ -300,7 +300,7 @@ it "fails when the second matcher fails" do
 
 **Plan:**
 
-- Perform research on-line individually.  
+- Perform research online individually.  
 - Describe what **Abstraction in OO is** and it's usages. 
 - Summarize and give some practical example. 
   
@@ -396,7 +396,7 @@ subject { described_class.new(name: "Kings cross", zone: 1)}
 
 **Plan:**
 
-- Perform research on-line individually.  
+- Perform research online individually.  
 - Describe what **Dependency injection** is and it's usages. 
 - Summarize and give some practical example. 
   

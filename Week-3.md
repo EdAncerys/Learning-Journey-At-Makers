@@ -34,7 +34,7 @@ The relationship between a client and a server. How HTTP is used to send informa
 
 **Plan:**
 
-- Perform research on-line individually.  
+- Perform research online individually.  
 - Describe what **server-client** relationship is and how **HTTP** is used. 
 - Summarize and give some practical example. 
   
@@ -115,7 +115,7 @@ end
 
 > **Sinatra: Defining a route**. We can handle/define and setup routes by the request path ** /. / **. Browser is making a request using a path for which your server has route setup. When a server receives a request along with a path, it activates a particular route.  
 > **Sinatra** gem basic web framework that can receive and respond to HTTP requests.  
-> **Sinatra: Views**. How to set up view partials that helps to render views for web apps. 
+> **Sinatra: Views** - sets up view partials that helps to render views for web apps. 
 
 ## Daily Goals 
 ### Tuesday 28 of April 2020
@@ -126,7 +126,7 @@ Basics, how the web works: **RESTful APIs**
 
 **Plan:**
 
-- Perform research on-line individually.  
+- Perform research online individually.  
 - Describe what **Abstraction in OO is** and it's usages. 
 - Summarize and give some practical example. 
   
@@ -228,18 +228,161 @@ end
 
 ## Morning Goals 
 
-
+Web templating with HTML/CSS.
 
 **Plan:**
 
-- Perform research on-line individually.  
+- Perform research online individually.  
 - Describe what **Abstraction in OO is** and it's usages. 
 - Summarize and give some practical example. 
   
 **Process:** 
 
+**What is HTML?**
+
+**HTML** is the language for describing the structure of Web pages. HTML gives authors the means to:  
+
+- Publish online documents with headings, text, tables, lists, photos, etc.
+- Retrieve online information via hypertext links, at the click of a button.
+- Design forms for conducting transactions with remote services, for use in searching for   information, making reservations, ordering products, etc.
+- Include spread-sheets, video clips, sound clips, and other applications directly in       their documents.
+
+**What is CSS?**
+
+**CSS** is the language for describing the presentation of Web pages, including colors, layout, and fonts. It allows one to adapt the presentation to different types of devices, such as large screens, small screens, or printers. 
+
+CSS is independent of HTML and can be used with any XML-based markup language. The separation of HTML from CSS makes it easier to maintain sites, share style sheets across pages, and tailor pages to different environments. This is referred to as the separation of structure (or: content) from presentation.
+
+**Examples**
+
+**External CSS.** An external style sheet is used to define the style for many HTML pages.
+
+With an external style sheet, you can change the look of an entire web site, by changing one file! To use an external style sheet, add a link to it in the <head> section of the HTML page:
+
+```
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h1>This is a heading</h1>
+<p>This is a paragraph.</p>
+
+</body>
+</html>
+```
+
+The following very simple example of a portion of an HTML document illustrates how to create a link within a paragraph. When rendered on the screen (or by a speech synthesizer), the link text will be “final report”; when somebody activates the link, the browser will retrieve the resource identified by “http://www.example.com/report”:
+```
+<p class="moreinfo">For more information see the
+<a href="http://www.example.com/report">final report</a>.</p>
+```
+
+The class attribute on the paragraph's start tag `<p>` can be used, among other thing, to add style. For instance, to italicize the text of all paragraphs with a class of “moreinfo,” one could write, in CSS:
+
+```
+p.moreinfo { font-style: italic }
+```
+
+By placing that rule in a separate file, the style may be shared by any number of HTML documents.
+
+**What I've Learned:**
+
+> With **HTML** we describe the structure of pages using markup. The elements of     the language label pieces of content such as “paragraph,” “list,” “table,” and so on.
+
+> **Cascading Style Sheets** (CSS) is a stylesheet language used to describe the           presentation of a document written in HTML or XML (including XML dialects such as SVG,   MathML or XHTML). CSS describes how elements should be rendered on screen, on paper, in   speech, or on other media.
+
+## Afternoon Challenges  
+
+*Practice pairing and building Web-app.*  
+**"Battle Challenge"**
+
+**Plan:** Pair with Jo and keep working on the afternoon challenge for the week - *"Battle".*
+
+**Process:**
+
+- Recap on progress and talk through the concept.
+- Testing with an Automated Browser and Capybara
+- Start a new project **Battle** by creating a Gemfile with Sinatra, Capybara   and Rspec.
+```
+# In Gemfile
+source 'https://rubygems.org'
+gem 'rspec'
+gem 'sinatra'
+```
+- Creating a controller file app.rb and require sinatra 
+
+```ruby
+# in app.rb
+
+require 'sinatra/base'
+
+class Battle < Sinatra::Base
+  get '/' do
+    'Hello Battle!'
+  end
+
+  # start the server if ruby file executed directly
+  run! if app_file == $0
+end
+```
+- Create a config.ru file you can use to run your app.
+
+```rb
+require_relative './app'
+run Battle
+```
+
+- Initialize `rspec --init` to start writing your tests.
+- Getting test infrastructure set up by adding capybara gem and in spec_helper.rb file the following:
+
+```rb
+  ENV['RACK_ENV'] = 'test'
+
+  # require our Sinatra app file
+  require File.join(File.dirname(__FILE__), '..', 'app.rb')
+
+  require 'capybara'
+  require 'capybara/rspec'
+  require 'rspec'
+
+  # tell Capybara about our app class
+  Capybara.app = Battle
+```
+
+- In spec/features, write a feature test that checks that the hompage says     Testing infrastructure working!.
+- Use params to extract information from a request by taking assigned values   from in the form.
+
+```rb
+<form action="/names" method="post">
+  <input type="text" name="player_1_name">
+  <input type="text" name="player_2_name">
+  <input type="submit" value="Submit">
+</form>
+```
+- Write a feature test using **Capybara.**
+```rb
+feature 'Enter names' do
+  scenario 'submitting names' do
+    visit('/')
+    fill_in :player_1_name, with: 'Dave'
+    fill_in :player_2_name, with: 'Mittens'
+    click_button 'Submit'
+    expect(page).to have_content 'Dave vs. Mittens'
+  end
+end
+```
 
 
+**What I've Learned:**
+
+> Capybara is a web-based test automation software that simulates scenarios     for user stories and automates web application testing for behavior-driven   software development. It is written in the Ruby programming language.         Capybara can mimic actions of real users interacting with web-based           applications.
+
+> **What is Browser Automation?** In the most fundamental sense, browser       automation is the act of running various tasks, or instances, to gather       insights into the functionality and performance of site pages, applications   and lines of code.
+
+> **Selenium WebDriver**. Featured snippet from the web WebDriver is a web     automation framework that allows you to execute your tests against           different browsers, not just Firefox, Chrome
 
 
 
@@ -256,7 +399,7 @@ end
 
 **Plan:**
 
-- Perform research on-line individually.  
+- Perform research online individually.  
 - Describe what **Polymorphism in OO is** and it's usages. 
 - Summarize and give some practical example. 
   
