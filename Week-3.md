@@ -389,6 +389,160 @@ end
 
 ## Morning Goals 
 
+Improve debugging techniques.
+
+**Plan:** Attend Debugging Web Apps Workshop with Eoin
+  
+**Process:** 
+
+- See the list of error messages
+- Pick one (unit test before feature tests)
+- Run rspec with the error path (shows only one error at a time)
+- Read the error message
+- Go to the file and line that the error is pointing (go to line command   can do this with the path)
+- Get overall view of your code and your tests to see it as a whole
+- Try to understand what the code does and what is being tested (look for   the syntax that you don’t understand).  
+- Try an idea and see if error changes
+- Zoom out when you do changes to see if the rest of tests for that code   are still passing (your changes may break them)
+- Keep looping through rest of the errors until the error is fixed
+
+**What I've Learned:**
+
+- **Debugging** - process of eliminating bugs from an expected program output.
+- 'Tighten the loop; Get visibility'.
+- Use the mantra to resolve bugs across the web stack.
+ 
+## Afternoon Challenges  
+
+*Practice pairing and building Web-app.*  
+**"Battle Challenge"**
+
+**Plan:** Pair with Will and keep working on the afternoon challenge for the week - *"Battle".*
+
+**Process:**
+
+- POST/redirect/GET pattern  
+
+> A session is a short-term information store that lives on the server. It's very small, but it allows the server to store basic pieces of information, like the name of the current user, across multiple requests.
+
+```rb
+# in app.rb
+class Battle < Sinatra::Base
+  enable :sessions
+
+  get '/' do
+    erb :index
+  end
+```
+
+- In the post '/names' route, adding player names in the session instead of assigning them to instance variables, as well as **redirecting to '/play' view:
+
+```rb
+# in app.rb
+post '/names' do
+  session[:player_1_name] = params[:player_1_name]
+  session[:player_2_name] = params[:player_2_name]
+  redirect '/play' 
+end
+```
+
+- We render view from a new get '/play' route, where we'll extract the required instance variables from the session instead:
+
+```rb
+# in app.rb
+get '/play' do
+  @player_1_name = session[:player_1_name]
+  @player_2_name = session[:player_2_name]
+  erb :play
+end
+
+```
+- Write a feature test using Capybara:
+
+```rb
+feature 'View hit points' do
+  scenario 'see Player 2 hit points' do
+    visit('/')
+    fill_in :player_1_name, with: 'Dave'
+    fill_in :player_2_name, with: 'Mittens'
+    click_button 'Submit'
+    expect(page).to have_content 'Mittens: 60HP'
+  end
+end
+```
+
+- DRY up code with helpers. Refactor the code (feature tests) by useing `web_helpers.rb`
+
+```rb
+require 'features/web_helpers'
+```
+
+- Feature test for second user story 2 using Capybara. 
+- Refactor our code to use some Application logic stored in a Model         layer. We can store our Model layer in /lib, and access it from our       controller. This is known as a Separation of Concerns.
+- Write a feature test using Capybara. Implement a feature from the **Model** layer. Since we have a Player model, let's move those responsibilities into Player for now. Our tests for these things:
+
+```rb
+describe Player do
+  subject(:dave) { Player.new('Dave') }
+  subject(:mittens) { Player.new('Mittens') }
+
+  describe '#name' do
+    it 'returns the name' do
+      expect(dave.name).to eq 'Dave'
+    end
+  end
+
+  describe '#hit_points' do
+    it 'returns the hit points' do
+      expect(dave.hit_points).to eq described_class::DEFAULT_HIT_POINTS
+    end
+  end
+
+  describe '#attack' do
+    it 'damages the player' do
+      expect(mittens).to receive(:receive_damage)
+      dave.attack(mittens)
+    end
+  end
+
+  describe '#receive_damage' do
+    it 'reduces the player hit points' do
+      expect { dave.receive_damage }.to change { dave.hit_points }.by(-10)
+    end
+  end
+ end
+```
+
+- Extract the `#attack method` (and associated tests) into a Game class.
+ **Refactor** your controller . At current, our Player model is            responsible for two main things: managing its hit points, and attacking other players:
+ 
+ ```rb
+describe Game do
+  subject(:game) { described_class.new }
+  let(:player_1) { double :player }
+  let(:player_2) { double :player }
+
+  describe '#attack' do
+    it 'damages the player' do
+      expect(player_2).to receive(:receive_damage)
+      game.attack(player_2)
+    end
+  end
+end
+```
+
+
+**What I've Learned:**
+
+> `redirect '/route'` will issue an 'internal GET request' within the       server.
+
+> We can use a **helper** to avoid this constant repetition. Helpers are   small objects that provide basic functionality that isn't related to     the main aim of a program. They are almost always used to DRY up code.
+
+## Daily Goals 
+### Friday 1 of May 2020
+
+## Morning Goals 
+
 Explain the **MVC** pattern.
 
 **Plan:**
@@ -415,6 +569,7 @@ Controller: The controller handles the user request. Typically, the user uses th
 
 <p align="center">
     <img width="300" src="images/MVC_01.png">  
+    
     *MVC Architecture* 
 </p>
 
@@ -422,6 +577,7 @@ The following figure illustrates the flow of the user's request in ASP.NET MVC.
 
 <p align="center">
     <img width="600" src="images/MVC_02.png">  
+    
     *Request flow in MVC Architecture* 
 </p>
 
@@ -434,5 +590,6 @@ As a web developer, this pattern could be breaked down in to data model that con
 > **MVC** stands for Model, View and Controller.  
 > *Model* represents the data.  
 > *View* is the User Interface.  
-> *Controller* is the request handler.  
+> *Controller* is the request handler. 
+
 
