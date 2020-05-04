@@ -12,11 +12,13 @@
 
 ## Morning Goals 
 
-Attend *Week 3* kick of class.
+Set a working plan for the new week
 
-**Plan:**
+##### Plan:
 
-Break down weekly goals to focus on this week.
+- Review weekend challenge in pair
+- Set goals for the new week
+- Attend *Week 3* kick of class.
 
 **Process:** 
 
@@ -79,7 +81,9 @@ Between the Web browser and the server, numerous computers and machines relay th
 
 **What I've learned:** 
 
-**HTTP** is an extensible protocol that is easy to use. The client-server structure, combined with the ability to simply add headers, allows HTTP to advance along with the extended capabilities of the Web.
+> The whole Web is built on client-server relationships. 
+
+> **HTTP** is an extensible protocol that is easy to use. The client-server structure, combined with the ability to simply add headers, allows HTTP to advance along with the extended capabilities of the Web.
 
 ## Afternoon Challenges  
 
@@ -221,7 +225,7 @@ end
 
 > **POST** requests do not store their query parameters in the request string. Instead, they store them in the body of the request as 'Form Data'.
 
-> **params** we print to the console have not changed. This is what we expect: although POST sends parameters from clients to servers in a different way to GET, it still sends them, and they are interpreted the same way by Sinatra.
+> **params** we print to the console have not changed. This is what we expect: although POST sends parameters from clients to servers in a different way to GET, it still sends them. All interpreted the same way by Sinatra.
 
 ## Daily Goals 
 ### Wednesday 29 of April 2020
@@ -378,7 +382,7 @@ end
 
 **What I've Learned:**
 
-> Capybara is a web-based test automation software that simulates scenarios     for user stories and automates web application testing for behavior-driven   software development. It is written in the Ruby programming language.         Capybara can mimic actions of real users interacting with web-based           applications.
+> **Capybara** is a web-based test automation software that simulates scenarios     for user stories and automates web application testing for behavior-driven   software development. It is written in the Ruby programming language.         Capybara can mimic actions of real users interacting with web-based           applications.
 
 > **What is Browser Automation?** In the most fundamental sense, browser       automation is the act of running various tasks, or instances, to gather       insights into the functionality and performance of site pages, applications   and lines of code.
 
@@ -477,7 +481,7 @@ end
 require 'features/web_helpers'
 ```
 
-- Feature test for second user story 2 using Capybara. 
+- Feature test for second user story 2 with Capybara. 
 - Refactor our code to use some Application logic stored in a Model         layer. We can store our Model layer in /lib, and access it from our       controller. This is known as a Separation of Concerns.
 - Write a feature test using Capybara. Implement a feature from the **Model** layer. Since we have a Player model, let's move those responsibilities into Player for now. Our tests for these things:
 
@@ -514,7 +518,8 @@ describe Player do
 ```
 
 - Extract the `#attack method` (and associated tests) into a Game class.
- **Refactor** your controller . At current, our Player model is            responsible for two main things: managing its hit points, and attacking other players:
+ **Refactor** your controller . At current, our Player model is responsible for two main things: managing its hit points, and attacking other players:  
+ 
  
  ```rb
 describe Game do
@@ -591,5 +596,291 @@ As a web developer, this pattern could be breaked down in to data model that con
 > *Model* represents the data.  
 > *View* is the User Interface.  
 > *Controller* is the request handler. 
+
+## Afternoon Challenges  
+
+*Practice pairing and building Web-app.*  
+**"Battle Challenge"**
+
+**Plan:** Pair with Dec and keep working on the afternoon challenge for the week - *"Battle".*
+
+**Process:**
+
+- Refactor a controller to keep it 'skinny'. In order to refactor controller we need to extract some methods that not reflects *SRP** in Player class: 
+
+```rb
+
+class Game
+
+  attr_reader :player_1, :player_2, :current_player
+
+  def initialize(player_1, player_2)
+    @player_1 = player_1
+    @player_2 = player_2
+    @current_player = @player_1
+  end
+
+  def attack(player)
+    player.receive_damage
+  end
+# other tests omitted    
+```
+
+- Adding a feature to switch turns.  
+Write a feature test using Capybara. Implement a feature from the Model   layer. Refactor a controller.  
+Feature tests using this visual turn indicator:
+
+```rb
+scenario 'Switch turns' do
+  context 'seeing the current turn' do
+    scenario 'at the start of the game' do
+      sign_in_and_play
+      expect(page).to have_content "Dave's turn"
+    end
+
+    scenario 'after player 1 attacks' do
+      sign_in_and_play
+      click_button 'Attack'
+      click_link 'OK'
+      expect(page).not_to have_content "Dave's turn"
+      expect(page).to have_content "Mittens's turn"
+    end
+  end
+end
+
+```
+
+Now for the actual turn-switching. In our controller:
+
+```rb
+get '/attack' do
+  @game = $game
+  @game.attack(@game.player_2)
+  @game.switch_turns
+  erb :attack
+end
+
+```
+
+- Implementing multiple features based on **User stories** in a web application. Delivering multiple features in a web application based on user stories. Feature test with **Capybara** to implement display User turns:
+
+```rb
+  scenario 'switch player turns' do
+    sign_in_and_play
+    click_link 'Attack'
+    click_link 'OK'
+    expect(page).to have_content "Mittens's turn"
+  end
+
+```
+
+- Adding a feature to note User who is a winner by adding **if** statement in view partial:
+
+```rb
+<% if @game.player_2.hit_points == 0 %>
+  <h1> <%= @game.player_2.name %> loses</h1>
+<% else%>
+  <h1><%= @game.current_player.name %>'s turn</h1>
+  <%= @game.player_1.name %> vs. <%= @game.player_2.name %>
+# Not all code displayed 
+
+```
+- Killing the Global Variable and removing `$game` from our code altogether.
+
+```rb
+  def self.create(player_1, player_2)
+    @game = Game.new(player_1, player_2)
+  end
+  
+  def self.instance
+    @game
+  end
+```
+
+**What I've Learned:**
+
+> Keep your Controllers skinny.
+
+> Commit to memory the fact that using a global variable will ruin any tech tests you do, and promise to your pair partner that you never will.
+
+To successfully set up a project with sinatra:
+- Add controller file app.rb
+- As we will be working with **Sinatra** framework we need to install **gem sinatra**. 
+Need to `require sinatra` at the top of the app.rb File should look something like this:
+
+```rb
+require 'sinatra/base'
+enable :sessions
+
+class MyRockApp < Sinatra::Base
+
+  go '/' do
+    erb :index
+  end
+
+end
+
+```
+
+- To run a server with **rackup** need to add `config.ru` file to directory with following configuration: 
+
+```rb
+require File.expand_path '../app.rb', __FILE__
+run MyRackApp
+```
+
+- To able to run **Feature testing** with **Capybara** need to add following to spec_helper.rb :
+
+```rb
+  # CAPYBARA SET UP
+  ENV['RACK_ENV'] = 'test'
+
+  # require our Sinatra app file
+  require File.join(File.dirname(__FILE__), '..', 'app.rb')
+
+  require 'capybara'
+  require 'capybara/rspec'
+  require 'rspec'
+
+  # tell Capybara about our app class
+  Capybara.app = BirthdayApp
+
+  # CAPYBARA SET UP
+```
+
+## Weekend Challenge
+
+**RPS Challenge:** Full path to the project on [GitHub](https://github.com/EdAncerys/rps-challenge)
+
+Weekend challenge project been a good way of recapping progress that been made over the week. It brought back some confidence and reassurance of what been learned over the week. 
+
+Task
+----
+
+The Makers Academy Marketing Array ( **MAMA** ) have asked us to provide a game for them. Their daily grind is pretty tough and they need time to steam a little.
+
+Your task is to provide a _Rock, Paper, Scissors_ game for them so they can play on the web with the following user stories:
+
+#### User Stories
+
+```
+As a marketeer
+So that I can see my name in lights
+I would like to register my name before playing an online game
+
+As a marketeer
+So that I can enjoy myself away from the daily grind
+I would like to be able to play rock/paper/scissors
+```
+
+Hints on functionality
+
+- the marketeer should be able to enter their name before the game
+- the marketeer will be presented the choices (rock, paper and scissors)
+- the marketeer can choose one option
+- the game will choose a random option
+- a winner will be declared
+
+## Bonus level 1: Multiplayer
+
+Change the game so that two marketeers can play against each other ( _yes there are two of them_ ).
+
+## Bonus level 2: Rock, Paper, Scissors, Spock, Lizard
+
+Use the _special_ rules ( _you can find them here http://en.wikipedia.org/wiki/Rock-paper-scissors-lizard-Spock_ )
+
+## Basic Rules
+
+- Rock beats Scissors
+- Scissors beats Paper
+- Paper beats Rock
+ 
+
+#### Domain Model for RSP app
+
+Game.new | Computer.new | MyData.new 
+:---: | :---: | :---: 
+@player_pick  | | @game_class 
+@computer_pick| | @results
+ @spin | | @player_wins
+ | | @computer_wins
+ | | @tie_games
+ | | @rounds
+ `----------` | `----------` | `----------`
+#choose_winner() | #random_pick() | #rps_score_results() 
+ | | #rps_win_records() 
+ | | #rps_round() 
+ | | #self.create() 
+ | | #self.instance() 
+    
+#### Views Plan:
+
+get './'         -->  display index.erb (name input form)  
+post './user'    -->  redirect to ./game (pass name as a parameter)  
+get './rps'     -->  display play.erb view partial (option to pick **RPC**)  
+post './game'  -->  redirect to ./play (passing player choice for **RPS**)  
+get './play'   -->  display play.erb (display game and outcome)
+
+**What I've Learned:**
+
+> Class instance is destroyed by post request any time request is made. 
+Can "store" temporary data in a instance of the class by initializing it as per bellow:
+
+```rb
+@data = MyData.instance
+```
+
+> We an can create **class methods** by calling them `on the class` as per bellow:
+
+```rb
+  def self.create
+    @data = MyData.new
+  end
+  
+  def self.instance
+    @data
+  end
+```
+
+<br>
+
+***
+
+<br>
+
+# Weekend Reflections
+
+### Did you meet all of your goals you set at the start of the week?
+- Managed to plan my week overall pretty good. Been sticking to set routine that helped me to stay on top of the game. 
+
+### What things do you still need to work through?
+- RSpec Mocking and doubles still is a challenge. 
+- Stubbing with **Capybara** random behavior of the class methods.
+
+### What would you change/improve to keep moving forward?
+##### Technical: 
+- Try to do at least few practicals per week to help me with implementing/re-assuring my knowledge.
+
+##### Personal:
+
+- Manage to have some more free time than previous week for myself.
+
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
