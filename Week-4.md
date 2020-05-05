@@ -298,5 +298,646 @@ Data is typically modeled in rows and columns in a series of tables to make proc
 
 > **SQL** (Structured Query Language) standard language used to communicate with a database. SQL statements are used to perform tasks such as update data on a database, or retrieve data from a database.
 
+## Afternoon Challenges  
+
+*Practice pairing and building Web-app.*  
+[**"Bookmark Manager"**](https://github.com/EdAncerys/bookmark-manager)
+
+**Plan:** Pair with Jed and keep working on the afternoon challenge for the week - *"Bookmark Manager".*
+
+**Process:**
+
+- Setting up a testing environment (**Test database**). A test environment that runs locally on your computer whenever you run your tests. It comes handy for tests that need to have predictable outcome.
+
+To set up *test database* we need to run following commands in terminal:
+
+```
+$> psql DATABASE_NAME (or postgresql)
+admin=# CREATE DATABASE "bookmark_manager_test";
+admin=# CREATE TABLE bookmarks(id SERIAL PRIMARY KEY, url VARCHAR(60));
+```
+We need to add following code to our `spec_helper.rb` :
+
+```
+# in spec/spec_helper.rb
+
+ENV['ENVIRONMENT'] = 'test'
+```
+
+As `spec_hlper.rb` always run first before any test we can tel **RSpec** to load/look in to test environment only. 
+
+We can now use this omnipresent ENV variable in our Bookmark class, to determine which database we should connect to:
+
+```rb
+# in lib/bookmark.rb
+require 'pg'
+
+class Bookmark
+  def self.all
+    if ENV['ENVIRONMENT'] == 'test'
+      connection = PG.connect(dbname: 'bookmark_manager_test')
+    else
+      connection = PG.connect(dbname: 'bookmark_manager')
+    end
+
+    result = connection.exec("SELECT * FROM bookmarks")
+    result.map { |bookmark| bookmark['url'] }
+  end
+end
+```
+
+**Tests should always run against an empty database**. We should set up any required Test data in the test itself. Let's write a script that sets up and clears out the test database each run.
+
+We need to 'drop' the database between each run of the script. Let's use PostgreSQL's TRUNCATE command to do that:
+
+```rb
+require 'pg'
+
+p "Setting up test database..."
+
+def setup_test_database 
+  connection = PG.connect(dbname: 'bookmark_manager_test')
+  # Clear the bookmarks table
+  connection.exec("TRUNCATE bookmarks;")
+end
+```
+Integrate the script into our test runner, `rspec` by adding following to `spec_helper.rb` :
+
+```rb
+require_relative './setup_test_database'
+
+ENV['ENVIRONMENT'] = 'test'
+
+RSpec.configure do |config|
+  config.before(:each) do
+    setup_test_database
+  end
+end
+```
+- Creating bookmarks and adding them to database.
+Write a feature test for adding bookmarks should look like this:
+
+```rb
+# in spec/features/creating_bookmarks_spec.rb
+
+feature 'Adding a new bookmark' do
+  scenario 'A user can add a bookmark to Bookmark Manager' do
+    visit('/bookmarks/new')
+    fill_in('url', with: 'http://testbookmark.com')
+    click_button('Submit')
+
+    expect(page).to have_content 'http://testbookmark.com'
+  end
+end
+```
+
+We should use a POST route to define this route, as we're submitting data to the application to be saved. Our view should look like:
+
+```
+<form action="/bookmarks" method="post">
+  <input type="text" name="url" />
+  <input type="submit" value="Submit" />
+</form>
+```
+
+Let's define this POST route, and print to the console whenever the route is activated:
+
+```rb
+get '/bookmarks/new' do
+  erb :"/bookmarks/new"
+end
+
+post '/bookmarks' do
+  Bookmark.create(url: params['url'])
+  redirect '/bookmarks'
+end
+```
+Adding **Unit test** to test our model method:
+
+```rb
+# in spec/bookmark_spec.rb
+
+describe '.create' do
+  it 'creates a new bookmark' do
+    Bookmark.create(url: 'http://www.testbookmark.com')
+
+    expect(Bookmark.all).to include 'http://www.testbookmark.com'
+  end
+end
+```
+Now we can finally add write method that pass the **Unit tats** and code looks like:
+```rb
+# in lib/bookmark.rb
+
+def self.create(url:)
+  if ENV['ENVIRONMENT'] == 'test'
+    connection = PG.connect(dbname: 'bookmark_manager_test')
+  else
+    connection = PG.connect(dbname: 'bookmark_manager')
+  end
+
+  connection.exec("INSERT INTO bookmarks (url) VALUES('#{url}')")
+end
+```
+- Wrapping database data in program objects. 
+
+At the moment, when we use Bookmark.all to get bookmarks from the database, we just return an array of strings.
+
+In this challenge, you will add a title column to the bookmarks table, and display it on the homepage instead of the link URL. To do this, you will need to wrap database data in a Ruby object.
+
+Before we can make any changes to the application features, the bookmarks table needs to be updated to accept a title value.
+
+To make this change in the bookmark_manager database via psql, use the following command:
+```
+ALTER TABLE bookmarks ADD COLUMN title VARCHAR(60);
+```
+We'll need to save this step in the db/migrations directory:
+
+```
+# in db/migrations/02_add_title_to_bookmarks.sql
+
+ALTER TABLE bookmarks ADD COLUMN title VARCHAR(60);
+```
+
+Adding title to creating a bookmark
+
+Before a user can see the title of a bookmark, they'll need to be able to add the title. Let's start by updating the feature test for creating bookmarks:
+
+```rb
+# in spec/features/creating_bookmarks_spec.rb
+
+feature 'Adding a new bookmark' do
+  scenario 'A user can add a bookmark to Bookmark Manager' do
+    visit('/bookmarks/new')
+    fill_in('url', with: 'http://www.testbookmark.com')
+    fill_in('title', with: 'Test Bookmark')
+    click_button('Submit')
+
+    expect(page).to have_link('Test Bookmark', href: 'http://www.testbookmark.com')
+  end
+end
+```
+
+We'll need to add this additional field to the bookmarks/new view:
+
+```
+<!-- in views/bookmarks/new.erb -->
+<form method="post" action="/bookmarks/new">
+  <input type="text" name="url" placeholder="URL" />
+  <input type="text" name="title" placeholder="Title" />
+  <input type="submit" value="Submit" />
+</form>
+```
+And let's pass this new field to Bookmark.create in the Controller:
+
+```rb
+# in app.rb
+
+post '/bookmarks/new' do
+  Bookmark.create(url: params[:url], title: params[:title])
+  redirect '/bookmarks'
+end
+```
+Now the data can be collected, we want to update Bookmark.create to save a bookmark title in addition to the url. Let's update the test to reflect this:
+
+```
+# in spec/bookmark_spec.rb
+
+require 'database_helpers'
+
+describe '.create' do
+  it 'creates a new bookmark' do
+    bookmark = Bookmark.create(url: 'http://www.testbookmark.com', title: 'Test Bookmark').first
+
+    expect(bookmark['url']).to eq 'http://www.testbookmark.com'
+    expect(bookmark['title']).to eq 'Test Bookmark'
+  end
+end
+```
+Now let's update Bookmark.create to pass the title to the database. We need the SQL query to return the Bookmark we're creating, so we can check that the Bookmark has been created with the given values. This also removes any dependency on the .all method.
+
+```rb
+def self.create(url:, title:)
+  if ENV['ENVIRONMENT'] == 'test'
+    connection = PG.connect(dbname: 'bookmark_manager_test')
+  else
+    connection = PG.connect(dbname: 'bookmark_manager')
+  end
+  result = connection.exec("INSERT INTO bookmarks (url, title) VALUES('#{url}', '#{title}') RETURNING id, title, url;")
+  Bookmark.new(id: result[0]['id'], title: result[0]['title'], url: result[0]['url'])
+end
+```
+
+Updating feature test to show title in the /bookmarks view:
+
+```rb
+feature 'viewing bookmarks' do
+  scenario 'bookmarks are visible' do
+    Bookmark.create(url: 'http://www.makersacademy.com', title: 'Makers Academy')
+    Bookmark.create(url: 'http://www.destroyallsoftware.com', title: 'Destroy All Software')
+    Bookmark.create(url: 'http://www.google.com', title: 'Google')
+
+    visit '/bookmarks'
+
+    expect(page).to have_link('Makers Academy', href: 'http://www.makersacademy.com')
+    expect(page).to have_link('Destroy All Software',  href: 'http://www.destroyallsoftware.com')
+    expect(page).to have_link('Google', href: 'http://www.google.com')
+    end
+  end
+```
+Adding a **Unit test** to test drive our model code: 
+
+```rb
+# in spec/bookmark_spec.rb
+
+describe '.all' do
+ it 'returns a list of bookmarks' do
+   connection = PG.connect(dbname: 'bookmark_manager_test')
+
+   # Add the test data
+   bookmark = Bookmark.create(url: "http://www.makersacademy.com", title: "Makers Academy")
+   Bookmark.create(url: "http://www.destroyallsoftware.com", title: "Destroy All Software")
+   Bookmark.create(url: "http://www.google.com", title: "Google")
+
+   bookmarks = Bookmark.all
+
+   expect(bookmarks.length).to eq 3
+   expect(bookmarks.first).to be_a Bookmark
+   expect(bookmarks.first.id).to eq bookmark.id
+   expect(bookmarks.first.title).to eq 'Makers Academy'
+   expect(bookmarks.first.url).to eq 'http://www.makersacademy.com'
+  end
+end
+```
+Use this test to drive the update to the Bookmark.all method:
+
+```rb
+def self.all
+  if ENV['ENVIRONMENT'] == 'test'
+    connection = PG.connect(dbname: 'bookmark_manager_test')
+  else
+    connection = PG.connect(dbname: 'bookmark_manager')
+  end
+  result = connection.exec("SELECT * FROM bookmarks")
+  result.map do |bookmark|
+    Bookmark.new(id: bookmark['id'], title: bookmark['title'], url: bookmark['url'])
+  end
+end
+```
+Returning a bookmark from Bookmark.create by doing the following:
+
+```rb
+# in spec/bookmark_spec.rb
+require 'database_helpers'
+
+describe '.create' do
+  it 'creates a new bookmark' do
+    bookmark = Bookmark.create(url: 'http://www.testbookmark.com', title: 'Test Bookmark')
+    persisted_data = persisted_data(id: bookmark.id)
+
+    expect(bookmark).to be_a Bookmark
+    expect(bookmark.id).to eq persisted_data['id']
+    expect(bookmark.title).to eq 'Test Bookmark'
+    expect(bookmark.url).to eq 'http://www.testbookmark.com'
+  end
+end
+```
+
+Let's refactor the test to extract a persisted_data helper method:
+```rb
+# in spec/database_helpers.rb
+require 'pg'
+
+def persisted_data(id:)
+  connection = PG.connect(dbname: 'bookmark_manager_test')
+  result = connection.query("SELECT * FROM bookmarks WHERE id = #{id};")
+  result.first
+end
+```
+- Deleting Bookmarks.
+
+Here's the user flow for deleting a bookmark:
+
+- Visit the bookmarks page.
+- Click a 'delete' button next to a bookmark.
+- See the bookmarks page, without that bookmark.
+
+Here's that flow in Capybara terms:
+```rb
+
+# in spec/features/deleting_a_bookmark_spec.rb
+
+feature 'Deleting a bookmark' do
+  scenario 'A user can delete a bookmark' do
+    Bookmark.create(url: 'http://www.makersacademy.com', title: 'Makers Academy')
+    visit('/bookmarks')
+    expect(page).to have_link('Makers Academy', href: 'http://www.makersacademy.com')
+
+    first('.bookmark').click_button 'Delete'
+
+    expect(current_path).to eq '/bookmarks'
+    expect(page).not_to have_link('Makers Academy', href: 'http://www.makersacademy.com')
+  end
+end
+```
+To add this feature we need to update view:
+
+```
+<ul>
+  <% @bookmarks.each do |bookmark| %>
+    <li class="bookmark" id="bookmark-<%= bookmark.id %>">
+      <a href="<%= bookmark.url %>" target="_blank">
+        <%= bookmark.title %>
+      </a>
+      <form action="/bookmarks/<%= bookmark.id %>" method="post">
+        <input type='hidden' name='_method' value='DELETE'/>
+        <input type="submit" value="Delete" />
+      </form>
+    </li>
+  <% end %>
+</ul>
+```
+We need to build a route for our Delete button to submit to, in app.rb, and enable :method_override (if you are using Sinatra::Base) so we can use the DELETE method.
+
+```rb
+# in app.rb
+
+enable :sessions, :method_override
+
+delete '/bookmarks/:id' do
+  # let's print out the form params
+  p params
+end
+
+```
+
+We can use this to write the SQL to delete the bookmark with that ID, and redirect:
+
+```rb
+# in app.rb
+
+delete '/bookmarks/:id' do
+  Bookmark.delete(id: params[:id])
+  redirect '/bookmarks'
+end
+```
+Now that our test passes, let's move the SQL into the Bookmark model. Start with a spec for Bookmark.delete:
+
+```rb
+# in spec/bookmark_spec.rb
+
+describe '.delete' do
+  it 'deletes the given bookmark' do
+    bookmark = Bookmark.create(title: 'Makers Academy', url: 'http://www.makersacademy.com')
+
+    Bookmark.delete(id: bookmark.id)
+
+    expect(Bookmark.all.length).to eq 0
+  end
+end
+```
+And code that looks something like:
+
+```rb
+class Bookmark
+  def self.delete(id:)
+    if ENV['ENVIRONMENT'] == 'test'
+      connection = PG.connect(dbname: 'bookmark_manager_test')
+    else
+      connection = PG.connect(dbname: 'bookmark_manager')
+    end
+    connection.exec("DELETE FROM bookmarks WHERE id = #{id}")
+  end
+
+  ### rest of the class ###
+end
+```
+
+- Adding ability to update bookmarks.
+We adding feature test. Here's that flow in Capybara terms:
+
+```rb
+# in spec/features/updating_a_bookmark_spec.rb
+
+feature 'Updating a bookmark' do
+  scenario 'A user can update a bookmark' do
+    bookmark = Bookmark.create(url: 'http://www.makersacademy.com', title: 'Makers Academy')
+    visit('/bookmarks')
+    expect(page).to have_link('Makers Academy', href: 'http://www.makersacademy.com')
+
+    first('.bookmark').click_button 'Edit'
+    expect(current_path).to eq "/bookmarks/#{bookmark.id}/edit"
+
+    fill_in('url', with: "http://www.snakersacademy.com")
+    fill_in('title', with: "Snakers Academy")
+    click_button('Submit')
+
+    expect(current_path).to eq '/bookmarks'
+    expect(page).not_to have_link('Makers Academy', href: 'http://www.makersacademy.com')
+    expect(page).to have_link('Snakers Academy', href: 'http://www.snakersacademy.com')
+  end
+end
+```
+
+Updated view looks like:
+```
+<!-- in views/bookmarks/index.erb -->
+
+<ul>
+  <% @bookmarks.each do |bookmark| %>
+    <li class="bookmark" id="bookmark-<%= bookmark.id %>">
+      <a href="<%= bookmark.url %>" target="_blank">
+        <%= bookmark.title %>
+      </a>
+      <form action="/bookmarks/<%= bookmark.id %>" method="post">
+        <input type='hidden' name='_method' value='DELETE'/>
+        <input type="submit" value="Delete" />
+      </form>
+      <form action="/bookmarks/<%= bookmark.id %>/edit" method="get">
+        <input type="submit" value="Edit" />
+      </form>
+    </li>
+  <% end %>
+</ul>
+```
+
+Let's define a route for this url:
+
+```rb
+# in app.rb
+
+get '/bookmarks/:id/edit' do
+  @bookmark_id = params[:id]
+  erb :'bookmarks/edit'
+end
+```
+And a view with the form:
+
+```
+<!-- in views/bookmarks/edit.erb -->
+
+<form action="/bookmarks/<%= @bookmark_id %>" method="post">
+  <input type="hidden" name="_method" value="PATCH" />
+  <input type="text" name="url" />
+  <input type="text" name="title" />
+  <input type="submit" value="Submit" />
+</form>
+```
+
+And another route, to which this form submits:
+
+```
+patch '/bookmarks/:id' do
+  connection = PG.connect(dbname: 'bookmark_manager_test')
+  connection.exec("UPDATE bookmarks SET url = '#{params[:url]}', title = '#{params[:title]}' WHERE id = '#{params[:id]}'")
+
+  redirect('/bookmarks')
+end
+```
+
+The first obvious refactor is to push the updating SQL into the model, using TDD you should end up with tests similar to this:
+
+```rb
+# in spec/bookmark_spec.rb
+
+describe '.update' do
+  it 'updates the bookmark with the given data' do
+    bookmark = Bookmark.create(title: 'Makers Academy', url: 'http://www.makersacademy.com')
+    updated_bookmark = Bookmark.update(id: bookmark.id, url: 'http://www.snakersacademy.com', title: 'Snakers Academy')
+
+    expect(updated_bookmark).to be_a Bookmark
+    expect(updated_bookmark.id).to eq bookmark.id
+    expect(updated_bookmark.title).to eq 'Snakers Academy'
+    expect(updated_bookmark.url).to eq 'http://www.snakersacademy.com'
+  end
+end
+```
+We can solve this by moving the controller SQL into the bookmark model:
+```rb
+# in lib/bookmarks.rb
+
+def self.update(id:, url:, title:)
+  if ENV['ENVIRONMENT'] == 'test'
+    connection = PG.connect(dbname: 'bookmark_manager_test')
+  else
+    connection = PG.connect(dbname: 'bookmark_manager')
+  end
+  result = connection.exec("UPDATE bookmarks SET url = '#{url}', title = '#{title}' WHERE id = #{id} RETURNING id, url, title;")
+  Bookmark.new(id: result[0]['id'], title: result[0]['title'], url: result[0]['url'])
+end
+```
+
+Now our refactored routes for update and get will look like:
+
+```rb
+# in app.rb
+
+patch '/bookmarks/:id' do
+  Bookmark.update(id: params[:id], title: params[:title], url: params[:url])
+  redirect '/bookmarks'
+end
+
+# in app.rb
+
+get '/bookmarks/:id/edit' do
+  @bookmark = Bookmark.find(id: params[:id])
+  erb :"bookmarks/edit"
+end
+```
+
+Let's write a Bookmark.find method to do that:
+
+```rb
+# in spec/bookmark_spec.rb
+
+describe '.find' do
+    it 'returns the requested bookmark object' do
+      bookmark = Bookmark.create(title: 'Makers Academy', url: 'http://www.makersacademy.com')
+
+      result = Bookmark.find(id: bookmark.id)
+
+      expect(result).to be_a Bookmark
+      expect(result.id).to eq bookmark.id
+      expect(result.title).to eq 'Makers Academy'
+      expect(result.url).to eq 'http://www.makersacademy.com'
+    end
+  end
+end
+```
+
+Here's the implementation in Bookmark:
+
+```rb
+# in lib/bookmark.rb
+
+class Bookmark
+  def self.find(id:)
+    if ENV['ENVIRONMENT'] == 'test'
+      connection = PG.connect(dbname: 'bookmark_manager_test')
+    else
+      connection = PG.connect(dbname: 'bookmark_manager')
+    end
+    result = connection.exec("SELECT * FROM bookmarks WHERE id = #{id};")
+    Bookmark.new(id: result[0]['id'], title: result[0]['title'], url: result[0]['url'])
+  end
+
+  ### rest of the class ###
+end
+```
+
+Now we can use this Bookmark object in our form. We can set the value attribute of each input to the current value of the bookmark:
+
+```rb
+<!-- in views/bookmarks/edit.erb -->
+
+<form action="/bookmarks/<%= @bookmark.id %>" method="post">
+  <input type="hidden" name="_method" value="PATCH" />
+  <input type="text" name="url" value="<%= @bookmark.url %>" />
+  <input type="text" name="title" value="<%= @bookmark.title %>" />
+  <input type="submit" value="Submit" />
+</form>
+    
+```
+**What I've Learned:**
+
+We can set up an Environment Variable (**ENV**) to tell the application to use the test database when we run our tests
+
+```rb
+# in spec/spec_helper.rb
+
+ENV['ENVIRONMENT'] = 'test'
+```
+
+> To build a route for Delete button to submit to, in app.rb, and enable :method_override (if you are using Sinatra::Base) so we can use the DELETE method.
+
+```
+enable :sessions, :method_override
+```
+
+> CRUD is an acronym for the four 'basic functions' of persistent storage:
+
+>- Creating data
+>- Reading data
+>- Updating data
+>- Deleting data
+
+## Daily Goals 
+### Wednesday 6 of May 2020
+
+## Morning Goals 
+
+#### Explain the **MVC** pattern.
+
+**Plan:**
+
+- Perform research online individually.  
+- Describe what **Abstraction in OO is** and it's usages. 
+- Summarize and give some practical example. 
+  
+**Process:** 
+
+**What I've Learned:**
+
+
 
 
