@@ -254,7 +254,49 @@ config.before(:each) do
 end
 ```
 
+## Daily Goals 
+### Tuesday 5 of May 2020
 
+## Morning Goals 
+
+#### Databases.
+
+**Plan:**
+
+- Perform research online individually.  
+- Describe what **Database** is and it's usages. 
+- Summarize and give some practical example. 
+  
+**Process:** 
+
+A database is an organized collection of structured information, or data, typically stored electronically. A database is usually controlled by a database management system (DBMS). The DBMS, along with the applications that are associated with them, are referred to as a database system or **database** for short.
+
+Data is typically modeled in rows and columns in a series of tables to make processing and data querying efficient. The data can then be easily accessed, managed, modified, updated, controlled, and organized. Most databases use **structured query language (SQL)** for writing and querying data.
+
+- Every database has a **DBMS** (Database Management System) which structures how we organize and interact with all our stored data. Four fundamental ways of interaction with databases: **(CRUD)**
+  - Create
+  - Read
+  - Update
+  - Delete
+  
+- This DBMS can be:
+  - Relational: organizes data in tables made of columns and rows (columns are categories and each row inside them holds a data entry). They are highly structured and have strict data types. Great for managing complex datasets. We talk to them using SQL (Structured Query Language).
+  
+  - Non-Relational: also known as noSQL (we don't use SQL to talk to them). These are more flexible systems with less strictness around data types (graphs, key-values...). They are good for getting a database up and running quickl and for deploying data across decentralised distributed networks (when data is stored across many computers that all hae to coordinate with each other).
+  
+- Most popular DMS:
+
+1. Oracle
+2. MySQL
+3. Microsoft SQL
+4. PostgreSQL
+5. MongoDB (noSQL)
+
+**What I've Learned:**
+
+> Data is typically modeled in rows and columns in a series of tables to make processing and data querying efficient.
+
+> **SQL** (Structured Query Language) standard language used to communicate with a database. SQL statements are used to perform tasks such as update data on a database, or retrieve data from a database.
 
 
 
