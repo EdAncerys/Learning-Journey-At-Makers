@@ -1281,3 +1281,94 @@ end
 > We're using a _class instance variable_ to store the connection. We can do this because our `DatabaseConnection` is never going to be instantiated. It's a 'Singleton' object: there's only one `DatabaseConnection` in the application.
 
 > The Flash is used to display one-time messages.
+
+## Daily Goals 
+### Thursday 7 of May 2020
+
+## Morning Goals 
+
+#### Explain the **MVC** pattern.
+
+**Plan:**
+
+Attend Database Domain Modeling using CRC cards with Josh.
+
+- Explain how to use CRC cards to model a domain
+- Model a simple domain using CRC cards
+- Infer database structure from domain structure
+  
+**Process:** 
+
+- User stories:
+
+```
+As a coach
+So I can get to know all students
+I want to see a list of students' names
+
+I want to filter the list of students by cohort name
+
+I want each student name's name to link to the URL of a picture of the student
+
+I want to tag a student with many named tags
+```
+
+- CRC Card (Class, Responsabilities, Collaborators).
+
+Class: Student | |
+:--- | :--- 
+Responsibilities: |	Collaborators:
+name | 
+profile_url |
+
+Class: Cohort | |
+:--- | :--- 
+Responsibilities: |	Collaborators:
+start_day |	student
+demo_day |	
+
+Class: Reflect | |
+:--- | :--- 
+Responsibilities: |	Collaborators:
+rate |	student
+average |	
+
+Class: Tag | |
+:--- | :--- 
+Responsibilities: |	Collaborators:
+tag | 	student
+filter |
+
+- Student DB table
+
+table: Student | | | | | |
+:--- | :--- | :--- | :--- | :---
+id | name | profile_url | tag_id | cohort_id | reflect_id
+1 |	"name" |	"url" |	1 |	1 |	1 
+2 |	"name" |	"url" |	1 |	1 |	1
+					
+- Cohort database table
+
+table: Cohort | | |
+:--- | :--- | :---
+id | start_day | demo_day			
+1 |	"day" |	"day"			
+					
+- Reflection DB table
+
+table: Reflect | |
+:--- | :--- 
+id | rate
+1 | int				
+					
+- Tag DB table 
+
+table: Tag | |
+:--- | :--- 
+id | tag
+1 | "tag"				
+					
+                    
+**What I've Learned:**
+
+>**Normalisation:** process where we take a table structure with repetition on it and we create new structures to avoid this repetitions. This way any change is made only in one place and automatically update everywhere else.
