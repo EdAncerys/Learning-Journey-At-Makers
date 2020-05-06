@@ -987,8 +987,297 @@ This would yield the following:
 *Practice pairing and building Web-app.*  
 [**"Bookmark Manager"**](https://github.com/EdAncerys/bookmark-manager)
 
-**Plan:** Pair with Marius and keep working on the afternoon challenge for the week - *"Bookmark Manager".*
+**Plan:** Pair with Patrick and keep working on the afternoon challenge for the week - *"Bookmark Manager".*
 
 **Process:**
 
+We will extract a `DatabaseConnection` object, and use it to set up a database connection on-boot. We'll use `DatabaseConnection` in the `Bookmark` class to act on the database, like this:
+
+```ruby
+# in bookmark.rb
+require_relative 'database_connection'
+
+class Bookmark
+  def self.all
+    result = DatabaseConnection.query("SELECT * FROM bookmarks")
+    result.map { |bookmark| bookmark['url'] }
+  end
+end
+```
+- Extracting the database connection logic to an object
+
+We're going to write a simple wrapper for the method `PG.connect`. It's going to be a class method, `setup`, on an object called `DatabaseConnection`.
+
+Here's a test for that method:
+
+```ruby
+# in spec/database_connection_spec.rb
+
+require 'database_connection'
+
+describe DatabaseConnection do
+  describe '.setup' do
+    it 'sets up a connection to a database through PG' do
+      expect(PG).to receive(:connect).with(dbname: 'bookmark_manager_test')
+
+      DatabaseConnection.setup('bookmark_manager_test')
+    end
+  end
+end
+```
+
+Here's the implementation of that class:
+
+```ruby
+# in lib/database_connection.rb
+
+require 'pg'
+
+class DatabaseConnection
+  def self.setup(dbname)
+    PG.connect(dbname: dbname)
+  end
+end
+```
+
+We should also write a test to ensure we can get the connection later on, through a class method called `connection`:
+
+```ruby
+# in spec/database_connection_spec.rb
+
+it 'this connection is persistent' do
+  # Grab the connection as a return value from the .setup method
+  connection = DatabaseConnection.setup('bookmark_manager_test')
+
+  expect(DatabaseConnection.connection).to eq connection
+end
+```
+
+Here's the implementation for `DatabaseConnection` that solves this:
+
+```ruby
+# in lib/database_connection.rb
+
+require 'pg'
+
+class DatabaseConnection
+  def self.setup(dbname)
+    @connection = PG.connect(dbname: dbname)
+  end
+
+  def self.connection
+    @connection
+  end
+end
+```
+- Using `DatabaseConnection` to set up a connection
+
+When the application boots, we want the database connection to be setup. Therefore, let's:
+
+- Require the `DatabaseConnection` into a script, `database_connection_setup.rb`
+- Setup the database connection in this script, and
+- Require this file into `app.rb`.
+
+First, let's write a script in which we'll set up the database connection:
+
+```ruby
+# in database_connection_setup.rb
+
+require './lib/database_connection'
+
+if ENV['ENVIRONMENT'] == 'test'
+  DatabaseConnection.setup('bookmark_manager_test')
+else
+  DatabaseConnection.setup('bookmark_manager')
+end
+```
+
+Now, let's include the script in `app.rb`:
+
+```ruby
+# in app.rb
+
+require 'sinatra/base'
+require './lib/bookmark'
+require './database_connection_setup'
+
+class BookmarkManager < Sinatra::Base
+   ### rest of the controller ###
+end
+```
+
+- Adding a `query` method to `DatabaseConnection`
+
+Let's add a `query` method to the `DatabaseConnection` object so we can use it to query the database. Here's the sort of code we want:
+
+```ruby
+# in bookmark.rb
+require 'database_connection'
+
+class Bookmark
+  def self.all
+    result = DatabaseConnection.query("SELECT * FROM bookmarks")
+    result.map { |bookmark| bookmark['url'] }
+  end
+end
+```
+
+First, we write a test for `.query`:
+
+```ruby
+# in spec/database_connection_spec.rb
+
+describe '.query' do
+  it 'executes a query via PG' do
+    connection = DatabaseConnection.setup('bookmark_manager_test')
+
+    expect(connection).to receive(:exec).with("SELECT * FROM bookmarks;")
+
+    DatabaseConnection.query("SELECT * FROM bookmarks;")
+  end
+end
+```
+
+We can pass this test by adding a `.query` class method to the `DatabaseConnection`. `query` just passes an SQL query string to the connection created by `setup`:
+
+```ruby
+# in lib/database_connection.rb
+
+require 'pg'
+
+class DatabaseConnection
+  def self.setup(dbname)
+    @connection = PG.connect(dbname: dbname)
+  end
+
+  def self.connection
+    @connection
+  end
+
+  def self.query(sql)
+    @connection.exec(sql)
+  end
+end
+```
+
+> Because the test for `query` relies explicitly on the persistent connection created by `setup`, we can now remove the `DatabaseConnection.connection` method (and test).
+
+- Replace PG with our wrapper in `Bookmark`
+
+Now that we've written a wrapper for PG, we can replace all calls to `PG` and `connection` with calls to this object, for example:
+
+```ruby
+# in lib/bookmark.rb
+
+require 'database_connection'
+
+class Bookmark
+  def self.all
+    result = DatabaseConnection.query("SELECT * FROM bookmarks")
+    result.map do |bookmark|
+      Bookmark.new(
+        url: bookmark['url'],
+        title: bookmark['title'],
+        id: bookmark['id']
+      )
+    end
+  end
+
+  # rest of class
+
+end
+```
+- Adding a feature test for an invalid URL
+
+Here's the user flow for submitting an invalid URL:
+
+1. Visit the new bookmark page.
+2. Submit a new bookmark with a string like 'not a bookmark'.
+3. See an error message, and don't see 'not a bookmark' in the list of bookmarks.
+
+Here's that flow in Capybara terms:
+
+```ruby
+# in spec/features/adding_a_new_bookmark_spec.rb
+
+scenario 'The bookmark must be a valid URL' do
+  visit('/bookmarks/new')
+  fill_in('url', with: 'not a real bookmark')
+  click_button('Submit')
+
+  expect(page).not_to have_content "not a real bookmark"
+  expect(page).to have_content "You must submit a valid URL."
+end
+```
+
+When we run this test, it fails as expected.
+
+#### Passing the test, and adding Sinatra-Flash
+
+```ruby
+# in app.rb
+require 'uri'
+
+post '/bookmarks' do
+  if params['url'] =~ /\A#{URI::regexp(['http', 'https'])}\z/
+    Bookmark.create(url: params['url'], title: params[:title])
+  else
+    flash[:notice] = "You must submit a valid URL."
+  end
+
+  redirect('/bookmarks')
+end
+```
+
+#### Refactoring the validation logic into the `Bookmark` model
+
+Let's write a unit test for that:
+
+```ruby
+# in spec/bookmark_spec.rb
+
+describe '.create' do
+  it 'does not create a new bookmark if the URL is not valid' do
+    Bookmark.create(url: 'not a real bookmark', title: 'not a real bookmark')
+    expect(Bookmark.all).to be_empty
+  end
+
+  ### other tests omitted for brevity ###
+end
+```
+Validation into the `Bookmark.create` method. Let's split it out to a private method, too:
+
+```ruby
+# in bookmark.rb
+require 'uri'
+
+class Bookmark
+  def self.create(url:)
+    return false unless is_url?(url)
+    result = DatabaseConnection.query("INSERT INTO bookmarks (url, title) VALUES('#{url}', '#{title}') RETURNING id, title, url;")
+    Bookmark.new(id: result[0]['id'], title: result[0]['title'], url: result[0]['url'])
+  end
+
+  private
+
+  def self.is_url?(url)
+    url =~ /\A#{URI::regexp(['http', 'https'])}\z/
+  end
+end
+```
+Now we can use this updated `create` method in our controller:
+
+```ruby
+# in app.rb
+
+post '/bookmarks' do
+  flash[:notice] = "You must submit a valid URL." unless Bookmark.create(url: params[:url], title: params[:title])
+  redirect('/bookmarks')
+end
+```
+
 **What I've Learned:**
+
+> We're using a _class instance variable_ to store the connection. We can do this because our `DatabaseConnection` is never going to be instantiated. It's a 'Singleton' object: there's only one `DatabaseConnection` in the application.
+
+> The Flash is used to display one-time messages.
