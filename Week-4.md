@@ -926,18 +926,69 @@ enable :sessions, :method_override
 
 ## Morning Goals 
 
-#### Explain the **MVC** pattern.
+#### Class methods vs instance methods.
 
 **Plan:**
 
 - Perform research online individually.  
-- Describe what **Abstraction in OO is** and it's usages. 
+- Describe what **class methods are** and there usages. 
 - Summarize and give some practical example. 
   
 **Process:** 
 
+#### Difference between class methods and Instance methods
+
+In Ruby, a method provides functionality to an Object. A class method provides functionality to a class itself, while an instance method provides functionality to one instance of a class.
+
+- Class method are methods which require an object of its class to be created before it can be called. Class methods are the methods that can be called without creating an object of class.
+- Static method is declared with static keyword. Instance method is not with static keyword.
+- Class method means which will exist as a single copy for a class. But instance methods exist as multiple copies depending on the number of instances created for that class.
+- Class methods can be invoked by using class reference (**self**). Class or non static methods are invoked by using object reference.
+- Class methods can not access instance methods and instance variables directly. Instance method can access class variables and class methods directly.
+- We cannot call an instance method on the class itself, and we cannot directly call a class method on an instance.
+
+```rb
+class SayHello
+  def self.from_the_class
+    "Hello, from a class method"
+  end
+
+  def from_an_instance
+    "Hello, from an instance method"
+  end
+end
+```
+
+This would yield the following:
+
+```
+>> SayHello.from_the_class
+=> "Hello, from a class method"
+
+>> SayHello.from_an_instance
+=> undefined method `from_an_instance' for SayHello:Class
+
+>> hello = SayHello.new
+>> hello.from_the_class
+=> undefined method `from_the_class' for #<SayHello:0x0000557920dac930>
+
+>> hello.from_an_instance
+=> "Hello, from an instance method"
+```
+
 **What I've Learned:**
 
+> Class methods can only be called on classes and instance methods can only be called on an instance of a class.
 
+> **What does self mean?** Self is the currently executing receiver, the object to which a method is applied. A function-style method call implies self as the receiver.
 
+## Afternoon Challenges  
 
+*Practice pairing and building Web-app.*  
+[**"Bookmark Manager"**](https://github.com/EdAncerys/bookmark-manager)
+
+**Plan:** Pair with Marius and keep working on the afternoon challenge for the week - *"Bookmark Manager".*
+
+**Process:**
+
+**What I've Learned:**
