@@ -941,7 +941,7 @@ enable :sessions, :method_override
 In Ruby, a method provides functionality to an Object. A class method provides functionality to a class itself, while an instance method provides functionality to one instance of a class.
 
 - Class method are methods which require an object of its class to be created before it can be called. Class methods are the methods that can be called without creating an object of class.
-- Static method is declared with static keyword. Instance method is not with static keyword.
+- Class method is declared with static keyword. Instance method is not with static keyword.
 - Class method means which will exist as a single copy for a class. But instance methods exist as multiple copies depending on the number of instances created for that class.
 - Class methods can be invoked by using class reference (**self**). Class or non static methods are invoked by using object reference.
 - Class methods can not access instance methods and instance variables directly. Instance method can access class variables and class methods directly.
@@ -1242,7 +1242,7 @@ describe '.create' do
     expect(Bookmark.all).to be_empty
   end
 
-  ### other tests omitted for brevity ###
+  ### other tests been cut off ###
 end
 ```
 Validation into the `Bookmark.create` method. Let's split it out to a private method, too:
@@ -1280,24 +1280,28 @@ end
 
 > We're using a _class instance variable_ to store the connection. We can do this because our `DatabaseConnection` is never going to be instantiated. It's a 'Singleton' object: there's only one `DatabaseConnection` in the application.
 
-> The Flash is used to display one-time messages.
+> The Flash is used to display one-time messages. To use the flash, we need to add the sinatra-flash gem to our Gemfile, install it to our project, and include sinatra/flash in our controller. Then, we need to enable :sessions.
 
 ## Daily Goals 
 ### Thursday 7 of May 2020
 
 ## Morning Goals 
 
-#### Explain the **MVC** pattern.
+#### Attend Database Domain Modeling using CRC cards with Josh.
 
 **Plan:**
-
-Attend Database Domain Modeling using CRC cards with Josh.
 
 - Explain how to use CRC cards to model a domain
 - Model a simple domain using CRC cards
 - Infer database structure from domain structure
   
 **Process:** 
+
+#### CRC stands for class-responsibility-collaborator  
+
+- Class - collection of objects
+- Responsibilities - what class will/can do or knows.
+- Collaborators -  classes that need other class to complete their responsibilities. 
 
 - User stories:
 
@@ -1372,3 +1376,286 @@ id | tag
 **What I've Learned:**
 
 >**Normalisation:** process where we take a table structure with repetition on it and we create new structures to avoid this repetitions. This way any change is made only in one place and automatically update everywhere else.
+
+## Afternoon Challenges  
+
+*Practice building simple Web-app.*  
+[**"Daily Diary Application"**](https://github.com/EdAncerys/daily-diary-app)
+
+**Process:**
+
+Mini project exploring how databases work.
+
+## Description
+
+I enjoy keeping a journal, and I want to store this online in my very own 'Daily Diary' application.
+
+As a busy coach I'm a bit short on time, so I've provided user stories below so you can build one for me. Your challenge is to build a 'Daily Diary' application that uses Sinatra together with a PostgreSQL to store diary entries, and has a browser-based user interface.
+
+## User Stories
+
+### Must Have
+
+```
+As a user
+So that I can keep a daily diary
+I want to be able to add a new Diary Entry
+```
+
+```
+As a user
+So that I can identify my entry in future
+I want to give each Diary Entry a title
+```
+
+```
+As a user
+So that I can browse my previous entries
+I want to see a list of Diary Entry Titles
+```
+
+```
+As a user
+So that I can read my previous entries
+I want to click on a title to see the full Diary Entry
+```
+
+### Should Have
+
+```
+As a user
+So that I can correct an error
+I want to be able to edit the Diary Entry
+```
+
+```
+As a user
+So that I can keep my diary tidy
+I want to be able to delete a Diary Entry
+```
+
+```
+As a user
+So that I can reflect on a previous diary entry
+I want to be able add a Comment to a Diary Entry
+```
+
+```
+As a user
+So that I can see my past reflections
+I want to see associated Comments when viewing a Diary Entry
+```
+
+### Could Have
+
+```
+As a user
+So that I can make entries easier to browse
+I want to be able to add Tags to an Entry
+```
+
+```
+As a user
+So that I can see different types of entry
+I want to be able to filter Diary Entries by Tag
+```
+
+**Domain Model:**
+
+Diary | User 
+:--- | :---
+ | @username
+ | @email  
+ | @password 
+ | 
+#create | #valid_log_in?
+#all |
+#find | 
+#delete | 
+#edit | 
+
+**Databases Plan:**
+
+- Table diary:
+
+|  id  |    title   | body | post_time | users_id  |
+|:------|:-----------|:-----------|:-----------|:------------
+|  1   |  'Diary One'  |  'Diary One body' | 13:25  |     1     
+|  2   |  'Diary Two'  |  'Diary Two body' | 17:05  |     1     
+
+- Table Users:
+
+|  id  |    name   |      email      |  password  
+|:-----|:----------|:----------------|:-----------
+|  1   |  'Frodo'  | 'frodo@eamil.com' | 'password' 
+
+
+
+**Views Plan:**
+```
+get '/diary'            -->  display diary.erb (link to link to log_in - peep list)
+get 'diary/sign_up'     --> diaplays sign_up.erb
+post 'diary/sign_up'    --> saves data to DB and redirects to 'diary/user'
+get 'diary/sign_in'     --> displays sign_in.erb
+post 'diary/sign_in'    --> validates data and redirects to 'display/user'
+get 'diary/user'        --> displays form to add diary to DB
+post 'diary/add_diary'  --> saves diary to DB redirects to 'diary/list'
+get 'diary/list'        --> displays all TITLE diaries 
+get 'diary/list:id'     --> displays diary selected
+
+
+```
+
+**What I've Learned:**
+
+> Working with **test and production databases** is a must in order to take TTD approach in building the application. 
+
+> Test development database can be reset every time before tests by running script in `spec_helper.rb` file.
+
+## Weekend Challenge
+
+**Chitter Challenge:** Full path to the project on [GitHub](https://github.com/EdAncerys/chitter-challenge)
+
+### Chitter App Challenge
+
+We are going to write a small Twitter clone that will allow the users to post messages to a public stream.
+
+### CRS Cards
+
+### Domain model
+
+Chitter | Peep | User
+:--- | :--- | :---
+#chitter_post | #peep_time | #user_sign_up
+#chitter_all |  | #user_log_in
+#chitter_delete |  | #user_log_out
+
+### Database model 
+
+chitter_user
+
+id | name | email | password  
+:--- | :--- | :--- | :---
+1 | "Frodo" | "user-email@email.com" | "password"
+
+chitter_peep
+
+id | peep | peep_time | user_id
+:--- | :--- | :--- | :---
+1 | "peep" | "peep_time" | 1
+
+
+
+**Views Plan:**
+```
+get '/'                 --> display sign-up and log-in path
+get '/chitter'          -->  display peeps and chitter main page (links to other pages)
+get 'user/sign_up'      --> diaplays sign_up.erb 
+post 'user/sign_up'     --> saves data to DB and redirects to '/chitter'
+get 'user/log-in'       --> displays sign_in.erb
+get 'chitter/log-in'    --> validates data and redirects to 'display/user'
+post 'chitter-post'      --> post peep and saves to DB redirects to '/chitter'
+post 'chitter/delete/:id'  --> deletes peep from DB and redirects to '/chitter'
+get 'chitter-sort'      --> displays all peeps in reverse order 
+get 'chitter/log-out'   --> logs out user and destroy `session`
+
+```
+
+## Instructions to set up Database:
+- Connect to psql
+- Create the database using the psql command `CREATE DATABASE chitter_app;`
+- Connect to the database using the pqsl command `\c chitter_app;`
+- Run the query we have saved in the file 01_create_diary_table.sql
+- Run the query we have saved in the file 02_create_user_chitter_table.sql
+
+### create a test environment
+- Create the database using the psql command `CREATE DATABASE chitter_app_test;`
+- Connect to the database using the pqsl command `\c chitter_app_test;`
+- Run the query we have saved in the file 01_create_diary_table.sql
+- Run the query we have saved in the file 02_create_user_chitter_table.sql
+
+Technical Approach:
+-----
+
+Integration of `PG` gem and `SQL` queries. 
+
+Notes on functionality:
+------
+
+* You don't have to be logged in to see the peeps.
+* Makers sign up to chitter with their email, password, name and a username (e.g. samm@makersacademy.com, password123, Sam Morgan, sjmog).
+* The username and email are unique.
+* Peeps (posts to chitter) have the name of the maker and their user handle.
+
+Bonus:
+-----
+
+If you have time you can implement the following:
+
+* In order to start a conversation as a maker I want to reply to a peep from another maker.
+
+And/Or:
+
+* Work on the CSS to make it look good.
+
+**Features:**
+
+## User Stories/Features
+
+```
+
+STRAIGHT UP
+
+As a Maker
+So that I can let people know what I am doing  
+I want to post a message (peep) to chitter
+
+As a maker
+So that I can see what others are saying  
+I want to see all peeps in reverse chronological order
+
+As a Maker
+So that I can better appreciate the context of a peep
+I want to see the time at which it was made
+
+As a Maker
+So that I can post messages on Chitter as me
+I want to sign up for Chitter
+
+HARDER
+
+As a Maker
+So that only I can post messages on Chitter as me
+I want to log in to Chitter
+
+As a Maker
+So that I can avoid others posting messages on Chitter as me
+I want to log out of Chitter
+
+ADVANCED
+
+As a Maker
+So that I can stay constantly tapped in to the shouty box of Chitter
+I want to receive an email if I am tagged in a Peep
+```
+
+# Weekend Reflections
+
+### Did you meet all of your goals you set at the start of the week?
+- I felt that I did understood main concepts and goals for a week. One thing to point out - through out a week I tend to rush and force through the challenges without deeply understanding them. That makes rest of the week dragging me with basic understanding of the concepts. Weekends **AGAIN** is usually the time to recap/reflect and understand all the concepts and goals raised. 
+
+### What things do you still need to work through?
+- Pause on weekly goals through out the week, make sure you understand them as you go. 
+- DB relationships between data and dependencies on each other.
+
+### What would you change/improve to keep moving forward?
+##### Technical: 
+- Break down main goals and understand them through out the week as I go.
+
+##### Personal:
+
+- Stick to the routine and make sure to get regular breaks.
+
+<br>
+
+
