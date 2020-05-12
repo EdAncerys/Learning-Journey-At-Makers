@@ -29,8 +29,6 @@ Main focuses for this week
 - Databases
 - Tooling
 
-**What I've Learned:**
-
 Code Review for the weekend [**RPS Challenge:**](https://github.com/EdAncerys/rps-challenge)
 
 **Plan:** Peer code review of the weekend challenge. Will be reviewing and getting a feedback to Gareth's code.
