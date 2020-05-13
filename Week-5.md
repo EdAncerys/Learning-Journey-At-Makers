@@ -706,7 +706,495 @@ console.log(brand()); // Output: Harley Davidson
 
 **What I've Learned:**
 
-> - The this references the object of which the function is a property. In other words, the this reference the object that is currently calling the function.
+> - The this references the object of which the function is a property. In other words, the **this** reference the object that is currently calling the function.
+
+## Afternoon Challenges  
+
+*Practice pairing and building Web-app.*  
+[**"Thermostat App"**](https://github.com/EdAncerys/Thermostat-Java-Script)
+
+**Plan:** Pair with Marija and keep working on the afternoon challenge for the week - *"Thermostat App".*
+
+**Process:**
+
+So let's start with the customer's requirements:
+
+1. Thermostat starts at 20 degrees
+2. You can increase the temp with an up function
+3. You can decrease the temp with a down function
+4. The minimum temperature is 10 degrees
+5. If power saving mode is on, the maximum temperature is 25 degrees
+6. If power saving mode is off, the maximum temperature is 32 degrees
+7. Power saving mode is on by default
+8. You can reset the temperature to 20 with a reset function
+9. You can ask about the thermostat's current energy usage: < 18 is `low-usage`, < 25 is `medium-usage`, anything else is `high-usage`.
+10. (In the challenges where we add an interface, low-usage will be indicated with green, medium-usage indicated with black, high-usage indicated with red.)
+
+#### The First Test
+
+Setting up directory with all needed requirements to use [**Jasmine**](https://github.com/jasmine/jasmine) and start TDD approach by writing first test:
+
+```javascript
+// spec/thermostatSpec.js
+
+'use strict';
+
+describe('Thermostat', function() {
+
+  var thermostat;
+
+  beforeEach(function() {
+    thermostat = new Thermostat();
+  });
+
+  it('starts at 20 degrees', function() {
+    expect(thermostat.temperature).toEqual(20);
+  });
+});
+```
+
+We're going to use **strict mode**, which you can read up on here: [MDN - Strict Mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode). To invoke strict mode, place this at the top of your files:
+
+```javascript
+'use strict';
+```
+This is purely to encourage us to write a higher standard of JavaScript.
+
+So our expectation here, is that upon creation, our `thermostat` will default to a `temperature` of 20.
+
+```javascript
+// src/thermostat.js
+
+class Thermostat {
+  constructor() {
+    this.temperature = 20;
+  }
+}
+```
+Re factor our test and code a little to allow for this.
+
+```javascript
+// spec/thermostatSpec.js
+
+  it('starts at 20 degrees', function() {
+    expect(thermostat.getCurrentTemperature()).toEqual(20);
+  });
+```
+
+We place parenthesis at the end. This is to communicate to the JavaScript interpreter that we want it to execute this function, as opposed to returning the function itself.
+
+#### Creating a method
+
+```javascript
+class Thermostat {
+  constructor() {
+    this.temperature = 20;
+  }
+  getCurrentTemperature() {
+  }
+}
+```
+
+Now, we want `getCurrentTemperature()` to return the current temperature of Thermostat, and we achieve this using the following:
+
+```javascript
+
+class Thermostat {
+  constructor() {
+    this.temperature = 20;
+  }
+  getCurrentTemperature() {
+    return this.temperature;
+  }
+};
+```
+
+#### It's getting hot in here
+
+So the only sensible thing to do now is to turn the temperature up! Let's write a test:
+
+```javascript
+// spec/thermostatSpec.js
+
+  it('increases in temperature with up()', function() {
+    thermostat.up();
+    expect(thermostat.getCurrentTemperature()).toEqual(21);
+  });
+```
+
+Now, at this point we need to write a method which increases the value of `thermostat.temperature` each time we run it. So with that in mind, I'm going to lay the solution out for your reference:
+
+```javascript
+class Thermostat {
+  constructor() {
+    this.temperature = 20;
+  }
+  getCurrentTemperature() {
+    return this.temperature;
+  }
+  up() {
+    this.temperature += 1
+  }
+}
+```
+
+And so by that logic, decreasing the temperature:
+
+```javascript
+// spec/thermostatSpec.js
+
+it('decreases in temperature with down()', function() {
+  thermostat.down();
+  expect(thermostat.getCurrentTemperature()).toEqual(19);
+});
+```
+
+Our implementation should follow that of our `up()` function:
+
+```javascript
+class Thermostat {
+  constructor() {
+    this.temperature = 20;
+  }
+  getCurrentTemperature() {
+    return this.temperature;
+  }
+  up() {
+    this.temperature += 1
+  }
+  down() {
+    this.temperature -= 1
+  }
+}
+```
+
+#### Limiting the temperature
+
+Our client has chosen 10 degrees as the minimum temperature our users should be able to set the Thermostat to.
+
+```javascript
+// spec/thermostatSpec.js
+
+it('has a minimum of 10 degrees', function() {
+  for (var i = 0; i < 11; i++) {
+    thermostat.down();
+  }
+  expect(thermostat.getCurrentTemperature()).toEqual(10);
+});
+```
+
+Now given that our `thermostat` has a default `temperature` of 20, and we want to test that we can't go more than 10 degrees below that default, here we employ a loop to handle the cumbersome test setup of calling `thermostat.down` eleven times.
+
+It's at this point we have a good case for adding another property to our object constructor function:
+
+```javascript
+// src/thermostat.js
+
+'use strict';
+
+constructor() {
+    this.MINIMUM_TEMPERATURE = 10;
+    this.temperature = 20;
+  }
+```
+
+Notice how I'm using capital letters for the property name? As you might probably have realised, I intend this value to be a constant, and am marking that intention in the use of capitalization. 
+
+```javascript
+// src/thermostat.js
+  isMinimumTemperature() {
+    return this.temperature === this.MINIMUM_TEMPERATURE;
+  }
+```
+
+And now let's edit our `down()` function to take advantage of this new temperature check:
+
+```javascript
+// src/thermostat.js
+
+down() {
+    if (this.isMinimumTemperature()) {
+      return;
+    }
+    this.temperature -= 1
+  }
+```
+
+So now we have a kind of guard condition before we are allowed to decrease our temperature!
+
+#### Power Saving Mode
+
+Now our spec says that PSM should be activated by default, so let's go ahead and write a test for this:
+
+```javascript
+// spec/thermostatSpec.js
+
+it('has power saving mode on by default', function() {
+  expect(thermostat.isPowerSavingModeOn()).toBe(true);
+});
+```
+
+Which leads us to the understanding that we will require a new property, and a new getter method to read that property:
+
+```javascript
+// src/thermostat.js
+
+'use strict';
+
+constructor() {
+  // Other properties omitted for brevity
+  this.powerSavingMode = true;
+}
+```
+
+and our getter method:
+
+```javascript
+// src/thermostat.js
+isPowerSavingModeOn() {
+    return this.powerSavingMode === true;
+}
+```
+Now in order to make this PSM business a viable proposition, we need the ability to switch it on and off. Since it's on by default, let's make our next step to turn it off:
+
+```javascript
+// spec/thermostatSpec.js
+
+it('can switch PSM off', function() {
+  thermostat.switchPowerSavingModeOff();
+  expect(thermostat.isPowerSavingModeOn()).toBe(false);
+});
+```
+
+Since we already have the `powerSavingMode` property to work with, lets get straight to our function:
+
+```javascript
+// src/thermostat.js
+
+switchPowerSavingModeOff() {
+    this.powerSavingMode = false;
+  }
+```
+
+Reverse and test for both conditions `switchPowerSavingModeOn` method:
+
+```javascript
+// spec/thermostatSpec.js
+
+it('can switch PSM back on', function() {
+  thermostat.switchPowerSavingModeOff();
+  expect(thermostat.isPowerSavingModeOn()).toBe(false);
+  thermostat.switchPowerSavingModeOn();
+  expect(thermostat.isPowerSavingModeOn()).toBe(true);
+});
+```
+
+And so goes our function:
+
+```javascript
+// src/thermostat.js
+
+switchPowerSavingModeOn() {
+  this.powerSavingMode = true;
+}
+```
+
+#### The Upper limits
+
+So if we refer back to our client's wishes, we are required to limit the temperature as follows:
+
+* To 25 degrees when PSM is activated
+* to 32 degrees when PSM is off
+
+So we are going to revisit our incremental function `up()`. Test for that would be as follows:
+
+```javascript
+// spec/thermostatSpec.js
+
+describe('when power saving mode is on', function() {
+  it('has a maximum temperature of 25 degrees', function() {
+    for (var i = 0; i < 6; i++) {
+      thermostat.up();
+    }
+    expect(thermostat.getCurrentTemperature()).toEqual(25);
+  });
+});
+```
+
+We use nested `describe()` blocks. In Jasmine there is no equivalent to RSpec's `context()` so we have to use nested describe block. So, let's make sure our test setup cannot increase the temperature to 26 when PSM is off:
+
+```javascript
+// src/thermostat.js
+
+up() {
+  if (this.isMaximumTemperature()) {
+    return;
+  }
+  this.temperature += 1;
+}
+```
+
+We are going to need a couple of extra properties in our object constructor function:
+
+```javascript
+// src/thermostat.js
+
+'use strict';
+
+function Thermostat() {
+  // Other properties omitted for brevity
+  this.MAX_LIMIT_PSM_ON = 25;
+  this.MAX_LIMIT_PSM_OFF = 32;
+}
+```
+
+```javascript
+// src/thermostat.js
+
+isMaximumTemperature() {
+  if (this.isPowerSavingModeOn() === false) {
+    return this.temperature === this.MAX_LIMIT_PSM_OFF;
+  }
+  return this.temperature === this.MAX_LIMIT_PSM_ON;
+}
+```
+
+To make sure our logic is sound, let us write a counter test to make double-sure:
+
+```javascript
+// spec/thermostatSpec.js
+
+describe('when power saving mode is off', function() {
+  it('has a maximum temperature of 32 degrees', function() {
+    thermostat.switchPowerSavingModeOff();
+    for (var i = 0; i < 13; i++) {
+      thermostat.up();
+    }
+    expect(thermostat.getCurrentTemperature()).toEqual(32);
+  });
+});
+```
+
+### Reset!
+
+Client wanted us to have a reset method to bring us back to the default temperature:
+
+```javascript
+// spec/thermostatSpec.js
+
+it('can be reset to the default temperature', function() {
+  for (var i = 0; i < 6; i++) {
+    thermostat.up();
+  }
+  thermostat.resetTemperature();
+  expect(thermostat.getCurrentTemperature()).toEqual(20);
+});
+```
+
+In this situation we could create a method that does the following:
+
+```javascript
+// src/thermostat.js
+
+resetTemperature() {
+  this.temperature = 20;
+}
+```
+Let's  go back to our object constructor function and do a little re-factor:
+
+```javascript
+// src/thermostat.js
+
+constructor {
+  // Other properties omitted for brevity
+  this.DEFAULT_TEMPERATURE = 20;
+  this.temperature = this.DEFAULT_TEMPERATURE;
+}
+```
+
+This means we can tidy up our `resetTemperature()` function:
+
+```javascript
+// src/thermostat.js
+
+resetTemperature() {
+  this.temperature = this.DEFAULT_TEMPERATURE;
+}
+```
+
+#### Energy usage
+
+The last requirement our client has given us, is that we should be able to demonstrate to our user where their energy usage sits.  We are going to have a function that outputs `high-usage`, `medium-usage` or `low-usage`.
+
+With that, let's write our final tests:
+
+```javascript
+// spec/thermostatSpec.js
+
+describe('displaying usage levels', function() {
+  describe('when the temperature is below 18 degrees', function() {
+    it('it is considered low-usage', function() {
+      for (var i = 0; i < 3; i++) {
+        thermostat.down();
+      }
+      expect(thermostat.energyUsage()).toEqual('low-usage');
+    });
+  });
+
+  describe('when the temperature is between 18 and 25 degrees', function() {
+    it('it is considered medium-usage', function() {
+      expect(thermostat.energyUsage()).toEqual('medium-usage');
+    });
+  });
+
+  describe('when the temperature is anything else', function() {
+    it('it is considered high-usage', function() {
+      thermostat.powerSavingMode = false;
+      for (var i = 0; i < 6; i++) {
+        thermostat.up();
+      }
+      expect(thermostat.energyUsage()).toEqual('high-usage');
+    });
+  });
+});
+```
+
+`MEDIUM_ENERGY_USAGE_LIMIT`
+
+```javascript
+// src/thermostat.js
+
+constructor {
+  // Other properties omitted for brevity
+  this.MEDIUM_ENERGY_USAGE_LIMIT = 18;
+}
+```
+
+Function `energyUsage()` now can be re-factor as accordingly:
+
+```javascript
+// src/thermostat.js
+
+energyUsage() {
+  if (this.temperature < this.MEDIUM_ENERGY_USAGE_LIMIT) {
+    return 'low-usage';
+  }
+  if (this.temperature >= this.MEDIUM_ENERGY_USAGE_LIMIT && this.temperature <= this.MAX_LIMIT_PSM_ON) {
+    return 'medium-usage';
+  }
+  return 'high-usage';
+}
+```
+
+**What I've Learned:**
+
+> Strict Mode it makes us write higher standard JS as converts mistakes (that could be passed by without strict mode) into errors, so we can fix them in the moment instead of risking them causing problems in a future when it would be more difficult to find them. For example, it is impossible to create global variables by mistake in strict mode (if you mistype a variable in sloppy mode JS will just create that new object and keep working, but functionality might be affected).
+
+
+
+
+
+
 
 
 
