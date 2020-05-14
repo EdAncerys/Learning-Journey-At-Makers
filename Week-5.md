@@ -1190,7 +1190,244 @@ energyUsage() {
 
 > Strict Mode it makes us write higher standard JS as converts mistakes (that could be passed by without strict mode) into errors, so we can fix them in the moment instead of risking them causing problems in a future when it would be more difficult to find them. For example, it is impossible to create global variables by mistake in strict mode (if you mistype a variable in sloppy mode JS will just create that new object and keep working, but functionality might be affected).
 
+## Daily Goals 
+### Thursday 14 of May 2020
 
+## Morning Goals 
+
+#### Attend Callbacks and following the flow of control workshop.
+
+**Plan:**
+
+- Describe "the flow of control of a program" as "the order in which the parts of the code are executed".
+- Explain the process you use to follow the flow of control.
+- Follow the flow of control to help you understand how callbacks work.
+  
+**Process:** 
+
+#### Following the flow of control
+
+Imagine you want to follow the flow of control in this code.  That is, you want to understand what parts run and in what order they run.
+
+```js
+document.addEventListener('click', function() {
+  console.log("click!");
+});
+
+```
+
+1. Before running the code, add some `console.log`s.  Log `console.log(1)` in the bit of code you think will get run first, `console.log(2)` in the bit of code you think will get run second, and so on. For example:
+
+```js
+console.log(1);
+
+document.addEventListener('click', function() {
+  console.log(2);
+  console.log("click!");
+  console.log(3);
+});
+
+console.log(4);
+```
+
+2. Run the code to see if the numbers get printed in order (1, 2, 3 etc.).  If they do, your prediction is correct.
+
+3. If your prediction is incorrect, examine the code and experiment with it to try to figure out why.  Once you have more information, update your `console.log`s to reflect your prediction and return to step 2.
+
+#### Following the flow fast
+
+A developer constantly analyses the flow of control of their code.  Keep trying to improve this skill.  The more adept you are at reading the flow of control without running the code, the faster you'll be.  Build this intuition by making predictions and checking if your prediction is right.
+
+**What I've Learned:**
+
+> - A callback function is a function that is passed as an argument to another function, to be “called back” at a later time. A function that accepts other functions as arguments is called a higher-order function, which contains the logic for when the callback function gets executed. It’s the combination of these two that allow us to extend our functionality. Callback, also known as a higher-order function.
+
+> Consider this common use of a callback function in jQuery:
+
+```javascript
+//Note that the item in the click method's parameter is a function, not a variable.
+//The item is a callback function
+$("#btn_1").click(function() {
+  alert("Btn 1 Clicked");
+});
+```
+
+## Afternoon Challenges  
+
+*Practice pairing and building Web-app.*  
+[**"Thermostat App"**](https://github.com/EdAncerys/Thermostat-Java-Script)
+
+**Plan:** Pair with Zsofia and keep working on the afternoon challenge for the week - *"Thermostat App".*
+
+**Process:**
+
+#### jQuery
+
+- Use jQuery to build interactive functionality into a webpage
+- Understand some things about how jQuery uses the technique of callbacks
+
+Can enable **jQuery** by linking external *src* file **CDN** (content delivery service):
+
+```html
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+```
+
+Call back function representation with **jQuery**:
+
+#### $(document).ready(function() { })
+
+This utility function translates to "only execute the function when the document is ready", i.e. when the DOM is loaded. This is a good idea because it's difficult (but not impossible!) to attach an event listener to something that isn't there. Forgetting to wrap jQuery code in this is a common source of bugs.
+
+#### jQuery selector
+
+The jQuery selector generally works like this:
+
+```javascript
+$('element')
+```
+
+where `element` is a CSS selector, or a tag name. Chrome Dev Tools actually comes with a very similar feature, so you can try it out on any page. Try selecting some `.classes`, `#ids` and HTML tags.
+
+#### Event listeners
+
+In longhand, these usually look like
+
+```javascript
+$('element').on('event', function() {
+
+})
+```
+
+where `event` is an action you would like to listen for on the page. Popular events include clicks, scrolls, typing and generally any kind of page interaction. The most popular ones generally have convenient shortcut functions, so you can write `$('element').click(function() { })`, for example.
+
+#### Callbacks
+
+The callback is the anonymous function passed as last argument to the event handler:
+
+```javascript
+$('#some-heading').click(function() {
+  // this function is the callback!
+})
+```
+
+In this case, the callback is the function passed to the `click` function, that executes at some point in the future. The plain English translation would be "when there is a click on the element with the ID `some-heading`, run the function".
+
+```javascript
+// console
+$('#temperature').text('hello jQuery world!');
+```
+
+Now we can put this in our actual interface file, wrapped in a `$(document).ready(function() {})`, so that it only triggers when the DOM has finished loading.
+
+```javascript
+// interface.js
+$(document).ready(function() {
+  var thermostat = new Thermostat();
+  $('#temperature').text(thermostat.temperature);
+})
+```
+
+Flow of what happens when a user interaction happens:
+
+**user input -> event listener -> update model -> update view to reflect change in model**
+
+In code:
+
+```javascript
+$('#temperature-up').on('click', function() { // event listener
+  thermostat.up(); // update model
+  $('#temperature').text(thermostat.temperature); // update view
+})
+```
+
+And the same again for decreasing the temperature:
+
+```javascript
+$('#temperature-down').click(function() { // this is an alternate version of .on('click'), with a sprinkle of jQuery syntactic sugar
+  thermostat.down();
+  $('#temperature').text(thermostat.temperature);
+})
+```
+
+Re-factor updating the temperature to its own clearly-named function:
+
+```javascript
+function updateTemperature() {
+  $('#temperature').text(thermostat.temperature);
+}
+```
+
+Hooking the other buttons up should be relatively straightforward, resulting in something like this:
+
+```javascript
+// interface.js
+$(document).ready(function() {
+  var thermostat = new Thermostat();
+  updateTemperature();
+
+  $('#temperature-up').click(function() {
+    thermostat.up();
+    updateTemperature();
+  });
+
+  $('#temperature-down').click(function() {
+    thermostat.down();
+    updateTemperature();
+  });
+
+  $('#temperature-reset').click(function() {
+    thermostat.resetTemperature();
+    updateTemperature();
+  });
+
+  $('#powersaving-on').click(function() {
+    thermostat.switchPowerSavingModeOn();
+    $('#power-saving').text('on')
+    updateTemperature();
+  })
+
+  $('#powersaving-off').click(function() {
+    thermostat.switchPowerSavingModeOff();
+    $('#power-saving').text('off')
+    updateTemperature();
+  })
+
+  function updateTemperature() {
+    $('#temperature').text(thermostat.temperature);
+  };
+});
+```
+
+We can delegating to the CSS itself to change color value(and/or other if needed) by just changing the class so that the CSS can decide how to handle colors:
+
+```javascript
+function updateTemperature() {
+  $('#temperature').text(thermostat.temperature);
+  $('#temperature').attr('class', thermostat.energyUsage());
+}
+```
+
+And now the CSS can handle colors (we just need to place this in its own file and link it in with the appropriate tag):
+
+```css
+.low-usage {
+  color: green;
+}
+
+.medium-usage {
+  color: black;
+}
+
+.high-usage {
+  color: red;
+}
+```
+
+**What I've Learned:**
+
+> - jQuery is a fast, small, and feature-rich JavaScript library. It makes things like HTML document traversal and manipulation, event handling, animation, and Ajax much simpler with an easy-to-use API that works across a multitude of browsers. 
+
+> - jQuery takes a lot of common tasks that require many lines of JavaScript code to accomplish, and wraps them into methods that you can call with a single line of code.
 
 
 
