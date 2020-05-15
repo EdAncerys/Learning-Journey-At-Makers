@@ -1429,6 +1429,262 @@ And now the CSS can handle colors (we just need to place this in its own file an
 
 > - jQuery takes a lot of common tasks that require many lines of JavaScript code to accomplish, and wraps them into methods that you can call with a single line of code.
 
+## Daily Goals 
+### Friday 15 of May 2020
+
+## Morning Goals 
+
+#### Closures and Prototypes in JS.
+
+**Plan:**
+
+- Perform research online individually.  
+- Describe what **closers and prototypes are in JS ** and it's usages. 
+- Summarize and give some practical example. 
+  
+**Process:** 
+
+Closures in JavaScript are one of those concepts that many struggle to get their heads around. In the following article, I will explain in clear terms what a closure is, and I’ll drive the point home using simple code examples.
+
+#### What is a closures in JS?
+
+A closure is a feature in JavaScript where an inner function has access to the outer (enclosing) function’s variables — a scope chain.
+
+The closure has three scope chains:
+
+- it has access to its own scope — variables defined between its curly brackets
+- it has access to the outer function’s variables
+- it has access to the global variables
+
+Let’s look at a simple closure example in JavaScript:
+
+```js
+function outer() {
+   var b = 10;
+   function inner() {
+        
+         var a = 20; 
+         console.log(a+b);
+    }
+   return inner;
+}
+```
+
+Here we have two functions:
+
+- an outer function outer which has a variable b, and returns the inner function
+- an inner function inner which has its variable called a, and accesses an outer variable b, within its function body
+
+The scope of variable b is limited to the outer function, and the scope of variable a is limited to the inner function.
+
+#### Prototypes is JS
+
+The prototype property is initially an empty object, and can have members added to it - as you would any other object.
+
+```js
+var myObject = function(name){
+    this.name = name;
+    return this;
+};
+ 
+console.log(typeof myObject.prototype); // object
+ 
+myObject.prototype.getName = function(){
+    return this.name;
+};
+```
+In the snippet above, we’ve created a function, but if we call myObject(), it will simply return the window object, because it was defined within the global scope. this will therefore return the global object, as it has not yet been instantiated.
+
+```js
+console.log(myObject() === window); // true
+```
+#### How to Use Prototype
+
+To make the application run faster (and follow best practices), we can (re)define the prototype property of the myObject; every instance of myObject will then reference the methods within myObject.prototype as if they were their own methods.
+
+We can then instantiate the myObject 100 times and still keep the App performance in good shape rather then having 100 different methods in memory.
+
+```js
+// define the GameObject constructor function
+var myObject = function(width, height) {
+    this.x = Math.floor((Math.random() * myCanvasWidth) + 1);
+    this.y = Math.floor((Math.random() * myCanvasHeight) + 1);
+    this.width = width;
+    this.height = height;
+    return this;
+};
+ 
+// (re)define the GameObject prototype object
+myObject.prototype = {
+    x: 0,
+    y: 0,
+    width: 5,
+    width: 5,
+    draw: function() {
+        myCanvasContext.fillRect(this.x, this.y, this.width, this.height);
+    }
+};
+```
+
+The JavaScript prototype property also allows you to add new methods to objects constructors:
+
+```js
+function Person(first, last, age, eyecolor) {
+  this.firstName = first;
+  this.lastName = last;
+  this.age = age;
+  this.eyeColor = eyecolor;
+}
+
+Person.prototype.name = function() {
+  return this.firstName + " " + this.lastName;
+};
+```
+
+**What I've Learned:**
+
+> - A closure is the combination of a function bundled together (enclosed) with references to its surrounding state (the lexical environment). In other words, a closure gives you access to an outer function’s scope from an inner function. In JavaScript, closures are created every time a function is created, at function creation time.
+
+> - Prototypes are the mechanism by which JavaScript objects inherit features from one another. 
+
+## Afternoon Challenges  
+
+*Practice pairing and building Web-app.*  
+[**"Thermostat App"**](https://github.com/EdAncerys/Thermostat-Java-Script)
+
+**Plan:** Pair with Zsofia and keep working on the afternoon challenge for the week - *"Thermostat App".*
+
+**Process:**
+
+#### Learning Objectives covered
+
+- Define 'AJAX' as 'Asynchronous JavaScript And XML'
+- Explain that AJAX allows users to interact asynchronously with other web entities (such as servers) without page reloads
+- Use AJAX to retrieve data from an API
+
+#### Thermostat: APIs
+
+To get the weather for London we can returns in the console, using a basic `$.get` request:
+
+```javascript
+// console
+$.get('http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=a3d9eb01d4de82b9b8d0849ef604dbed', function(data) {
+  console.log(data);
+})
+```
+
+`$.get()` is shorthand for `$.ajax()`, which in turn is a wrapper around JavaScript's inbuilt `XMLHttp` library.
+
+We can pass an additional parameter to the request to make sure our request returns a metric unit, in this case Celcius:
+
+```javascript
+// console
+$.get('http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=a3d9eb01d4de82b9b8d0849ef604dbed&units=metric', function(data) {
+  console.log(data.main.temp);
+})
+```
+
+To add some HTML to hold the result:
+
+```html
+<section>
+  <h1>Current temperature: <span id="current-temperature"></span></h1>
+</section>
+```
+
+And display it on page load:
+
+```javascript
+// interface.js, within the $(document).ready(function() { })
+$.get('http://api.openweathermap.org/data/2.5/weather?q=London&appid=a3d9eb01d4de82b9b8d0849ef604dbed&units=metric', function(data) {
+  $('#current-temperature').text(data.main.temp);
+})
+```
+
+To load this dynamically, based on the user's selection. One way you can do this is to have a selector with pre-defined cities, and some JavaScript to detect the change:
+
+```html
+<section>
+  <h1>Current temperature: <span id="current-temperature">20</span></h1>
+  <select id="current-city">
+    <option value="london">London</option>
+    <option value="newyork">New York</option>
+    <option value="paris">Paris</option>
+    <option value="tokyo">Tokyo</option>
+  </select>
+</section>
+```
+
+```javascript
+// interface.js
+$('#current-city').change(function() {
+  var city = $('#current-city').val();
+  $.get('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=a3d9eb01d4de82b9b8d0849ef604dbed&units=metric', function(data) {
+    $('#current-temperature').text(data.main.temp)
+  })
+})
+```
+
+Or can let the user type in whatever city they want:
+
+```html
+<section>
+  <h1>Current temperature: <span id="current-temperature">20</span></h1>
+  <form id="select-city">
+    <input id="current-city" type="text" placeholder="Enter a city"></input>
+    <input type="submit"></input>
+  </form>
+</section>
+```
+
+```javascript
+// interface.js
+$('#select-city').submit(function(event) {
+  event.preventDefault();
+  var city = $('#current-city').val();
+  $.get('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=a3d9eb01d4de82b9b8d0849ef604dbed&units=metric', function(data) {
+    $('#current-temperature').text(data.main.temp);
+  })
+})
+```
+
+Either way, that `$.get()` function is looking a bit messy - to re factor and extract it to a function that's a bit clearer:
+
+```javascript
+// interface.js
+function displayWeather(city) {
+ var url = 'http://api.openweathermap.org/data/2.5/weather?q=' + city;
+ var token = '&appid=a3d9eb01d4de82b9b8d0849ef604dbed';
+ var units = '&units=metric';
+ $.get(url + token + units, function(data) {
+   $('#current-temperature').text(data.main.temp);
+ })
+```
+
+And refactor the existing code:
+
+```javascript
+// interface.js
+
+displayWeather('London');
+
+$('#select-city').submit(function(event) {
+  event.preventDefault();
+  var city = $('#current-city').val();
+  displayWeather(city);
+})
+
+```
+
+**What I've Learned:**
+
+> - Asynchronous JavaScript and XML, while not a technology in itself, is a "new" approach to using a number of existing technologies together, including HTML or XHTML, CSS, JavaScript, DOM, XML, XSLT, and most importantly the XMLHttpRequest object.
+
+> - When these technologies are combined in the Ajax model, web applications are able to make quick, incremental updates to the user interface without reloading the entire browser page. This makes the application faster and more responsive to user actions.
+
+> - Although X in Ajax stands for XML, JSON is used more than XML nowadays because of its many advantages such as being lighter and a part of JavaScript. Both JSON and XML are used for packaging information in the Ajax model.
+
+
 
 
 
