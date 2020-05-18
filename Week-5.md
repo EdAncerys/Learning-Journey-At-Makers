@@ -1684,10 +1684,105 @@ $('#select-city').submit(function(event) {
 
 > - Although X in Ajax stands for XML, JSON is used more than XML nowadays because of its many advantages such as being lighter and a part of JavaScript. Both JSON and XML are used for packaging information in the Ajax model.
 
+## Weekend Challenge
+
+**Bowling Challenge:** Full path to the project on [GitHub](https://github.com/EdAncerys/bowling-challenge)
+
+#### Bowling App Challenge Task
+
+Count and sum the scores of a bowling game for one player (in JavaScript).
+
+A bowling game consists of 10 frames in which the player tries to knock down the 10 pins. In every frame the player can roll one or two times. The actual number depends on strikes and spares. The score of a frame is the number of knocked down pins plus bonuses for strikes and spares. After every frame the 10 pins are reset.
+
+#### Domain Model
+
+new Bowling(); | # |
+:--- | :---:
+     |
+#countScore(score); | 1
+#_countScoreHelper(score) | 2
+#getTotalScore(); | 3
+#_countHelper(score) | 4
+#_countHelperWhenStrike(score) | 5
 
 
+#### How does Bowling work?
 
+**Strikes**
 
+The player has a strike if he knocks down all 10 pins with the first roll in a frame. The frame ends immediately (since there are no pins left for a second roll). The bonus for that frame is the number of pins knocked down by the next two rolls. That would be the next frame, unless the player rolls another strike.
 
+**Spares**
 
+The player has a spare if the knocks down all 10 pins with the two rolls of a frame. The bonus for that frame is the number of pins knocked down by the next roll (first roll of next frame).
 
+**10th frame**
+
+If the player rolls a strike or spare in the 10th frame they can roll the additional balls for the bonus. But they can never roll more than 3 balls in the 10th frame. The additional rolls only count for the bonus not for the regular frame count.
+
+    10, 10, 10 in the 10th frame gives 30 points (10 points for the regular first strike and 20 points for the bonus).
+    1, 9, 10 in the 10th frame gives 20 points (10 points for the regular spare and 10 points for the bonus).
+
+**Gutter Game**
+
+A Gutter Game is when the player never hits a pin (20 zero scores).
+
+**Perfect Game**
+
+A Perfect Game is when the player rolls 12 strikes (10 regular strikes and 2 strikes for the bonus in the 10th frame). The Perfect Game scores 300 points.
+
+In the image below you can find some score examples.
+
+**Examples for the Tests:**
+
+<p align="center">
+    <img width="600" src="images/bowling_02.png">  
+    *Proses Abstraction in OOP* 
+</p>
+
+Technical Approach:
+-----
+
+- Model written with JS.
+- Views and route structure with Sinatra using ruby.
+- Tests been written using Jasmine test framework. 
+
+Notes on functionality:
+------
+
+- Clone the repository.
+- Set up host on your local machine using `rackup`. Load main html page `bowling.html`
+- Select pins scored in every frame by choosing numbers on screen provided.
+
+#### Interface
+
+After I had all my tests passing with Jasmine and all the specifications covered I decided to do some front-end to practice everything I learned from Thermostat Project.
+I created an HTML table with ten frames that take roll_1, roll_2 and current score for each of them.
+It has a click button 'bowl' that plays a random frame at a time and keeps updating the score through each of them. After 10 frames, on the next click it pops out a message 'Game Over'.
+The interface is not fully conected to backend and there is no bonus added in the score.
+
+![img](images/bowling_01.png)
+
+# Weekend Reflections
+
+### Did you meet all of your goals you set at the start of the week?
+- Week 5 been a new experience in a way as I learned new language **Java Script**. Been setting up main model with **JS** and testing it with Jasmine testing framework. 
+Despite this, overall week load did not felt as heavy as weeks before. I felt that I did understood main concepts and goals for a week. 
+
+Believe that taking deeper understanding of the concepts and not as before mainly rushing through the tasks helped to have a better outcome overall.
+
+Weekend challenge been a good recap of the week and cementing of understanding.
+
+### What things do you still need to work through?
+- Need still work on getting better understanding of classes and SRP.
+- JS is more pickier and less forgiving language comparing to ruby so have good understanding of concepts and syntax have a big advantage.
+
+### What would you change/improve to keep moving forward?
+##### Technical: 
+- Focus on getting main goals set with clear understanding and vision. Prioritize learning experience over things done. **Quality over Quantity**
+
+##### Personal:
+
+- Happy with maintaining 'day in - day out' routine pretty constant through out the week.
+
+<br>

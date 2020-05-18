@@ -1581,7 +1581,7 @@ Notes on functionality:
 ------
 
 * You don't have to be logged in to see the peeps.
-* Makers sign up to chitter with their email, password, name and a username (e.g. samm@makersacademy.com, password123, Sam Morgan, sjmog).
+* Makers sign up to chitter with their email, password, name and a username (e.g. frodo@makersacademy.com, password123, Sam Morgan).
 * The username and email are unique.
 * Peeps (posts to chitter) have the name of the maker and their user handle.
 
