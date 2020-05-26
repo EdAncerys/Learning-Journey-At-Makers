@@ -1,4 +1,4 @@
-## Week  Goals
+# Week 6 Goals
 
 By the end of the week all developers can build tested, easy-to-change software in a team using these processes:
 
