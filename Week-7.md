@@ -80,7 +80,7 @@ document.querySelector("button").onclick = function(event) { … }.
 ## Afternoon Challenges  
 
 *Practice pairing and building Web-app.*  
-[**"Notes App"**](https://github.com/EdAncerys/noteApp)
+[**"Notes App"**](https://github.com/EdAncerys/Notes-App)
 
 **Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - *"Notes App".*
 
@@ -368,3 +368,133 @@ function(context) {
 name // returns 'ed'
 sayGoodMorning() // returns 'notEd'
 ```
+
+## Daily Goals
+### Thursday 28 of May 2020
+
+## Morning Goals
+
+#### Explain how to **Manipulate the Document Object Model (DOM).**.
+
+**Plan:**
+
+- Perform research online individually.  
+- Describe what **Document Object Model (DOM) is** and it's usages.
+- Summarize and give some practical example.
+
+**Process:**
+
+The DOM (Document Object Model) is an interface that represents how your HTML and XML documents are read by the browser. It allows a language (JavaScript) to manipulate, structure, and style your website. After the browser reads your HTML document, it creates a representational tree called the Document Object Model and defines how that tree can be accessed.
+
+#### Advantages
+
+By manipulating the DOM, you have infinite possibilities. You can create applications that update the data of the page without needing a refresh. Also, you can create applications that are customisable by the user and then change the layout of the page without a refresh. You can drag, move, and delete elements.
+
+#### Most common elements
+
+- Document: It treats all the HTML documents.
+- Elements: All the tags that are inside your HTML or XML turn into a DOM element.
+- Text: All the tags’ content.
+- Attributes: All the attributes from a specific HTML element. In the image, the attribute class=”hero” is an attribute from the <p> element.
+
+### Manipulating the DOM
+
+#### Methods
+
+The DOM has a lot of methods. They are the connection between our nodes (elements) and events.
+
+getElementById()
+
+This method returns the element that contains the name id passed. As we know, id’s should be unique, so it’s a very helpful method to get only the element you want.
+
+start: id passed. And in case we do not have any id with that specific name, it returns null.
+```js
+var myStart = document.getElementsById('start');
+myStart: Our variable name that looks similar to our id passed.
+```
+
+getElementsByClassName()
+
+This method returns an HTMLCollection of all those elements containing the specific name class passed.
+
+.container: our class passed. In case we do not have any class with that specific name, it returns null.
+```js
+var myContainer = document.getElementsByClassName('container');
+myContainer: Our variable name that looks similar to our class passed.
+```
+
+getElementsByTagName()
+
+This works the same way as those methods above: it also returns an HTMLCollection, but this time with a single difference: it returns all those elements with the tag name passed.
+
+button: tag name that we want to get.
+```js
+var buttons = document.getElementsByTagName('button');
+buttons: Our variable name that looks similar to our tag name passed.
+```
+
+querySelector()
+
+It returns the first element that has the specific CSS selector passed.
+```js
+var resetButton = document.querySelector('#reset');
+resetButton: Our variable name that looks similar to our selector passed.
+
+#reset: selector passed, and if you don’t have any selector that matches it returns null.
+```
+querySelectorAll()
+
+Very similar to the querySelector() method, but with a single difference: it returns all the elements that match with the CSS selector passed. The selector should also follow the CSS syntax. In case you do not have any selector, it returns null.
+```js
+var myButtons = document.querySelector('#buttons');
+myButtons: Our variable name that looks similar to our selectors passed.
+
+#buttons: selector passed, if you don’t have any selector that matches it returns null.
+```
+createElement()
+
+Creates a new element in your HTML page
+```js
+var p_element = document.createElement('p');
+```
+
+setAttribute()
+
+Lets you set new attributes for elements HTML.
+```js
+p_element.setAttribute('id', 'note-body')
+```
+
+### Events
+
+The DOM elements have methods, but they also have events. These events are responsible for make interactivity possible in our page. **Events are also methods.**
+
+`click`
+
+One of the most used events is the click event. When the user clicks on a specific element, it will realise some action.
+```js
+myStart.addEventListener('click', function(event) {
+// Do something here.
+}, false);
+```
+The addEventListener() parameters are:
+
+- The type of the event that you want (in this case ‘click’).
+- A callback function
+- The useCapture by default is false. It indicates whether or not you want to “capture” the event.
+
+`select`
+
+This events is for when you want to dispatch something when a specific element is selected. In that case we’re gonna dispatch a simple alert.
+```js
+myStart.addEventListener('select', function(event) {
+alert('Element selected!');
+}, false);
+```
+These are some of the most commonly used events.
+
+**What I've Learned:**
+
+> When a web page is loaded, the browser creates a Document Object Model of the page, which is an object oriented representation of an HTML document, that acts as an interface between JavaScript and the document itself and allows the creation of dynamic web pages.  
+
+> By manipulating the DOM, you have infinite possibilities. You can create applications that update the data of the page without needing a refresh. Also, you can create applications that are customizable by the user and then change the layout of the page without a refresh.
