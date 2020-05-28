@@ -1,4 +1,4 @@
-# Week 7 Goals
+achieve# Week 7 Goals
 
 #### By the end of the week all developers can:
 
@@ -86,18 +86,168 @@ document.querySelector("button").onclick = function(event) { … }.
 
 **Process:**
 
+## Writing a frontend, single page app using only pure JavaScript (further JS)
+
+### Learning objectives
+
+#### Primary goal
+
+By the end of the week, the goal is to be able to answer "yes" to the week's primary question:
+
+Can you write a frontend, single page app using only pure JavaScript?
+
+As part of this primary goal, a sub-goal should be that you are able to explain and give an example of asynchronous behaviour in Javascript.
+
+### User Stories
+```
+As a programmer
+I can see a list of my notes, where each note is abbreviated to the first 20 characters
+So I can find the one I want
+
+As a programmer
+I can create a new note
+So I can record something I need to remember
+
+As a programmer
+I can see the full text of an individual note on its own page
+So I can see all the information in the note
+```
+
+First thing been to discus an approach and break it down to the smaller chunks User stories to tackle. Thats what we came up with after discussion:
+
+## Approach
+
+### View notes 20 characters each
+
+- Object that holds notes [x]
+- Instantiate notes [x]
+- Retrieve list of notes [x]
+- Note function that returns first 20 characters of the note body [x]
+- A way to get those 20 characters onto the page as an element [x]
+- Create a list of HTML elements as links on the page [x]
+- Updates every time new note is added [x]
+
+### Create a note
+
+- Generate text box element [x]
+- Generate a submit button [x]
+- Get text from text box and put it into a element on the page [x]
+- New note object [x]
+- Clear text element box when note is generated [x]
+- Stop empty notes being added [x]
+
+### View full note
+
+- Clicking link suppresses default event and triggers custom event [x]
+- Retrieve particular note's full text [x]
+- Generate HTML element that holds full note text [x]
+
 **What I've Learned:**
 
+> Importance of taking right and thoughtful approach to the problem/challenge is well forth an effort as its helps to stay on track during the development process and keep your self on track without deviating from the main problem.
 
+## Afternoon Challenges  
 
+*Practice pairing and building Web-app.*  
+[**"Notes App"**](https://github.com/EdAncerys/Notes-App)
 
+**Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - *"Notes App".*
 
+**Process:**
 
+# Writing tests without a testing library
 
+## What is a test?
 
+A test does two things:
 
+1. Sets some conditions up.
+2. Checks that some things are true.
 
+## What are testing libraries for?
 
+A testing library supplies:
+
+1. Mocking functions to help isolate the part of the code being tested.
+2. Assertion functions that help check that specific things are true.
+3. A standard way to describe what a test or group of tests is doing.
+4. A way to organise tests.
+5. An easy way to run lots of tests.
+
+## Writing tests without a testing library
+
+In order to test our JS methods and code we had to write our own test framework. Below is a walkthrough of test framework we been using to test our code.
+
+Starting from the beginning beforeEach syntax could be added as follows:
+```js
+var beforeEachFunction = function() {}
+function beforeEach(callback) {
+  beforeEachFunction = callback;
+}
+```
+As we follow simmilar aproach to **Jasmine** testing framework we desided to add similar functionality and approach. Describe block functionality could be added by adding following code to testing framework:
+```js
+function describe(description, callback) {
+  incrementPrintDepth()
+  printMessage(description)
+  callback()
+  decrementPrintDepth()
+  printDivider()
+}
+```
+Same applies to `it` block and this can be added:
+```js
+function it(description, callback) {
+  incrementPrintDepth()
+  beforeEachFunction();
+  printMessage(description)
+  callback()
+  decrementPrintDepth()
+}
+```
+To add matchers we want to implement in our test framework we defining Result function:
+```js
+function Result() {
+  this.assertion = undefined
+}
+```
+Now to define matchers we want to use we can add them by assigning to the function as per below:
+
+#### `toEqual` matcher:
+```js
+Result.prototype.toEqual = function(expectation) {
+  if(this.assertion === expectation) {
+    passed()
+  } else {
+    failed(function() {
+      printMessage(`Expected ${this.assertion} to equal ${expectation}`)
+      printMessage(`But equals ${this.assertion}`)
+    }.bind(this))
+  }
+}
+```
+#### `toBe` matcher:
+```js
+Result.prototype.toBe = function(expectation) {
+  if(typeof this.assertion !== 'boolean' || typeof expectation !== 'boolean') {
+    return matcherError(function() {
+      printMessage('toBe can only be used with booleans')
+    })
+  }
+  if(this.assertion === expectation) {
+    passed()
+  } else {
+    failed(function() {
+      printMessage(`Expected ${this.assertion} to be ${expectation}`)
+      printMessage(`But it was ${this.assertion}`)
+    }.bind(this))
+  }
+}
+```
+
+**What I've Learned:**
+
+> Learned about test frameworks and deeper understanding how it all works under the hood. After writing basic testing framework that helps to test JS code have more confidence in my knowledge and better understanding of test frameworks in general.
 
 ## Daily Goals
 ### Wednesday 27 of May 2020
@@ -498,3 +648,135 @@ These are some of the most commonly used events.
 > When a web page is loaded, the browser creates a Document Object Model of the page, which is an object oriented representation of an HTML document, that acts as an interface between JavaScript and the document itself and allows the creation of dynamic web pages.  
 
 > By manipulating the DOM, you have infinite possibilities. You can create applications that update the data of the page without needing a refresh. Also, you can create applications that are customizable by the user and then change the layout of the page without a refresh.
+
+## Afternoon Challenges  
+
+*Practice pairing and building Web-app.*  
+[**"Notes App"**](https://github.com/EdAncerys/Notes-App)
+
+**Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - *"Notes App".*
+
+**Process:**
+
+As we had to write all our code in **Java Script** only, that meant we had to learn more about **DOM** and how to manipulate it via JS.
+
+Our `index.html` main page body had no *HTML* at all so all HTML elements could be added and created with Java Script only. That all could be achieved by adding `<script>` tag that links to JS file where we will be adding all necessary elements for our project.
+
+#### `index.html` file:
+
+```HTML
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src='src/note.js'></script>
+  </head>
+
+  <body>
+
+    <script src='src/interface.js'></script>
+  </body>
+</html>
+```
+
+To achieve this we adding a function that will load when DOM is loaded. That by it self is an **event**. 
+Code below is after refactoring and extracting some code to separate functions for better readability:
+
+```js
+document.body.onload = function() {
+  let noteHeadingElement = document.createElement('h1')
+  noteHeadingElement.innerHTML = 'Notes'
+
+  document.body.appendChild(noteHeadingElement)
+  createPageOneElements()
+  createPageTwoElements()
+}
+```
+We decided to have two views to simulate and mimic page load when user trigger different events. To achieve this we added two separate `<div>` elements that will be hiding and showing up HTML elements by triggering events in **DOM** on users pick/selection.
+
+#### Page view one 
+```js
+function createPageOneElements() {
+
+  let inputForm = document.createElement('form')
+  inputForm.setAttribute('id', 'input-form')
+
+  let noteBodyInput = document.createElement('textarea')
+  noteBodyInput.setAttribute('rows', 8)
+  noteBodyInput.setAttribute('cols', 40)
+  noteBodyInput.setAttribute('id', 'text-input')
+
+  let noteSubmissionButton = document.createElement('input')
+  noteSubmissionButton.setAttribute('type', 'submit')
+  noteSubmissionButton.setAttribute('value', 'Save Note')
+
+  inputForm.appendChild(noteBodyInput)
+  inputForm.appendChild(document.createElement('br'))
+  inputForm.appendChild(noteSubmissionButton)
+
+  pageOneView.appendChild(inputForm)
+  document.body.appendChild(pageOneView)
+
+  inputForm.addEventListener('submit', createNewNote)
+}
+```
+
+Acordingly we have page two view created with following function:
+#### Page view one 
+```js
+function createPageTwoElements() {
+  let noteBodyElement = document.createElement('p')
+  noteBodyElement.setAttribute('id', 'note-body')
+
+  let homeButton = document.createElement('button')
+  homeButton.innerHTML = 'Home'
+  homeButton.addEventListener('click', function(event) {
+    pageTwoView.style.display = 'none'
+    pageOneView.style.display = 'block'
+  })
+  pageTwoView.appendChild(noteBodyElement)
+  pageTwoView.appendChild(homeButton)
+  document.body.appendChild(pageTwoView)
+  pageTwoView.style.display = 'none'
+}
+```
+To create a single note element we created `createNewNote` function that have all functionality encapsulated in its own function:
+
+```js
+function createNewNote(event) {
+  event.preventDefault()
+  let inputMessage = document.getElementById('text-input').value
+  if(inputMessage === '') return
+  document.getElementById('text-input').value = ''
+  let noteObject = new Note(inputMessage)
+  let new_note = document.createElement('a')
+  addShowBodyEvent(new_note, arrayOfNotes.length)
+  arrayOfNotes.push(noteObject)
+
+  new_note.setAttribute('href', '/')
+  new_note.setAttribute('class', 'new-note')
+  new_note.innerHTML = noteObject.preview()
+  pageOneView.appendChild(new_note)
+  pageOneView.appendChild(document.createElement('br'))
+
+}
+```
+**What I've Learned:**
+
+> We able to manipulate DOM via JS by creating and adding set of HTML elements either by appending them to existing elements or placing them in DOM body. 
+We able to trigger different events in DOM that can fire different `functions` that helps to add functionality when user take action and interacts in **UI**.
+That by it self can greatly improve *user* experience add functionality to the page without reloading the page or changing route.  
+
+## Afternoon Challenges  
+
+*Practice pairing and building Web-app.*  
+[**"Notes App"**](https://github.com/EdAncerys/Notes-App)
+
+**Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - *"Notes App".*
+
+**Process:**
+
+**What I've Learned:**
+
