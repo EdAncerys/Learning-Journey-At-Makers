@@ -1,4 +1,4 @@
-achieve# Week 7 Goals
+fetchingrequestslisteners# Week 7 Goals
 
 #### By the end of the week all developers can:
 
@@ -61,13 +61,13 @@ The on-event handler is usually named with the event it reacts to, like onclick,
 #### Events on the Web
 
 Another example of an event is a user clicking on a button within a web page. This action creates what is known as a "click" event. JavaScript could then be used to program a reaction to the event, for instance, you could use the onclick event handler shown in the following box:
-```
+```js
 <form action="#" method="post">
 <input type="button" value="Click for a Message" onclick="window.alert('Hello!');">
 </form>
 ```
 Or by setting the corresponding property from JavaScript:
-```
+```js
 document.querySelector("button").onclick = function(event) { … }.
 ```
 
@@ -80,7 +80,7 @@ document.querySelector("button").onclick = function(event) { … }.
 ## Afternoon Challenges  
 
 *Practice pairing and building Web-app.*  
-[**"Notes App"**](https://github.com/EdAncerys/Notes-App)
+["Notes App"](https://github.com/EdAncerys/Notes-App)
 
 **Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - *"Notes App".*
 
@@ -113,141 +113,45 @@ I can see the full text of an individual note on its own page
 So I can see all the information in the note
 ```
 
-First thing been to discus an approach and break it down to the smaller chunks User stories to tackle. Thats what we came up with after discussion:
+As a groupe first thing been to discus an approach and break it down to the smaller chunks User stories to tackle.
+
+That is what we came up with after discussion:
 
 ## Approach
 
 ### View notes 20 characters each
 
-- Object that holds notes [x]
-- Instantiate notes [x]
-- Retrieve list of notes [x]
-- Note function that returns first 20 characters of the note body [x]
-- A way to get those 20 characters onto the page as an element [x]
-- Create a list of HTML elements as links on the page [x]
-- Updates every time new note is added [x]
+- [x] object that holds notes
+- [x] instantiate notes
+- [x] retrieve list of notes
+- [x] note function that returns first 20 characters of the note body
+- [x] a way to get those 20 characters onto the page as an element
+- [x] create a list of HTML elements as links on the page
+- [x] updates every time new note is added
 
 ### Create a note
 
-- Generate text box element [x]
-- Generate a submit button [x]
-- Get text from text box and put it into a element on the page [x]
-- New note object [x]
-- Clear text element box when note is generated [x]
-- Stop empty notes being added [x]
+- [x] generate text box element
+- [x] generate a submit button
+- [x] get text from text box and put it into a element on the page
+- [x] new note object
+- [x] clear text element box when note is generated
+- [x] stop empty notes being added
+
+### Create note Manager
+- [x] holds an array of note objects
+- [x] create addNote method to add note objects to array
+- [x] create getNote method to retrieve a note
 
 ### View full note
 
-- Clicking link suppresses default event and triggers custom event [x]
-- Retrieve particular note's full text [x]
-- Generate HTML element that holds full note text [x]
+- [x] clicking link suppresses default event and triggers custom event
+- [x] retrieve particular note's full text
+- [x] generate HTML element that holds full note text
 
 **What I've Learned:**
 
 > Importance of taking right and thoughtful approach to the problem/challenge is well forth an effort as its helps to stay on track during the development process and keep your self on track without deviating from the main problem.
-
-## Afternoon Challenges  
-
-*Practice pairing and building Web-app.*  
-[**"Notes App"**](https://github.com/EdAncerys/Notes-App)
-
-**Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - *"Notes App".*
-
-**Process:**
-
-# Writing tests without a testing library
-
-## What is a test?
-
-A test does two things:
-
-1. Sets some conditions up.
-2. Checks that some things are true.
-
-## What are testing libraries for?
-
-A testing library supplies:
-
-1. Mocking functions to help isolate the part of the code being tested.
-2. Assertion functions that help check that specific things are true.
-3. A standard way to describe what a test or group of tests is doing.
-4. A way to organise tests.
-5. An easy way to run lots of tests.
-
-## Writing tests without a testing library
-
-In order to test our JS methods and code we had to write our own test framework. Below is a walkthrough of test framework we been using to test our code.
-
-Starting from the beginning beforeEach syntax could be added as follows:
-```js
-var beforeEachFunction = function() {}
-function beforeEach(callback) {
-  beforeEachFunction = callback;
-}
-```
-As we follow simmilar aproach to **Jasmine** testing framework we desided to add similar functionality and approach. Describe block functionality could be added by adding following code to testing framework:
-```js
-function describe(description, callback) {
-  incrementPrintDepth()
-  printMessage(description)
-  callback()
-  decrementPrintDepth()
-  printDivider()
-}
-```
-Same applies to `it` block and this can be added:
-```js
-function it(description, callback) {
-  incrementPrintDepth()
-  beforeEachFunction();
-  printMessage(description)
-  callback()
-  decrementPrintDepth()
-}
-```
-To add matchers we want to implement in our test framework we defining Result function:
-```js
-function Result() {
-  this.assertion = undefined
-}
-```
-Now to define matchers we want to use we can add them by assigning to the function as per below:
-
-#### `toEqual` matcher:
-```js
-Result.prototype.toEqual = function(expectation) {
-  if(this.assertion === expectation) {
-    passed()
-  } else {
-    failed(function() {
-      printMessage(`Expected ${this.assertion} to equal ${expectation}`)
-      printMessage(`But equals ${this.assertion}`)
-    }.bind(this))
-  }
-}
-```
-#### `toBe` matcher:
-```js
-Result.prototype.toBe = function(expectation) {
-  if(typeof this.assertion !== 'boolean' || typeof expectation !== 'boolean') {
-    return matcherError(function() {
-      printMessage('toBe can only be used with booleans')
-    })
-  }
-  if(this.assertion === expectation) {
-    passed()
-  } else {
-    failed(function() {
-      printMessage(`Expected ${this.assertion} to be ${expectation}`)
-      printMessage(`But it was ${this.assertion}`)
-    }.bind(this))
-  }
-}
-```
-
-**What I've Learned:**
-
-> Learned about test frameworks and deeper understanding how it all works under the hood. After writing basic testing framework that helps to test JS code have more confidence in my knowledge and better understanding of test frameworks in general.
 
 ## Daily Goals
 ### Wednesday 27 of May 2020
@@ -519,6 +423,109 @@ name // returns 'ed'
 sayGoodMorning() // returns 'notEd'
 ```
 
+## Afternoon Challenges  
+
+*Practice pairing and building Web-app.*  
+["Notes App"](https://github.com/EdAncerys/Notes-App)
+
+**Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - *"Notes App".*
+
+**Process:**
+
+# Writing tests without a testing library
+
+## What is a test?
+
+A test does two things:
+
+1. Sets some conditions up.
+2. Checks that some things are true.
+
+## What are testing libraries for?
+
+A testing library supplies:
+
+1. Mocking functions to help isolate the part of the code being tested.
+2. Assertion functions that help check that specific things are true.
+3. A standard way to describe what a test or group of tests is doing.
+4. A way to organise tests.
+5. An easy way to run lots of tests.
+
+## Writing tests without a testing library
+
+In order to test our JS methods and code we had to write our own test framework. Below is a walkthrough of test framework we been using to test our code.
+
+Starting from the beginning beforeEach syntax could be added as follows:
+```js
+var beforeEachFunction = function() {}
+function beforeEach(callback) {
+  beforeEachFunction = callback;
+}
+```
+As we follow simmilar aproach to **Jasmine** testing framework we desided to add similar functionality and approach. Describe block functionality could be added by adding following code to testing framework:
+```js
+function describe(description, callback) {
+  incrementPrintDepth()
+  printMessage(description)
+  callback()
+  decrementPrintDepth()
+  printDivider()
+}
+```
+Same applies to `it` block and this can be added:
+```js
+function it(description, callback) {
+  incrementPrintDepth()
+  beforeEachFunction();
+  printMessage(description)
+  callback()
+  decrementPrintDepth()
+}
+```
+To add matchers we want to implement in our test framework we defining Result function:
+```js
+function Result() {
+  this.assertion = undefined
+}
+```
+Now to define matchers we want to use we can add them by assigning to the function as per below:
+
+#### `toEqual` matcher:
+```js
+Result.prototype.toEqual = function(expectation) {
+  if(this.assertion === expectation) {
+    passed()
+  } else {
+    failed(function() {
+      printMessage(`Expected ${this.assertion} to equal ${expectation}`)
+      printMessage(`But equals ${this.assertion}`)
+    }.bind(this))
+  }
+}
+```
+#### `toBe` matcher:
+```js
+Result.prototype.toBe = function(expectation) {
+  if(typeof this.assertion !== 'boolean' || typeof expectation !== 'boolean') {
+    return matcherError(function() {
+      printMessage('toBe can only be used with booleans')
+    })
+  }
+  if(this.assertion === expectation) {
+    passed()
+  } else {
+    failed(function() {
+      printMessage(`Expected ${this.assertion} to be ${expectation}`)
+      printMessage(`But it was ${this.assertion}`)
+    }.bind(this))
+  }
+}
+```
+
+**What I've Learned:**
+
+> Learned about test frameworks and deeper understanding how it all works under the hood. After writing basic testing framework that helps to test JS code have more confidence in my knowledge and better understanding of test frameworks in general.
+
 ## Daily Goals
 ### Thursday 28 of May 2020
 
@@ -649,10 +656,45 @@ These are some of the most commonly used events.
 
 > By manipulating the DOM, you have infinite possibilities. You can create applications that update the data of the page without needing a refresh. Also, you can create applications that are customizable by the user and then change the layout of the page without a refresh.
 
+## Daily Goals
+### Friday 29 of May 2020
+
+## Morning Goals
+
+#### Explain how to **Manipulate the Document Object Model (DOM).**.
+
+**Plan:**
+
+- Perform research online individually.  
+- Describe what **asynchronous JavaScript is** and it's usages.
+
+**Process:**
+
+#### Synchronous JavaScript:
+
+Execution Context: each function has its own that evaluates and executes the code.
+Call Stack: LIFO (Last in, First out) structure, which is used to store all the execution context created during the code execution. Items can only be added or removed at the top of the stack. As it's a single threaded language JS only has one call stack.
+
+#### Asynchronous JavaScript: 
+
+Some tasks take longer than others and they will be blocking the call stack until they are fully executed, thats what we want to avoid.
+
+Asynchronous callbacks:
+
+- We can use the setTimeout method to evaluate part of our code with some delay, to give it time to load.
+
+- Then the 'Event loop' will look into the call stack and determine if the call stack is empty or not. If the call stack is empty, it looks into the message queue to see if there’s any pending callback waiting to be executed. If call stack is empty and there's a callback in queue it will be pushed into the top of the stack to be executed.
+
+- The message queue also contains the callbacks from the DOM events such as click events and keyboard events. The event listener sits in the web APIs environment waiting for a certain event to happen, and when that event happens, then the callback function is placed in the message queue waiting to be executed. Again the event loop checks if the call stack is empty and pushes the event callback to the stack if it’s empty and the callback is executed.
+
+**What I've Learned:**
+
+> JavaScript is a single-threaded programming language which means only one thing can happen at a time. That is, the JavaScript engine can only process one statement at a time in a single thread. While the single-threaded languages simplify writing code because you don’t have to worry about the concurrency issues, this also means you can’t perform long operations such as network access without blocking the main thread. Using asynchronous JavaScript (such as callbacks, promises, and async/await), you can perform long network requests without blocking the main thread.
+
 ## Afternoon Challenges  
 
 *Practice pairing and building Web-app.*  
-[**"Notes App"**](https://github.com/EdAncerys/Notes-App)
+["Notes App"](https://github.com/EdAncerys/Notes-App)
 
 **Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - *"Notes App".*
 
@@ -681,7 +723,7 @@ Our `index.html` main page body had no *HTML* at all so all HTML elements could 
 </html>
 ```
 
-To achieve this we adding a function that will load when DOM is loaded. That by it self is an **event**. 
+To achieve this we adding a function that will load when DOM is loaded. That by it self is an **event**.
 Code below is after refactoring and extracting some code to separate functions for better readability:
 
 ```js
@@ -696,7 +738,7 @@ document.body.onload = function() {
 ```
 We decided to have two views to simulate and mimic page load when user trigger different events. To achieve this we added two separate `<div>` elements that will be hiding and showing up HTML elements by triggering events in **DOM** on users pick/selection.
 
-#### Page view one 
+#### Page view one
 ```js
 function createPageOneElements() {
 
@@ -724,7 +766,7 @@ function createPageOneElements() {
 ```
 
 Acordingly we have page two view created with following function:
-#### Page view one 
+#### Page view one
 ```js
 function createPageTwoElements() {
   let noteBodyElement = document.createElement('p')
@@ -765,18 +807,167 @@ function createNewNote(event) {
 ```
 **What I've Learned:**
 
-> We able to manipulate DOM via JS by creating and adding set of HTML elements either by appending them to existing elements or placing them in DOM body. 
+> We able to manipulate DOM via JS by creating and adding set of HTML elements either by appending them to existing elements or placing them in DOM body.
 We able to trigger different events in DOM that can fire different `functions` that helps to add functionality when user take action and interacts in **UI**.
 That by it self can greatly improve *user* experience add functionality to the page without reloading the page or changing route.  
 
 ## Afternoon Challenges  
 
 *Practice pairing and building Web-app.*  
-[**"Notes App"**](https://github.com/EdAncerys/Notes-App)
+["Notes App"](https://github.com/EdAncerys/Notes-App)
 
 **Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - *"Notes App".*
 
 **Process:**
 
+We decided to take few final steps to complete our challenge by extracting array where we store notes in to separate model:
+
+```js
+'use strict';
+
+class NoteManager {
+  constructor() {
+    this._notes = []
+  }
+  numberOfNotes() {
+    return this._notes.length
+  }
+  addNote(noteObject) {
+    this._notes.push(noteObject);
+  }
+  getNote(index) {
+    return this._notes[index]
+  }
+}
+```
+
+And done some back end code refactoring that we felt much needed to have cleaner, more readable code.
+
+End up having functions extracted to different files and folders that helps achieve goals above:
+
+<p align="center">
+    <img width="400" src="images/fileTree_01.png">  
+    *Project file tree*
+</p>
+
 **What I've Learned:**
 
+> Extracting code to separate functions and files helps to improve code readability and helps to keep things organised.
+> We can encapsulate functions and variables and extract only what we want to be visible by doing:
+
+```js
+(function(exports) {
+
+  const END_OF_TEST_MESSAGE = '* End Test Line *'
+
+  function it(input, callback) {
+    console.log(`Test: ${input}`)
+    callback()
+    console.log(END_OF_TEST_MESSAGE)
+  }
+  exports.it = it
+
+})(this)
+```
+
+## Weekend Challenge: News App
+
+You can see the whole project [News Summary Challenge](https://github.com/EdAncerys/news-summary-challenge)
+
+
+Your app will grab all the headlines from the Guardian newspaper API and display them on a page. Clicking on a headline will show a summary of the article.
+
+
+Technologies: You'll write a single page web app. You'll write your code in frontend JavaScript, CSS and HTML. You won't use Ruby or backend JavaScript. And, as is the theme for this week, you won't use any libraries or frameworks!
+
+## User Stories :white_check_mark:
+
+```
+As a busy politician
+I can see all of today's headlines in one place
+So I know what the big stories of the day are
+```
+
+```
+As a busy politician
+I can click a link to see the original news article
+So that I can get an in depth understanding of a very important story
+```
+
+```
+As a busy politician
+I can see a summary of a news article
+So I can get a few more details about an important story
+```
+
+```
+As a busy politician
+I can see a picture to illustrate each news article when I browse headlines
+So that I have something nice to look at
+```
+
+```
+As a busy politician
+I can read the site comfortably on my phone
+Just in case my laptop breaks
+```
+
+```
+As a busy politician
+I can see whizzy animations in the app
+To make my news reading more fun
+```
+
+## Model view
+
+`News` |
+:--- |
+this.newsBody |
+preview() |
+
+`NewsData` |
+:--- |
+this._storedNewsData |
+viewAllNews() |
+getDataFromAPI() |
+
+## Model view
+
+<p align="center">
+    <img width="600" src="images/theGuardianPreview.png">  
+    *UI preview*
+</p>
+
+## **What I've Learned:**
+
+Did had a chance to better understand how to manipulate **DOM** using pure JS. How to implement event listeners and how to use them to create different events in the **DOM**.
+
+Have good understanding of how to add functionality to UI without re routing and making a get requests and benefits in doing this.
+
+API's and fetching external data.
+
+<br>
+
+
+# Weekend Reflections
+
+### Did you meet all of your goals you set at the start of the week?
+Felt that have learned quite a few things this week starting from DOM manipulation, working in the teams and better understanding of JS
+
+### What things do you still need to work through?
+- Mocking in Javascript
+- APIs
+
+### What would you change/improve moving forward?
+##### Technical:
+
+- Breaking problems into smaller peaces and articulate to the team.
+
+##### Personal:
+
+* To get enough rest and finnish off coding earlier in a day
+
+### A pat on the back
+* Happy to keep on exercising daily. That gives me energy and mental ease to saty focus 
+
+<br>
