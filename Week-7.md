@@ -672,10 +672,13 @@ These are some of the most commonly used events.
 
 #### Synchronous JavaScript:
 
-Execution Context: each function has its own that evaluates and executes the code.
+At its base, JavaScript is a synchronous, blocking, single-threaded language. That just means that only one operation can be in progress at a time.
+
+Execution context (EC): is defined as the environment in which the JavaScript code is executed. By environment, I mean the value of this, variables, objects, and functions JavaScript code has access to at a particular time.
+
 Call Stack: LIFO (Last in, First out) structure, which is used to store all the execution context created during the code execution. Items can only be added or removed at the top of the stack. As it's a single threaded language JS only has one call stack.
 
-#### Asynchronous JavaScript: 
+#### Asynchronous JavaScript:
 
 Some tasks take longer than others and they will be blocking the call stack until they are fully executed, thats what we want to avoid.
 
@@ -683,7 +686,7 @@ Asynchronous callbacks:
 
 - We can use the setTimeout method to evaluate part of our code with some delay, to give it time to load.
 
-- Then the 'Event loop' will look into the call stack and determine if the call stack is empty or not. If the call stack is empty, it looks into the message queue to see if there’s any pending callback waiting to be executed. If call stack is empty and there's a callback in queue it will be pushed into the top of the stack to be executed.
+- 'Event loop' will look into the call stack and determine if the call stack is empty or not. If the call stack is empty, it looks into the message queue to see if there’s any pending callback waiting to be executed. If call stack is empty and there's a callback in queue it will be pushed into the top of the stack to be executed.
 
 - The message queue also contains the callbacks from the DOM events such as click events and keyboard events. The event listener sits in the web APIs environment waiting for a certain event to happen, and when that event happens, then the callback function is placed in the message queue waiting to be executed. Again the event loop checks if the call stack is empty and pushes the event callback to the stack if it’s empty and the callback is executed.
 
@@ -927,7 +930,7 @@ preview() |
 
 `NewsData` |
 :--- |
-this._storedNewsData |
+this_storedNewsData |
 viewAllNews() |
 getDataFromAPI() |
 
@@ -968,6 +971,6 @@ Felt that have learned quite a few things this week starting from DOM manipulati
 * To get enough rest and finnish off coding earlier in a day
 
 ### A pat on the back
-* Happy to keep on exercising daily. That gives me energy and mental ease to saty focus 
+* Happy to keep on exercising daily. That gives me energy and mental ease to saty focus
 
 <br>
