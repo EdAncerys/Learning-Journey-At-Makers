@@ -1,4 +1,4 @@
-fetchingrequestslisteners# Week 7 Goals
+# Week 7 Goals
 
 #### By the end of the week all developers can:
 
@@ -11,12 +11,13 @@ This week is analogous to week 2 in that developers will be wrestling with some 
 Most of the work and interventions we have run historically are meant to 'de-magic' Javascript and force developers to confront the pieces they are glossing over in an attempt to get work done.
 
 ## Daily Goals
+
 ### Tuesday 26 of May 2020
 
 ## Morning Goals
 
 - Code Review for the weekend **Bowling** challenge.
-- Attend week 7 *kick off*.
+- Attend week 7 _kick off_.
 - Set a working plan for the new week
 
 ##### Plan:
@@ -36,7 +37,7 @@ Most of the work and interventions we have run historically are meant to 'de-mag
 
 **Plan:**
 
-- Perform research online individually.  
+- Perform research online individually.
 - Describe what **events and event handlers are** and it's usages.
 - Summarize and give some practical example.
 
@@ -61,12 +62,15 @@ The on-event handler is usually named with the event it reacts to, like onclick,
 #### Events on the Web
 
 Another example of an event is a user clicking on a button within a web page. This action creates what is known as a "click" event. JavaScript could then be used to program a reaction to the event, for instance, you could use the onclick event handler shown in the following box:
+
 ```js
 <form action="#" method="post">
 <input type="button" value="Click for a Message" onclick="window.alert('Hello!');">
 </form>
 ```
+
 Or by setting the corresponding property from JavaScript:
+
 ```js
 document.querySelector("button").onclick = function(event) { … }.
 ```
@@ -77,12 +81,12 @@ document.querySelector("button").onclick = function(event) { … }.
 > HTML events are "things" that happen to HTML elements.  
 > When JavaScript is used in HTML pages, JavaScript can "react" on these events.
 
-## Afternoon Challenges  
+## Afternoon Challenges
 
-*Practice pairing and building Web-app.*  
+_Practice pairing and building Web-app._  
 ["Notes App"](https://github.com/EdAncerys/Notes-App)
 
-**Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - *"Notes App".*
+**Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - _"Notes App"._
 
 **Process:**
 
@@ -99,6 +103,7 @@ Can you write a frontend, single page app using only pure JavaScript?
 As part of this primary goal, a sub-goal should be that you are able to explain and give an example of asynchronous behaviour in Javascript.
 
 ### User Stories
+
 ```
 As a programmer
 I can see a list of my notes, where each note is abbreviated to the first 20 characters
@@ -139,6 +144,7 @@ That is what we came up with after discussion:
 - [x] stop empty notes being added
 
 ### Create note Manager
+
 - [x] holds an array of note objects
 - [x] create addNote method to add note objects to array
 - [x] create getNote method to retrieve a note
@@ -154,6 +160,7 @@ That is what we came up with after discussion:
 > Importance of taking right and thoughtful approach to the problem/challenge is well forth an effort as its helps to stay on track during the development process and keep your self on track without deviating from the main problem.
 
 ## Daily Goals
+
 ### Wednesday 27 of May 2020
 
 ## Morning Goals
@@ -162,7 +169,7 @@ That is what we came up with after discussion:
 
 **Plan:**
 
-- Perform research online individually.  
+- Perform research online individually.
 - Describe what **JavaScript module pattern is** and it's usages.
 - Summarize and give some practical example.
 
@@ -174,49 +181,49 @@ A design pattern to encapsulate your JavaScript code.
 
 ## Immediately Invoked Function Expression (IIFE)
 
-Let's start by talking about a part of the module pattern: the Immediately Invoked Function Expression (or IIFE, pronounced "iffy").  At its simplest, it looks like this:
+Let's start by talking about a part of the module pattern: the Immediately Invoked Function Expression (or IIFE, pronounced "iffy"). At its simplest, it looks like this:
 
 ```js
 function printHi() {
-  console.log("hi");
-};
+  console.log('hi');
+}
 
 printHi();
 ```
 
-This code does the same thing the IIFE does.  But it's more verbose. And it creates an unnecessary variable, `printHi` that no one needs.
+This code does the same thing the IIFE does. But it's more verbose. And it creates an unnecessary variable, `printHi` that no one needs.
 
 ### Why?
 
-It's pointless to wrap just a call to `console.log` in an IIFE.  We use IIFEs to hide variable and function declarations.  Calling `console.log` doesn't declare any variables, so it doesn't need to be wrapped in an IIFE.
+It's pointless to wrap just a call to `console.log` in an IIFE. We use IIFEs to hide variable and function declarations. Calling `console.log` doesn't declare any variables, so it doesn't need to be wrapped in an IIFE.
 
 Imagine we wanted to formulate a more complex greeting than just `hi`.
 
 ```js
 (function () {
-  var EXCLAMATION_MARK_COUNT = 5
+  var EXCLAMATION_MARK_COUNT = 5;
 
   function exclaim(string) {
-    return string + "!".repeat(EXCLAMATION_MARK_COUNT);
-  };
+    return string + '!'.repeat(EXCLAMATION_MARK_COUNT);
+  }
 
-  console.log(exclaim("hi"));
+  console.log(exclaim('hi'));
 })();
 ```
 
-Using an IIFE to wrap all this code keeps the details of creating the greeting private. It means none of the rest of the code can access any variables or functions inside the IIFE.  Look what happens when we try to use `exclaim` and `EXCLAMATION_MARK_COUNT` outside the IIFE:
+Using an IIFE to wrap all this code keeps the details of creating the greeting private. It means none of the rest of the code can access any variables or functions inside the IIFE. Look what happens when we try to use `exclaim` and `EXCLAMATION_MARK_COUNT` outside the IIFE:
 
 ```js
 (function () {
-  var EXCLAMATION_MARK_COUNT = 5
+  var EXCLAMATION_MARK_COUNT = 5;
 
   function exclaim(string) {
-    return string + "!".repeat(EXCLAMATION_MARK_COUNT);
-  };
+    return string + '!'.repeat(EXCLAMATION_MARK_COUNT);
+  }
 })();
 
 // throws a ReferenceError
-exclaim("hi");
+exclaim('hi');
 
 // would throw a ReferenceError, if not for the ReferenceError thrown
 // by the previous line
@@ -225,17 +232,17 @@ console.log(EXCLAMATION_MARK_COUNT);
 
 ## Using the module pattern in the browser
 
-The module pattern is basically just an IIFE.  But it uses a bit of extra code to export (or expose, or make available to the outside, or show) functions and variables that are part of the public interface of the module.
+The module pattern is basically just an IIFE. But it uses a bit of extra code to export (or expose, or make available to the outside, or show) functions and variables that are part of the public interface of the module.
 
 Here is a tiny module:
 
 ```js
-(function(exports) {
-  var EXCLAMATION_MARK_COUNT = 5
+(function (exports) {
+  var EXCLAMATION_MARK_COUNT = 5;
 
   function exclaim(string) {
-    return string + "!".repeat(EXCLAMATION_MARK_COUNT);
-  };
+    return string + '!'.repeat(EXCLAMATION_MARK_COUNT);
+  }
 
   exports.exclaim = exclaim;
 })(this);
@@ -244,44 +251,44 @@ Here is a tiny module:
 To explore this code, let's try and use the exclaim function:
 
 ```js
-(function(exports) {
-  var EXCLAMATION_MARK_COUNT = 5
+(function (exports) {
+  var EXCLAMATION_MARK_COUNT = 5;
 
   function exclaim(string) {
-    return string + "!".repeat(EXCLAMATION_MARK_COUNT);
-  };
+    return string + '!'.repeat(EXCLAMATION_MARK_COUNT);
+  }
 
   exports.exclaim = exclaim;
 })(this);
 
 // prints "hi!!!!!"
-console.log(exclaim("hi"));
+console.log(exclaim('hi'));
 
 // throws a ReferenceError
 console.log(EXCLAMATION_MARK_COUNT);
 ```
 
-So we can access `exclaim`, but `EXCLAMATION_MARK_COUNT` is hidden. We've made available the function we want people to use, but hidden some implementation details that we don't want to bother them with.  We've also prevented our hidden variables from clashing with variables in the rest of our program.  For example, we could have two modules, each of which define and keep private their own `EXCLAMATION_MARK_COUNT`.
+So we can access `exclaim`, but `EXCLAMATION_MARK_COUNT` is hidden. We've made available the function we want people to use, but hidden some implementation details that we don't want to bother them with. We've also prevented our hidden variables from clashing with variables in the rest of our program. For example, we could have two modules, each of which define and keep private their own `EXCLAMATION_MARK_COUNT`.
 
 ### How does `exports` work?
 
 How have we made `exclaim` available? Grab the code and paste it into your browser console.
 
-Use `console.log` to print the data stored in variables like `this` and `exports`.  Follow the flow of this data through the program.  Some points to help you:
+Use `console.log` to print the data stored in variables like `this` and `exports`. Follow the flow of this data through the program. Some points to help you:
 
-* Notice how the value of `this` is `window`, the place where all globals are stored.
+- Notice how the value of `this` is `window`, the place where all globals are stored.
 
 ### What if one module needs to require another module?
 
-In the rewrite below, the programmer wants to abstract out the code that can repeat the exclamation marks.  They create a new module, `repeat`.
+In the rewrite below, the programmer wants to abstract out the code that can repeat the exclamation marks. They create a new module, `repeat`.
 
 ```js
 // repeat.js
 
-(function(exports) {
+(function (exports) {
   function repeat(string, count) {
     return string.repeat(count);
-  };
+  }
 
   exports.repeat = repeat;
 })(this);
@@ -290,46 +297,46 @@ In the rewrite below, the programmer wants to abstract out the code that can rep
 ```js
 // exclaim.js
 
-(function(exports) {
+(function (exports) {
   var EXCLAMATION_MARK_COUNT = 5;
 
   function exclaim(string) {
-    return string + repeat("!", EXCLAMATION_MARK_COUNT);
-  };
+    return string + repeat('!', EXCLAMATION_MARK_COUNT);
+  }
 
   exports.exclaim = exclaim;
 })(this);
 ```
 
-This works great.  `repeat` is available because it's a global variable, so all is well.
+This works great. `repeat` is available because it's a global variable, so all is well.
 
 ### A module that doesn't include any other modules
 
 This version of `exclaim` contains the repeat functionality.
 
 ```js
-(function(exports) {
-  var EXCLAMATION_MARK_COUNT = 5
+(function (exports) {
+  var EXCLAMATION_MARK_COUNT = 5;
 
   function exclaim(string) {
-    return string + "!".repeat(EXCLAMATION_MARK_COUNT);
-  };
+    return string + '!'.repeat(EXCLAMATION_MARK_COUNT);
+  }
 
   exports.exclaim = exclaim;
 })(this);
 ```
 
-This version that we wrote for the browser works perfectly, without any changes, in Node.js.  Look:
+This version that we wrote for the browser works perfectly, without any changes, in Node.js. Look:
 
 ```js
 // exclaim-test.js
 
-var exclaim = require("./exclaim").exclaim;
+var exclaim = require('./exclaim').exclaim;
 
-if (exclaim("hi") !== "hi!!!!!") {
-  throw new Error("Exclaiming hi should equal hi!!!!!");
+if (exclaim('hi') !== 'hi!!!!!') {
+  throw new Error('Exclaiming hi should equal hi!!!!!');
 } else {
-  console.log(".");
+  console.log('.');
 }
 ```
 
@@ -340,10 +347,10 @@ This version of the `exclaim` module breaks out the `repeat` functionality into 
 ```js
 // repeat.js
 
-(function(exports) {
+(function (exports) {
   function repeat(string, count) {
     return string.repeat(count);
-  };
+  }
 
   exports.repeat = repeat;
 })(this);
@@ -352,60 +359,60 @@ This version of the `exclaim` module breaks out the `repeat` functionality into 
 ```js
 // exclaim.js
 
-(function(exports) {
+(function (exports) {
   var EXCLAMATION_MARK_COUNT = 5;
 
   function exclaim(string) {
-    return string + repeat("!", EXCLAMATION_MARK_COUNT);
-  };
+    return string + repeat('!', EXCLAMATION_MARK_COUNT);
+  }
 
   exports.exclaim = exclaim;
 })(this);
 ```
 
-This version of the `exclaim` module won't work in Node.js.  The behaviour of the browser that makes `repeat` available as a global doesn't work in Node.js
+This version of the `exclaim` module won't work in Node.js. The behaviour of the browser that makes `repeat` available as a global doesn't work in Node.js
 
-Here is one way we can rewrite `exclaim` to support Node.js and the browser.  There are other ways, but this one is simple and clear.
+Here is one way we can rewrite `exclaim` to support Node.js and the browser. There are other ways, but this one is simple and clear.
 
 ```js
 // exclaim.js
 
-(function(exports) {
+(function (exports) {
   var EXCLAMATION_MARK_COUNT = 5;
 
   function exclaim(repeat, string) {
-    return string + repeat("!", EXCLAMATION_MARK_COUNT);
-  };
+    return string + repeat('!', EXCLAMATION_MARK_COUNT);
+  }
 
   exports.exclaim = exclaim;
 })(this);
 ```
 
-We have injected the `repeat` function into `exclaim`.  To support this, here are the slightly rewritten `app.js` and Node.js test file `exclaim-test.js`:
+We have injected the `repeat` function into `exclaim`. To support this, here are the slightly rewritten `app.js` and Node.js test file `exclaim-test.js`:
 
 ```js
 // app.js
 
-console.log(exclaim(repeat, "howdy"));
+console.log(exclaim(repeat, 'howdy'));
 ```
 
 ```js
 // exclaim-test.js
 
-var repeat = require("./repeat").repeat;
-var exclaim = require("./exclaim").exclaim;
+var repeat = require('./repeat').repeat;
+var exclaim = require('./exclaim').exclaim;
 
-if (exclaim(repeat, "hi") !== "hi!!!!!") {
-  throw new Error("Exclaiming hi should equal hi!!!!!");
+if (exclaim(repeat, 'hi') !== 'hi!!!!!') {
+  throw new Error('Exclaiming hi should equal hi!!!!!');
 } else {
-  console.log(".");
+  console.log('.');
 }
 ```
 
 **What I've Learned:**
 
 > JavaScript module pattern is a design pattern to encapsulate your JavaScript code.
-This can be done by wrapping function in another function and expose variables we want by doing:
+> This can be done by wrapping function in another function and expose variables we want by doing:
 
 ```js
 var name = ‘ed’
@@ -423,12 +430,12 @@ name // returns 'ed'
 sayGoodMorning() // returns 'notEd'
 ```
 
-## Afternoon Challenges  
+## Afternoon Challenges
 
-*Practice pairing and building Web-app.*  
+_Practice pairing and building Web-app._  
 ["Notes App"](https://github.com/EdAncerys/Notes-App)
 
-**Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - *"Notes App".*
+**Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - _"Notes App"._
 
 **Process:**
 
@@ -456,70 +463,85 @@ A testing library supplies:
 In order to test our JS methods and code we had to write our own test framework. Below is a walkthrough of test framework we been using to test our code.
 
 Starting from the beginning beforeEach syntax could be added as follows:
+
 ```js
-var beforeEachFunction = function() {}
+var beforeEachFunction = function () {};
 function beforeEach(callback) {
   beforeEachFunction = callback;
 }
 ```
+
 As we follow simmilar aproach to **Jasmine** testing framework we desided to add similar functionality and approach. Describe block functionality could be added by adding following code to testing framework:
+
 ```js
 function describe(description, callback) {
-  incrementPrintDepth()
-  printMessage(description)
-  callback()
-  decrementPrintDepth()
-  printDivider()
+  incrementPrintDepth();
+  printMessage(description);
+  callback();
+  decrementPrintDepth();
+  printDivider();
 }
 ```
+
 Same applies to `it` block and this can be added:
+
 ```js
 function it(description, callback) {
-  incrementPrintDepth()
+  incrementPrintDepth();
   beforeEachFunction();
-  printMessage(description)
-  callback()
-  decrementPrintDepth()
+  printMessage(description);
+  callback();
+  decrementPrintDepth();
 }
 ```
+
 To add matchers we want to implement in our test framework we defining Result function:
+
 ```js
 function Result() {
-  this.assertion = undefined
+  this.assertion = undefined;
 }
 ```
+
 Now to define matchers we want to use we can add them by assigning to the function as per below:
 
 #### `toEqual` matcher:
+
 ```js
-Result.prototype.toEqual = function(expectation) {
-  if(this.assertion === expectation) {
-    passed()
+Result.prototype.toEqual = function (expectation) {
+  if (this.assertion === expectation) {
+    passed();
   } else {
-    failed(function() {
-      printMessage(`Expected ${this.assertion} to equal ${expectation}`)
-      printMessage(`But equals ${this.assertion}`)
-    }.bind(this))
+    failed(
+      function () {
+        printMessage(`Expected ${this.assertion} to equal ${expectation}`);
+        printMessage(`But equals ${this.assertion}`);
+      }.bind(this)
+    );
   }
-}
+};
 ```
+
 #### `toBe` matcher:
+
 ```js
-Result.prototype.toBe = function(expectation) {
-  if(typeof this.assertion !== 'boolean' || typeof expectation !== 'boolean') {
-    return matcherError(function() {
-      printMessage('toBe can only be used with booleans')
-    })
+Result.prototype.toBe = function (expectation) {
+  if (typeof this.assertion !== 'boolean' || typeof expectation !== 'boolean') {
+    return matcherError(function () {
+      printMessage('toBe can only be used with booleans');
+    });
   }
-  if(this.assertion === expectation) {
-    passed()
+  if (this.assertion === expectation) {
+    passed();
   } else {
-    failed(function() {
-      printMessage(`Expected ${this.assertion} to be ${expectation}`)
-      printMessage(`But it was ${this.assertion}`)
-    }.bind(this))
+    failed(
+      function () {
+        printMessage(`Expected ${this.assertion} to be ${expectation}`);
+        printMessage(`But it was ${this.assertion}`);
+      }.bind(this)
+    );
   }
-}
+};
 ```
 
 **What I've Learned:**
@@ -527,6 +549,7 @@ Result.prototype.toBe = function(expectation) {
 > Learned about test frameworks and deeper understanding how it all works under the hood. After writing basic testing framework that helps to test JS code have more confidence in my knowledge and better understanding of test frameworks in general.
 
 ## Daily Goals
+
 ### Thursday 28 of May 2020
 
 ## Morning Goals
@@ -535,7 +558,7 @@ Result.prototype.toBe = function(expectation) {
 
 **Plan:**
 
-- Perform research online individually.  
+- Perform research online individually.
 - Describe what **Document Object Model (DOM) is** and it's usages.
 - Summarize and give some practical example.
 
@@ -565,6 +588,7 @@ getElementById()
 This method returns the element that contains the name id passed. As we know, id’s should be unique, so it’s a very helpful method to get only the element you want.
 
 start: id passed. And in case we do not have any id with that specific name, it returns null.
+
 ```js
 var myStart = document.getElementsById('start');
 myStart: Our variable name that looks similar to our id passed.
@@ -575,6 +599,7 @@ getElementsByClassName()
 This method returns an HTMLCollection of all those elements containing the specific name class passed.
 
 .container: our class passed. In case we do not have any class with that specific name, it returns null.
+
 ```js
 var myContainer = document.getElementsByClassName('container');
 myContainer: Our variable name that looks similar to our class passed.
@@ -585,6 +610,7 @@ getElementsByTagName()
 This works the same way as those methods above: it also returns an HTMLCollection, but this time with a single difference: it returns all those elements with the tag name passed.
 
 button: tag name that we want to get.
+
 ```js
 var buttons = document.getElementsByTagName('button');
 buttons: Our variable name that looks similar to our tag name passed.
@@ -593,24 +619,29 @@ buttons: Our variable name that looks similar to our tag name passed.
 querySelector()
 
 It returns the first element that has the specific CSS selector passed.
+
 ```js
 var resetButton = document.querySelector('#reset');
 resetButton: Our variable name that looks similar to our selector passed.
 
 #reset: selector passed, and if you don’t have any selector that matches it returns null.
 ```
+
 querySelectorAll()
 
 Very similar to the querySelector() method, but with a single difference: it returns all the elements that match with the CSS selector passed. The selector should also follow the CSS syntax. In case you do not have any selector, it returns null.
+
 ```js
 var myButtons = document.querySelector('#buttons');
 myButtons: Our variable name that looks similar to our selectors passed.
 
 #buttons: selector passed, if you don’t have any selector that matches it returns null.
 ```
+
 createElement()
 
 Creates a new element in your HTML page
+
 ```js
 var p_element = document.createElement('p');
 ```
@@ -618,8 +649,9 @@ var p_element = document.createElement('p');
 setAttribute()
 
 Lets you set new attributes for elements HTML.
+
 ```js
-p_element.setAttribute('id', 'note-body')
+p_element.setAttribute('id', 'note-body');
 ```
 
 ### Events
@@ -629,11 +661,17 @@ The DOM elements have methods, but they also have events. These events are respo
 `click`
 
 One of the most used events is the click event. When the user clicks on a specific element, it will realise some action.
+
 ```js
-myStart.addEventListener('click', function(event) {
-// Do something here.
-}, false);
+myStart.addEventListener(
+  'click',
+  function (event) {
+    // Do something here.
+  },
+  false
+);
 ```
+
 The addEventListener() parameters are:
 
 - The type of the event that you want (in this case ‘click’).
@@ -643,20 +681,27 @@ The addEventListener() parameters are:
 `select`
 
 This events is for when you want to dispatch something when a specific element is selected. In that case we’re gonna dispatch a simple alert.
+
 ```js
-myStart.addEventListener('select', function(event) {
-alert('Element selected!');
-}, false);
+myStart.addEventListener(
+  'select',
+  function (event) {
+    alert('Element selected!');
+  },
+  false
+);
 ```
+
 These are some of the most commonly used events.
 
 **What I've Learned:**
 
-> When a web page is loaded, the browser creates a Document Object Model of the page, which is an object oriented representation of an HTML document, that acts as an interface between JavaScript and the document itself and allows the creation of dynamic web pages.  
+> When a web page is loaded, the browser creates a Document Object Model of the page, which is an object oriented representation of an HTML document, that acts as an interface between JavaScript and the document itself and allows the creation of dynamic web pages.
 
 > By manipulating the DOM, you have infinite possibilities. You can create applications that update the data of the page without needing a refresh. Also, you can create applications that are customizable by the user and then change the layout of the page without a refresh.
 
 ## Daily Goals
+
 ### Friday 29 of May 2020
 
 ## Morning Goals
@@ -665,7 +710,7 @@ These are some of the most commonly used events.
 
 **Plan:**
 
-- Perform research online individually.  
+- Perform research online individually.
 - Describe what **asynchronous JavaScript is** and it's usages.
 
 **Process:**
@@ -694,18 +739,18 @@ Asynchronous callbacks:
 
 > JavaScript is a single-threaded programming language which means only one thing can happen at a time. That is, the JavaScript engine can only process one statement at a time in a single thread. While the single-threaded languages simplify writing code because you don’t have to worry about the concurrency issues, this also means you can’t perform long operations such as network access without blocking the main thread. Using asynchronous JavaScript (such as callbacks, promises, and async/await), you can perform long network requests without blocking the main thread.
 
-## Afternoon Challenges  
+## Afternoon Challenges
 
-*Practice pairing and building Web-app.*  
+_Practice pairing and building Web-app._  
 ["Notes App"](https://github.com/EdAncerys/Notes-App)
 
-**Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - *"Notes App".*
+**Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - _"Notes App"._
 
 **Process:**
 
 As we had to write all our code in **Java Script** only, that meant we had to learn more about **DOM** and how to manipulate it via JS.
 
-Our `index.html` main page body had no *HTML* at all so all HTML elements could be added and created with Java Script only. That all could be achieved by adding `<script>` tag that links to JS file where we will be adding all necessary elements for our project.
+Our `index.html` main page body had no _HTML_ at all so all HTML elements could be added and created with Java Script only. That all could be achieved by adding `<script>` tag that links to JS file where we will be adding all necessary elements for our project.
 
 #### `index.html` file:
 
@@ -730,96 +775,100 @@ To achieve this we adding a function that will load when DOM is loaded. That by 
 Code below is after refactoring and extracting some code to separate functions for better readability:
 
 ```js
-document.body.onload = function() {
-  let noteHeadingElement = document.createElement('h1')
-  noteHeadingElement.innerHTML = 'Notes'
+document.body.onload = function () {
+  let noteHeadingElement = document.createElement('h1');
+  noteHeadingElement.innerHTML = 'Notes';
 
-  document.body.appendChild(noteHeadingElement)
-  createPageOneElements()
-  createPageTwoElements()
-}
+  document.body.appendChild(noteHeadingElement);
+  createPageOneElements();
+  createPageTwoElements();
+};
 ```
+
 We decided to have two views to simulate and mimic page load when user trigger different events. To achieve this we added two separate `<div>` elements that will be hiding and showing up HTML elements by triggering events in **DOM** on users pick/selection.
 
 #### Page view one
+
 ```js
 function createPageOneElements() {
+  let inputForm = document.createElement('form');
+  inputForm.setAttribute('id', 'input-form');
 
-  let inputForm = document.createElement('form')
-  inputForm.setAttribute('id', 'input-form')
+  let noteBodyInput = document.createElement('textarea');
+  noteBodyInput.setAttribute('rows', 8);
+  noteBodyInput.setAttribute('cols', 40);
+  noteBodyInput.setAttribute('id', 'text-input');
 
-  let noteBodyInput = document.createElement('textarea')
-  noteBodyInput.setAttribute('rows', 8)
-  noteBodyInput.setAttribute('cols', 40)
-  noteBodyInput.setAttribute('id', 'text-input')
+  let noteSubmissionButton = document.createElement('input');
+  noteSubmissionButton.setAttribute('type', 'submit');
+  noteSubmissionButton.setAttribute('value', 'Save Note');
 
-  let noteSubmissionButton = document.createElement('input')
-  noteSubmissionButton.setAttribute('type', 'submit')
-  noteSubmissionButton.setAttribute('value', 'Save Note')
+  inputForm.appendChild(noteBodyInput);
+  inputForm.appendChild(document.createElement('br'));
+  inputForm.appendChild(noteSubmissionButton);
 
-  inputForm.appendChild(noteBodyInput)
-  inputForm.appendChild(document.createElement('br'))
-  inputForm.appendChild(noteSubmissionButton)
+  pageOneView.appendChild(inputForm);
+  document.body.appendChild(pageOneView);
 
-  pageOneView.appendChild(inputForm)
-  document.body.appendChild(pageOneView)
-
-  inputForm.addEventListener('submit', createNewNote)
+  inputForm.addEventListener('submit', createNewNote);
 }
 ```
 
 Acordingly we have page two view created with following function:
+
 #### Page view one
+
 ```js
 function createPageTwoElements() {
-  let noteBodyElement = document.createElement('p')
-  noteBodyElement.setAttribute('id', 'note-body')
+  let noteBodyElement = document.createElement('p');
+  noteBodyElement.setAttribute('id', 'note-body');
 
-  let homeButton = document.createElement('button')
-  homeButton.innerHTML = 'Home'
-  homeButton.addEventListener('click', function(event) {
-    pageTwoView.style.display = 'none'
-    pageOneView.style.display = 'block'
-  })
-  pageTwoView.appendChild(noteBodyElement)
-  pageTwoView.appendChild(homeButton)
-  document.body.appendChild(pageTwoView)
-  pageTwoView.style.display = 'none'
+  let homeButton = document.createElement('button');
+  homeButton.innerHTML = 'Home';
+  homeButton.addEventListener('click', function (event) {
+    pageTwoView.style.display = 'none';
+    pageOneView.style.display = 'block';
+  });
+  pageTwoView.appendChild(noteBodyElement);
+  pageTwoView.appendChild(homeButton);
+  document.body.appendChild(pageTwoView);
+  pageTwoView.style.display = 'none';
 }
 ```
+
 To create a single note element we created `createNewNote` function that have all functionality encapsulated in its own function:
 
 ```js
 function createNewNote(event) {
-  event.preventDefault()
-  let inputMessage = document.getElementById('text-input').value
-  if(inputMessage === '') return
-  document.getElementById('text-input').value = ''
-  let noteObject = new Note(inputMessage)
-  let new_note = document.createElement('a')
-  addShowBodyEvent(new_note, arrayOfNotes.length)
-  arrayOfNotes.push(noteObject)
+  event.preventDefault();
+  let inputMessage = document.getElementById('text-input').value;
+  if (inputMessage === '') return;
+  document.getElementById('text-input').value = '';
+  let noteObject = new Note(inputMessage);
+  let new_note = document.createElement('a');
+  addShowBodyEvent(new_note, arrayOfNotes.length);
+  arrayOfNotes.push(noteObject);
 
-  new_note.setAttribute('href', '/')
-  new_note.setAttribute('class', 'new-note')
-  new_note.innerHTML = noteObject.preview()
-  pageOneView.appendChild(new_note)
-  pageOneView.appendChild(document.createElement('br'))
-
+  new_note.setAttribute('href', '/');
+  new_note.setAttribute('class', 'new-note');
+  new_note.innerHTML = noteObject.preview();
+  pageOneView.appendChild(new_note);
+  pageOneView.appendChild(document.createElement('br'));
 }
 ```
+
 **What I've Learned:**
 
 > We able to manipulate DOM via JS by creating and adding set of HTML elements either by appending them to existing elements or placing them in DOM body.
-We able to trigger different events in DOM that can fire different `functions` that helps to add functionality when user take action and interacts in **UI**.
-That by it self can greatly improve *user* experience add functionality to the page without reloading the page or changing route.  
+> We able to trigger different events in DOM that can fire different `functions` that helps to add functionality when user take action and interacts in **UI**.
+> That by it self can greatly improve _user_ experience add functionality to the page without reloading the page or changing route.
 
-## Afternoon Challenges  
+## Afternoon Challenges
 
-*Practice pairing and building Web-app.*  
+_Practice pairing and building Web-app._  
 ["Notes App"](https://github.com/EdAncerys/Notes-App)
 
-**Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - *"Notes App".*
+**Plan:** Pair with Dec, Marja and Catriona and keep working on the afternoon challenge for the week - _"Notes App"._
 
 **Process:**
 
@@ -830,16 +879,16 @@ We decided to take few final steps to complete our challenge by extracting array
 
 class NoteManager {
   constructor() {
-    this._notes = []
+    this._notes = [];
   }
   numberOfNotes() {
-    return this._notes.length
+    return this._notes.length;
   }
   addNote(noteObject) {
     this._notes.push(noteObject);
   }
   getNote(index) {
-    return this._notes[index]
+    return this._notes[index];
   }
 }
 ```
@@ -859,27 +908,23 @@ End up having functions extracted to different files and folders that helps achi
 > We can encapsulate functions and variables and extract only what we want to be visible by doing:
 
 ```js
-(function(exports) {
-
-  const END_OF_TEST_MESSAGE = '* End Test Line *'
+(function (exports) {
+  const END_OF_TEST_MESSAGE = '* End Test Line *';
 
   function it(input, callback) {
-    console.log(`Test: ${input}`)
-    callback()
-    console.log(END_OF_TEST_MESSAGE)
+    console.log(`Test: ${input}`);
+    callback();
+    console.log(END_OF_TEST_MESSAGE);
   }
-  exports.it = it
-
-})(this)
+  exports.it = it;
+})(this);
 ```
 
 ## Weekend Challenge: News App
 
 You can see the whole project [News Summary Challenge](https://github.com/EdAncerys/news-summary-challenge)
 
-
 Your app will grab all the headlines from the Guardian newspaper API and display them on a page. Clicking on a headline will show a summary of the article.
-
 
 Technologies: You'll write a single page web app. You'll write your code in frontend JavaScript, CSS and HTML. You won't use Ruby or backend JavaScript. And, as is the theme for this week, you won't use any libraries or frameworks!
 
@@ -923,16 +968,16 @@ To make my news reading more fun
 
 ## Model view
 
-`News` |
-:--- |
-this.newsBody |
-preview() |
+| `News`        |
+| :------------ |
+| this.newsBody |
+| preview()     |
 
-`NewsData` |
-:--- |
-this_storedNewsData |
-viewAllNews() |
-getDataFromAPI() |
+| `NewsData`          |
+| :------------------ |
+| this_storedNewsData |
+| viewAllNews()       |
+| getDataFromAPI()    |
 
 ## Model view
 
@@ -951,26 +996,29 @@ API's and fetching external data.
 
 <br>
 
-
 # Weekend Reflections
 
 ### Did you meet all of your goals you set at the start of the week?
+
 Felt that have learned quite a few things this week starting from DOM manipulation, working in the teams and better understanding of JS
 
 ### What things do you still need to work through?
+
 - Mocking in Javascript
 - APIs
 
 ### What would you change/improve moving forward?
+
 ##### Technical:
 
 - Breaking problems into smaller peaces and articulate to the team.
 
 ##### Personal:
 
-* To get enough rest and finnish off coding earlier in a day
+- To get enough rest and finnish off coding earlier in a day
 
 ### A pat on the back
-* Happy to keep on exercising daily. That gives me energy and mental ease to saty focus
+
+- Happy to keep on exercising daily. That gives me energy and mental ease to saty focus
 
 <br>
